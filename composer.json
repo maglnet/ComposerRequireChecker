@@ -1,0 +1,39 @@
+{
+    "name":              "ocramius/composer-require-checker",
+    "description":       "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
+    "type":              "library",
+    "license":           "MIT",
+    "homepage":          "https://github.com/Ocramius/ComposerRequireChecker",
+    "keywords":          [
+        "composer",
+        "dependency",
+        "cli",
+        "analysis",
+        "requirements",
+        "imports",
+        "require"
+    ],
+    "authors": [
+        {
+            "name":     "Marco Pivetta",
+            "email":    "ocramius@gmail.com",
+            "homepage": "http://ocramius.github.io/"
+        }
+    ],
+    "require": {
+        "php":  "~7.0",
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ComposerRequireChecker\\": "src/ComposerRequireChecker"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ComposerRequireCheckerTest\\": "tests/ComposerRequireCheckerTest"
+        }
+    }
+}
