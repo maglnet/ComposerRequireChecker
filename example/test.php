@@ -29,5 +29,5 @@ use PhpParser\ParserFactory;
 
     var_dump(['unknown_symbols' => $unknownSymbols]);
 
-    exit((bool) $unknownSymbols);
+    exit((int) (bool) $unknownSymbols);
 })();
