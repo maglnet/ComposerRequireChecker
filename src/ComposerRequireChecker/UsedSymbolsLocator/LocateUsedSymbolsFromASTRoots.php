@@ -18,18 +18,17 @@ final class LocateUsedSymbolsFromASTRoots
     public function __invoke(Traversable $ASTs) : array
     {
         // note: dependency injection is not really feasible for these two, as they need to co-exist in parallel
-        $usedSymbolsCollector = new UsedSymbolCollector();
-        $usedSymbolsTraverser = new NodeTraverser();
+        $traverser = new NodeTraverser();
 
-        $usedSymbolsTraverser->addVisitor(new NameResolver());
-        $usedSymbolsTraverser->addVisitor($usedSymbolsCollector);
+        $traverser->addVisitor(new NameResolver());
+        $traverser->addVisitor($collector = new UsedSymbolCollector());
 
         $astSymbols = [];
 
         foreach ($ASTs as $astRoot) {
-            $usedSymbolsTraverser->traverse($astRoot);
+            $traverser->traverse($astRoot);
 
-            $astSymbols[] = $usedSymbolsCollector->getCollectedSymbols();
+            $astSymbols[] = $collector->getCollectedSymbols();
         }
 
         return array_values(array_unique(array_merge([], ...$astSymbols)));
