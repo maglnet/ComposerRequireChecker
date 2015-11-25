@@ -1,7 +1,8 @@
 <?php
 
-namespace ComposerRequireChecker\NodeVisitor;
+namespace ComposerRequireCheckerTest\NodeVisitor;
 
+use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
