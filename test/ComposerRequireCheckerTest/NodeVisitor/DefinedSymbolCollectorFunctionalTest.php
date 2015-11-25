@@ -55,6 +55,21 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
         );
     }
 
+    public function testWillCollectFunctionDefinition()
+    {
+        $this->traverseStringAST('function foo() {}');
+
+        self::assertSameCollectedSymbols(
+            ['foo'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
+    private function traverseStringAST(string $phpSource) : array
+    {
+        return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
+    }
+
     private function traverseClassAST(string $className) : array
     {
         return $this->traverser->traverse(
