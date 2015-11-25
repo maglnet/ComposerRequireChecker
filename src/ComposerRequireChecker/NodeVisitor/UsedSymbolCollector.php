@@ -44,6 +44,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
         $this->recordFunctionCallUsage($node);
+        // @todo $this->recordFunctionDefinitionTypesUsage($node);
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
 
