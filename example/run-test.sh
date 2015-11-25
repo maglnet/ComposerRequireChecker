@@ -13,3 +13,7 @@ git checkout release-2.5.0
 
 curl -sS https://getcomposer.org/installer | php
 ./composer.phar install
+
+cd "$DIR"
+
+php test.php
