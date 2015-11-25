@@ -4,6 +4,7 @@ use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
@@ -39,17 +40,7 @@ use PhpParser\ParserFactory;
     $usedSymbolsTraverser->addVisitor($usedSymbolsCollector);
 
 
-    $allUsedSymbols = function (Traversable $ASTs) use ($usedSymbolsTraverser, $usedSymbolsCollector) : array {
-        $symbols = [];
-
-        foreach ($ASTs as $astRoot) {
-            $usedSymbolsTraverser->traverse($astRoot);
-
-            $symbols = array_merge($symbols, $usedSymbolsCollector->getCollectedSymbols());
-        }
-
-        return $symbols;
-    };
+    $allUsedSymbols = new LocateUsedSymbolsFromASTRoots();
 
     $directories = new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test']);
     $extension   = '.php';
