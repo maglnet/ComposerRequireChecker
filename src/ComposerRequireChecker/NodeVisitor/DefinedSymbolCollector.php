@@ -49,28 +49,28 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     private function recordClassDefinition(Node $node)
     {
         if ($node instanceof Node\Stmt\Class_) {
-            $this->recordDefinitionOf($node->name);
+            $this->recordDefinitionOf($node);
         }
     }
 
     private function recordInterfaceDefinition(Node $node)
     {
         if ($node instanceof Node\Stmt\Interface_) {
-            $this->recordDefinitionOf($node->name);
+            $this->recordDefinitionOf($node);
         }
     }
 
     private function recordTraitDefinition(Node $node)
     {
         if ($node instanceof Node\Stmt\Trait_) {
-            $this->recordDefinitionOf($node->name);
+            $this->recordDefinitionOf($node);
         }
     }
 
     private function recordFunctionDefinition(Node $node)
     {
         if ($node instanceof Node\Stmt\Function_) {
-            $this->recordDefinitionOf($node->name);
+            $this->recordDefinitionOf($node);
         }
     }
 
@@ -78,18 +78,27 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     {
         if ($node instanceof Node\Stmt\Const_) {
             foreach ($node->consts as $const) {
-                $this->recordDefinitionOf($const->name);
+                $this->recordDefinitionOf($const);
             }
         }
     }
 
     /**
-     * @param string $symbolName
+     * @param Node $node
      *
      * @return void
      */
-    private function recordDefinitionOf(string $symbolName)
+    private function recordDefinitionOf(Node $node)
     {
-        $this->definedSymbols[$symbolName] = $symbolName;
+        if (! isset($node->namespacedName)) {
+            throw new \UnexpectedValueException(sprintf(
+                'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
+                . 'did you pass it through a name resolver visitor?',
+                get_class($node),
+                $node->getLine()
+            ));
+        }
+
+        $this->definedSymbols[(string) $node->namespacedName] = $node->namespacedName;
     }
 }
