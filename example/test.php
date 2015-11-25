@@ -4,6 +4,7 @@ use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 
@@ -18,7 +19,7 @@ use PhpParser\ParserFactory;
     $composerJson = __DIR__ . '/test-data/zend-feed/composer.json';
 
     $definedSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
-        (new \ComposerRequireChecker\GeneratorUtil\ComposeGenerators())->__invoke(
+        (new ComposeGenerators())->__invoke(
             $getPackageSourceFiles($composerJson),
             (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
         )
