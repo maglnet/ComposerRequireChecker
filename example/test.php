@@ -1,5 +1,6 @@
 <?php
 
+use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
 use PhpParser\NodeTraverser;
@@ -13,25 +14,7 @@ use PhpParser\ParserFactory;
 
     $parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
 
-    $allFiles = function (Traversable $directories) use ($extension) : Traversable {
-        $extensionMatcher = '/.*' . preg_quote($extension) . '$/';
-
-        foreach ($directories as $directory) {
-            $allFiles = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($directory),
-                \RecursiveIteratorIterator::LEAVES_ONLY
-            );
-
-            /* @var $file \SplFileInfo */
-            foreach ($allFiles as $file) {
-                if (! preg_match($extensionMatcher, $file->getBasename())) {
-                    continue;
-                }
-
-                yield $file->getPathname();
-            }
-        }
-    };
+    $allFiles = new LocateAllFilesByExtension();
 
     $allSourcesASTs = function (Traversable $files) use ($parser) : Traversable {
         foreach ($files as $file) {
@@ -76,9 +59,11 @@ use PhpParser\ParserFactory;
         return $symbols;
     };
 
+    $directories = new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test']);
+    $extension   = '.php';
 
     var_dump([
-        'defined' => $allDefinedSymbols($allSourcesASTs($allFiles(new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test'])))),
-        'used'    => $allUsedSymbols($allSourcesASTs($allFiles(new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test'])))),
+        'defined' => $allDefinedSymbols($allSourcesASTs($allFiles($directories, $extension))),
+        'used'    => $allUsedSymbols($allSourcesASTs($allFiles($directories, $extension))),
     ]);
 })();
