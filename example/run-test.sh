@@ -11,3 +11,5 @@ cd "$DIR/test-data/zend-feed"
 # checking out a release that is known to have "soft" (broken) dependencies:
 git checkout release-2.5.0
 
+curl -sS https://getcomposer.org/installer | php
+./composer.phar install
