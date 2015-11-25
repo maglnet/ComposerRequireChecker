@@ -25,6 +25,14 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
+     * @return string[]
+     */
+    public function getCollectedSymbols() : array
+    {
+        return array_keys($this->collectedSymbols);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function beforeTraverse(array $nodes)
