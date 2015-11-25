@@ -75,6 +75,16 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
         );
     }
 
+    public function testWillCollectConstDefinition()
+    {
+        $this->traverseStringAST('const foo = "bar", baz = "tab";');
+
+        self::assertSameCollectedSymbols(
+            ['foo', 'baz'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
     private function traverseStringAST(string $phpSource) : array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
