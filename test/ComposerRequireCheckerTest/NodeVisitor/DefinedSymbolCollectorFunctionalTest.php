@@ -50,7 +50,7 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
         $this->traverseClassAST(self::class);
 
         self::assertSameCollectedSymbols(
-            ['DefinedSymbolCollectorFunctionalTest'],
+            ['ComposerRequireCheckerTest\NodeVisitor\DefinedSymbolCollectorFunctionalTest'],
             $this->collector->getDefinedSymbols()
         );
     }
@@ -61,6 +61,16 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
 
         self::assertSameCollectedSymbols(
             ['foo'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
+    public function testWillCollectNamespacedFunctionDefinition()
+    {
+        $this->traverseStringAST('namespace Foo; function foo() {}');
+
+        self::assertSameCollectedSymbols(
+            ['Foo\foo'],
             $this->collector->getDefinedSymbols()
         );
     }
