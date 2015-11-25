@@ -2,30 +2,16 @@
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
-use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
+use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 
 (function () {
     require_once  __DIR__ . '/../vendor/autoload.php';
 
-    $getPackageSourceDirs = function ($composerJsonPath) : Traversable {
-        $packageDir   = dirname($composerJsonPath);
-        $composerData = json_decode(file_get_contents($composerJsonPath), true);
+    $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        // @todo support "classmap"
-        // @todo support "files"
-        $sourceDirs = array_merge(
-            $composerData['autoload']['psr-0'] ?? [],
-            $composerData['autoload']['psr-4'] ?? []
-        );
-
-        foreach ($sourceDirs as $sourceDir) {
-            yield $packageDir . '/' . ltrim($sourceDir, '/');
-        }
-    };
-
-    $getPackageDirectDependenciesSourceDirs = function ($composerJsonPath) use ($getPackageSourceDirs) : Traversable {
+    $getPackageDirectDependenciesSourceDirs = function ($composerJsonPath) use ($getPackageSourceFiles) : Traversable {
         $packageDir = dirname($composerJsonPath);
 
         $vendorDirs = array_values(array_map(
@@ -40,11 +26,10 @@ use PhpParser\ParserFactory;
                 continue;
             }
 
-            yield from $getPackageSourceDirs($vendorDir . '/composer.json');
+            yield from $getPackageSourceFiles($vendorDir . '/composer.json');
         }
     };
 
-    $allFiles          = new LocateAllFilesByExtension();
     $sourcesASTs       = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
     $allDefinedSymbols = new LocateDefinedSymbolsFromASTRoots();
     $allUsedSymbols    = new LocateUsedSymbolsFromASTRoots();
@@ -53,7 +38,7 @@ use PhpParser\ParserFactory;
     $composerJson = __DIR__ . '/test-data/zend-feed/composer.json';
 
     var_dump([
-        'defined' => $allDefinedSymbols($sourcesASTs($allFiles($getPackageDirectDependenciesSourceDirs($composerJson), $extension))),
-        'used'    => $allUsedSymbols($sourcesASTs($allFiles($getPackageSourceDirs($composerJson), $extension))),
+        'defined' => $allDefinedSymbols($sourcesASTs($getPackageDirectDependenciesSourceDirs($composerJson), $extension)),
+        'used'    => $allUsedSymbols($sourcesASTs($getPackageSourceFiles($composerJson), $extension)),
     ]);
 })();
