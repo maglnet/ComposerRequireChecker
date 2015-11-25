@@ -53,8 +53,12 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordExtendsUsage(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
+        if ($node instanceof Node\Stmt\Class_) {
             array_map([$this, 'recordUsageOf'], array_filter([$node->extends]));
+        }
+
+        if ($node instanceof Node\Stmt\Interface_) {
+            array_map([$this, 'recordUsageOf'], array_filter($node->extends));
         }
     }
 
