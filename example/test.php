@@ -7,6 +7,8 @@ use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 
+// Please run "run-test.sh", and not this file directly.
+
 (function () {
     require_once  __DIR__ . '/../vendor/autoload.php';
 
