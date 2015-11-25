@@ -13,18 +13,6 @@ use PhpParser\ParserFactory;
 
     $parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
 
-    $definedSymbolsCollector = new DefinedSymbolCollector();
-    $definedSymbolsTraverser = new NodeTraverser();
-
-    $definedSymbolsTraverser->addVisitor(new NameResolver());
-    $definedSymbolsTraverser->addVisitor($definedSymbolsCollector);
-
-    $usedSymbolsCollector = new UsedSymbolCollector();
-    $usedSymbolsTraverser = new NodeTraverser();
-
-    $usedSymbolsTraverser->addVisitor(new NameResolver());
-    $usedSymbolsTraverser->addVisitor($usedSymbolsCollector);
-
     $allFiles = function (Traversable $directories) use ($extension) : Traversable {
         $extensionMatcher = '/.*' . preg_quote($extension) . '$/';
 
@@ -51,6 +39,12 @@ use PhpParser\ParserFactory;
         }
     };
 
+    $definedSymbolsCollector = new DefinedSymbolCollector();
+    $definedSymbolsTraverser = new NodeTraverser();
+
+    $definedSymbolsTraverser->addVisitor(new NameResolver());
+    $definedSymbolsTraverser->addVisitor($definedSymbolsCollector);
+
     $allDefinedSymbols = function (Traversable $ASTs) use ($definedSymbolsTraverser, $definedSymbolsCollector) : array {
         $symbols = [];
 
@@ -63,5 +57,28 @@ use PhpParser\ParserFactory;
         return $symbols;
     };
 
-    var_dump($allDefinedSymbols($allSourcesASTs($allFiles(new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test'])))));
+    $usedSymbolsCollector = new UsedSymbolCollector();
+    $usedSymbolsTraverser = new NodeTraverser();
+
+    $usedSymbolsTraverser->addVisitor(new NameResolver());
+    $usedSymbolsTraverser->addVisitor($usedSymbolsCollector);
+
+
+    $allUsedSymbols = function (Traversable $ASTs) use ($usedSymbolsTraverser, $usedSymbolsCollector) : array {
+        $symbols = [];
+
+        foreach ($ASTs as $astRoot) {
+            $usedSymbolsTraverser->traverse($astRoot);
+
+            $symbols = array_merge($symbols, $usedSymbolsCollector->getCollectedSymbols());
+        }
+
+        return $symbols;
+    };
+
+
+    var_dump([
+        'defined' => $allDefinedSymbols($allSourcesASTs($allFiles(new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test'])))),
+        'used'    => $allUsedSymbols($allSourcesASTs($allFiles(new ArrayObject([__DIR__ . '/../src', __DIR__ . '/../test'])))),
+    ]);
 })();
