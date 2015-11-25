@@ -14,7 +14,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     public function __construct()
     {
-        $this->collectedSymbols = [];
     }
 
     /**
@@ -23,6 +22,16 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     public function getCollectedSymbols() : array
     {
         return array_keys($this->collectedSymbols);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function beforeTraverse(array $nodes)
+    {
+        $this->collectedSymbols = [];
+
+        return parent::beforeTraverse($nodes);
     }
 
     /**
@@ -37,6 +46,8 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordFunctionCallUsage($node);
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
+
+        return parent::enterNode($node);
     }
 
     private function recordExtendsUsage(Node $node)
