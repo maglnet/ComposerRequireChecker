@@ -1,5 +1,6 @@
 <?php
 
+use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
@@ -10,17 +11,8 @@ use PhpParser\ParserFactory;
 (function () {
     require_once  __DIR__ . '/../vendor/autoload.php';
 
-    $extension = '.php';
-
-    $parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-
-    $allFiles = new LocateAllFilesByExtension();
-
-    $allSourcesASTs = function (Traversable $files) use ($parser) : Traversable {
-        foreach ($files as $file) {
-            yield $parser->parse(file_get_contents($file));
-        }
-    };
+    $allFiles    = new LocateAllFilesByExtension();
+    $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
 
     $definedSymbolsCollector = new DefinedSymbolCollector();
     $definedSymbolsTraverser = new NodeTraverser();
@@ -63,7 +55,7 @@ use PhpParser\ParserFactory;
     $extension   = '.php';
 
     var_dump([
-        'defined' => $allDefinedSymbols($allSourcesASTs($allFiles($directories, $extension))),
-        'used'    => $allUsedSymbols($allSourcesASTs($allFiles($directories, $extension))),
+        'defined' => $allDefinedSymbols($sourcesASTs($allFiles($directories, $extension))),
+        'used'    => $allUsedSymbols($sourcesASTs($allFiles($directories, $extension))),
     ]);
 })();
