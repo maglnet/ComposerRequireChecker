@@ -17,11 +17,15 @@ use PhpParser\ParserFactory;
     $allDefinedSymbols = new LocateDefinedSymbolsFromASTRoots();
     $allUsedSymbols    = new LocateUsedSymbolsFromASTRoots();
 
-    $extension    = '.php';
     $composerJson = __DIR__ . '/test-data/zend-feed/composer.json';
 
     var_dump([
-        'defined' => $allDefinedSymbols($sourcesASTs($getPackageDirectDependenciesSourceFiles($composerJson), $extension)),
-        'used'    => $allUsedSymbols($sourcesASTs($getPackageSourceFiles($composerJson), $extension)),
+        'defined' => $allDefinedSymbols($sourcesASTs(
+            (new \ComposerRequireChecker\GeneratorUtil\ComposeGenerators())->__invoke(
+                $getPackageSourceFiles($composerJson),
+                $getPackageDirectDependenciesSourceFiles($composerJson)
+            )
+        )),
+        'used'    => $allUsedSymbols($sourcesASTs($getPackageSourceFiles($composerJson))),
     ]);
 })();
