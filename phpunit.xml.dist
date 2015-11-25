@@ -12,7 +12,7 @@
     syntaxCheck="true"
 >
     <testsuite name="ComposerRequireChecker tests">
-        <directory>./test/ComposerRequireChecker</directory>
+        <directory>./test/ComposerRequireCheckerTest</directory>
     </testsuite>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
