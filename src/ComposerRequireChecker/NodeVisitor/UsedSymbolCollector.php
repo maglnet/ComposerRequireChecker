@@ -3,16 +3,10 @@
 namespace ComposerRequireChecker\NodeVisitor;
 
 use PhpParser\Node;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitorAbstract;
 
 final class UsedSymbolCollector extends NodeVisitorAbstract
 {
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
-
     /**
      * @var mixed[]
      */
@@ -20,7 +14,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     public function __construct()
     {
-        $this->nameResolver     = new NameResolver();
         $this->collectedSymbols = [];
     }
 
@@ -35,18 +28,8 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     /**
      * {@inheritDoc}
      */
-    public function beforeTraverse(array $nodes)
-    {
-        return $this->nameResolver->beforeTraverse($nodes);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function enterNode(Node $node)
     {
-        $replacementNode = $this->nameResolver->enterNode($node);
-
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
         $this->recordClassExpressionUsage($node);
@@ -54,8 +37,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordFunctionCallUsage($node);
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
-
-        return $replacementNode;
     }
 
     private function recordExtendsUsage(Node $node)
