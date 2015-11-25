@@ -22,10 +22,9 @@ use PhpParser\ParserFactory;
         )
     ));
     $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
+    $unknownSymbols = array_diff($usedSymbols, $definedSymbols);
 
-    var_dump([
-        'defined'         => $definedSymbols,
-        'used'            => $usedSymbols,
-        'unknown_symbols' => array_diff($usedSymbols, $definedSymbols),
-    ]);
+    var_dump(['unknown_symbols' => $unknownSymbols]);
+
+    exit((bool) $unknownSymbols);
 })();
