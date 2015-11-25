@@ -24,7 +24,8 @@ use PhpParser\ParserFactory;
     $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
     var_dump([
-        'defined' => $definedSymbols,
-        'used'    => $usedSymbols,
+        'defined'         => $definedSymbols,
+        'used'            => $usedSymbols,
+        'unknown_symbols' => array_diff($usedSymbols, $definedSymbols),
     ]);
 })();
