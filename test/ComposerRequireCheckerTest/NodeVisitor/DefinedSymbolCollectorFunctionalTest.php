@@ -85,6 +85,16 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
         );
     }
 
+    public function testWillCollectNamespacedConstDefinition()
+    {
+        $this->traverseStringAST('namespace Foo; const foo = "bar", baz = "tab";');
+
+        self::assertSameCollectedSymbols(
+            ['Foo\foo', 'Foo\baz'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
     private function traverseStringAST(string $phpSource) : array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
