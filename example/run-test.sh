@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -x
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+mkdir -p "$DIR/test-data/zend-feed"
+git clone git@github.com:zendframework/zend-feed.git "$DIR/test-data/zend-feed"
+cd "$DIR/test-data/zend-feed"
+
+# checking out a release that is known to have "soft" (broken) dependencies:
+git checkout release-2.5.0
+
