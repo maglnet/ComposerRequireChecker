@@ -5,6 +5,7 @@ namespace ComposerRequireChecker\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
@@ -39,6 +40,7 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
         $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->traverser = new NodeTraverser();
 
+        $this->traverser->addVisitor(new NameResolver());
         $this->traverser->addVisitor($this->collector);
     }
 
@@ -56,6 +58,7 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
                 'ReflectionClass',
                 'array_diff',
                 'self',
+                'PhpParser\NodeVisitor\NameResolver',
             ],
             $this->collector->getCollectedSymbols()
         );
