@@ -11,7 +11,7 @@ class LocateDefinedSymbolsFromExtensions
     /**
      * @param string[] $extensionNames
      * @return string[]
-     * @throws \ReflectionException if the extension cannot be found
+     * @throws UnknownExtensionException if the extension cannot be found
      */
     public function __invoke(array $extensionNames) : array
     {
