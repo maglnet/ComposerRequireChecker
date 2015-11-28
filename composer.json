@@ -1,5 +1,5 @@
 {
-    "name":              "ocramius/composer-require-checker",
+    "name":              "maglnet/composer-require-checker",
     "description":       "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
     "type":              "library",
     "license":           "MIT",
@@ -18,6 +18,11 @@
             "name":     "Marco Pivetta",
             "email":    "ocramius@gmail.com",
             "homepage": "http://ocramius.github.io/"
+        },
+        {
+            "name":     "Matthias Glaub",
+            "email":    "magl@magl.net",
+            "homepage": "http://magl.net"
         }
     ],
     "minimum-stability": "dev",
