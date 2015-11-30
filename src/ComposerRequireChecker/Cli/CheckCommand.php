@@ -9,6 +9,7 @@
 namespace ComposerRequireChecker\Cli;
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
@@ -55,7 +56,9 @@ class CheckCommand extends Command
 
         $options = new Options();
 
-        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke($options->getPhpCoreExtensions());
+        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
+            (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
+        );
 
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
