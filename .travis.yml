@@ -8,3 +8,4 @@ install:
 
 script:
   - vendor/bin/phpunit
+  - php bin/composer-require-checker
