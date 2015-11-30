@@ -45,7 +45,7 @@ final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_Test
         $this->traverser->addVisitor($this->collector);
     }
 
-    public function testWillCollectSymbolsUsedInThisFile()
+    public function testWillCollectSymbolsDefinedInThisFile()
     {
         $this->traverseClassAST(self::class);
 
