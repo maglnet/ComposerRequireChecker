@@ -45,7 +45,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordCatchUsage($node);
         $this->recordFunctionCallUsage($node);
         $this->recordFunctionParameterTypesUsage($node);
-        // @todo $this->recordFunctionReturnTypeUsage($node);
+        $this->recordFunctionReturnTypeUsage($node);
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
 
@@ -115,6 +115,18 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 if(is_string($param->type)) {
                     $this->recordUsageOfByString($param->type);
                 }
+            }
+        }
+    }
+
+    private function recordFunctionReturnTypeUsage(Node $node)
+    {
+        if ($node instanceof Node\Stmt\Function_) {
+            if ($node->getReturnType() instanceof Node\Name) {
+                $this->recordUsageOf($node->getReturnType());
+            }
+            if (is_string($node->getReturnType())) {
+                $this->recordUsageOfByString($node->getReturnType());
             }
         }
     }
