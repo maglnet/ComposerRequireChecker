@@ -105,6 +105,18 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
         );
     }
 
+    public function testWillCollectMethodReturnTypes()
+    {
+        $this->traverseStringAST('<?php class Foo { function foo($bar) : My\ReturnType {}}');
+
+        self::assertSameCollectedSymbols(
+            [
+                'My\ReturnType',
+            ],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
     public function testWillCollectSimpleFunctionReturnTypes()
     {
         $this->traverseStringAST('<?php function foo($bar) : int {}');

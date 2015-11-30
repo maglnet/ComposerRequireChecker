@@ -123,7 +123,9 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordFunctionReturnTypeUsage(Node $node)
     {
-        if ($node instanceof Node\Stmt\Function_) {
+        if ($node instanceof Node\Stmt\Function_
+            || $node instanceof Node\Stmt\ClassMethod
+        ) {
             if ($node->getReturnType() instanceof Node\Name) {
                 $this->recordUsageOf($node->getReturnType());
             }
