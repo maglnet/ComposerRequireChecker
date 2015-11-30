@@ -28,6 +28,10 @@
     "minimum-stability": "dev",
     "require": {
         "php":              "~7.0",
+        "ext-json":         "*",
+        "ext-pcre":         "*",
+        "ext-spl":          "*",
+        "ext-reflection":   "*",
         "nikic/php-parser": "~2.0",
         "symfony/console":  "~3.0"
     },
