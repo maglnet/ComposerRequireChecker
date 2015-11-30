@@ -41,9 +41,6 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $whitelistSymbols = ['null', 'true', 'false', 'static', 'self', 'parent'];
-        $defaultExtensions = ["Core","standard"]; // "bcmath","calendar","ctype","date","filter","hash","iconv","json","mcrypt","SPL","pcre","Reflection","session","standard","mysqlnd","tokenizer","zip","zlib","libxml","dom","PDO","Phar","SimpleXML","xml","wddx","xmlreader","xmlwriter"];
-
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
         $sourcesASTs  = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
@@ -56,7 +53,9 @@ class CheckCommand extends Command
             )
         ));
 
-        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke($defaultExtensions);
+        $options = new Options();
+
+        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke($options->getPhpCoreExtensions());
 
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
@@ -64,7 +63,7 @@ class CheckCommand extends Command
             $usedSymbols,
             $definedVendorSymbols,
             $definedExtensionSymbols,
-            $whitelistSymbols
+            $options->getSymbolWhitelist()
         );
 
 
