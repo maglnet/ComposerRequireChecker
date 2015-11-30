@@ -107,12 +107,14 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordFunctionParameterTypesUsage(Node $node)
     {
-        if($node instanceof Node\Stmt\Function_) {
+        if ($node instanceof Node\Stmt\Function_
+            || $node instanceof Node\Stmt\ClassMethod
+        ) {
             foreach ($node->getParams() as $param) {
-                if($param->type instanceof Node\Name) {
+                if ($param->type instanceof Node\Name) {
                     $this->recordUsageOf($param->type);
                 }
-                if(is_string($param->type)) {
+                if (is_string($param->type)) {
                     $this->recordUsageOfByString($param->type);
                 }
             }

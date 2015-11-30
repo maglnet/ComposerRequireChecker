@@ -60,6 +60,8 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
                 'array_diff',
                 'self',
                 'PhpParser\NodeVisitor\NameResolver',
+                'string',
+                'array',
             ],
             $this->collector->getCollectedSymbols()
         );
@@ -68,6 +70,19 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
     public function testWillCollectFunctionDefinitionTypes()
     {
         $this->traverseStringAST('<?php function foo(My\ParameterType $bar, array $fooBar) {}');
+
+        self::assertSameCollectedSymbols(
+            [
+                'My\ParameterType',
+                'array',
+            ],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
+    public function testWillCollectMethodDefinitionTypes()
+    {
+        $this->traverseStringAST('<?php class Foo { function foo(My\ParameterType $bar, array $fooBar) {}}');
 
         self::assertSameCollectedSymbols(
             [
