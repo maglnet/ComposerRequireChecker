@@ -39,7 +39,7 @@ class CheckCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
@@ -69,8 +69,15 @@ class CheckCommand extends Command
             $options->getSymbolWhitelist()
         );
 
+        if (!$unknownSymbols) {
+            $output->writeln("There were no unknown symbols found.");
+            return 0;
+        }
 
-        $output->writeln(json_encode(['unknown_symbols' => array_values($unknownSymbols)]));
+        $output->writeln("The following unknown symbols were found:");
+        foreach ($unknownSymbols as $unknownSymbol) {
+            $output->writeln("  " . $unknownSymbol);
+        }
 
         return ((int) (bool) $unknownSymbols);
     }
