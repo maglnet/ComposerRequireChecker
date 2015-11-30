@@ -65,12 +65,42 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
         );
     }
 
-    private function traverseClassAST(string $className) : array
+    public function testWillCollectFunctionDefinitionTypes()
+    {
+        $this->traverseStringAST('<?php function foo(My\ParameterType $bar, array $fooBar) {}');
+
+        self::assertSameCollectedSymbols(
+            [
+                'My\ParameterType',
+                'array',
+            ],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
+    public function testWontCollectAnyUsageTypes()
+    {
+        $this->traverseStringAST('<?php function foo($bar) {}');
+
+        self::assertSameCollectedSymbols(
+            [],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
+    private function traverseStringAST(string $stringAST)
     {
         return $this->traverser->traverse(
             $this->parser->parse(
-                file_get_contents((new \ReflectionClass($className))->getFileName())
+                $stringAST
             )
+        );
+    }
+
+    private function traverseClassAST(string $className) : array
+    {
+        return $this->traverseStringAST(
+                file_get_contents((new \ReflectionClass($className))->getFileName())
         );
     }
 

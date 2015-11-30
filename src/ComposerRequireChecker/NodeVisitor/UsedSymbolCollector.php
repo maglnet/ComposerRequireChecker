@@ -44,7 +44,8 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
         $this->recordFunctionCallUsage($node);
-        // @todo $this->recordFunctionDefinitionTypesUsage($node);
+        $this->recordFunctionParameterTypesUsage($node);
+        // @todo $this->recordFunctionReturnTypeUsage($node);
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
 
@@ -104,6 +105,20 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         }
     }
 
+    private function recordFunctionParameterTypesUsage(Node $node)
+    {
+        if($node instanceof Node\Stmt\Function_) {
+            foreach ($node->getParams() as $param) {
+                if($param->type instanceof Node\Name) {
+                    $this->recordUsageOf($param->type);
+                }
+                if(is_string($param->type)) {
+                    $this->recordUsageOfByString($param->type);
+                }
+            }
+        }
+    }
+
     private function recordConstantFetchUsage(Node $node)
     {
         if ($node instanceof Node\Expr\ConstFetch) {
@@ -136,5 +151,15 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordUsageOf(Node\Name $symbol)
     {
         $this->collectedSymbols[(string) $symbol] = $symbol;
+    }
+
+    /**
+     * @param Node\Name $symbol
+     *
+     * @return void
+     */
+    private function recordUsageOfByString(string $symbol)
+    {
+        $this->collectedSymbols[$symbol] = $symbol;
     }
 }
