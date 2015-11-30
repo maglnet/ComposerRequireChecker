@@ -6,7 +6,11 @@ namespace ComposerRequireChecker\Cli;
 class Options
 {
 
-    private $symbolWhitelist = ['null', 'true', 'false', 'static', 'self', 'parent'];
+    private $symbolWhitelist = [
+        'null', 'true', 'false', // consts
+        'static', 'self', 'parent', // class hierarchy
+        'array', 'string', 'int', 'float', 'bool' // types
+    ];
 
     private $phpCoreExtensions = ["Core", "standard"];
 
