@@ -26,5 +26,4 @@ This package is made available under the [MIT LICENSE](LICENSE).
 
 ## Credits
 
-This package was initially designed by [Matthias Glaub](https://github.com/maglnet)
-and [Marco Pivetta](https://github.com/ocramius).
+This package was initially designed by [Marco Pivetta](https://github.com/ocramius) and [Matthias Glaub](https://github.com/maglnet).
