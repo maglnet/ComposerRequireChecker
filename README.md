@@ -10,8 +10,9 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 ## Usage
 
-Composer require checker is not supposed to be installed as part of your project dependencies.
-Instead, please install it in a separate directory via:
+Composer require checker is not supposed to be installed as part of your project dependencies.  
+Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files or
+install it in a separate directory via:
 
 ```sh
 composer create-project -s dev maglnet/composer-require-checker
