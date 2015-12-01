@@ -8,3 +8,8 @@ This will prevent you from using "soft" dependencies that are not defined within
 ## License
 
 This package is made available under the [MIT LICENSE](LICENSE).
+
+## Credits
+
+This package was initially designed by [Matthias Glaub](https://github.com/maglnet)
+and [Marco Pivetta](https://github.com/ocramius).
