@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- ============================================  -->
-<!-- Phing Build instructions                      -->
-<!-- http://www.phing.info/                        -->
-<!-- http://www.phing.info/get/phing-latest.phar   -->
-<!-- ============================================  -->
+<!-- ============================================================== -->
+<!-- Phing Build instructions                                       -->
+<!-- http://www.phing.info/                                         -->
+<!-- http://www.phing.info/get/phing-latest.phar                    -->
+<!-- php -d phar.readonly=Off phing-latest.phar phar-build-release  -->
+<!-- ============================================================== -->
 
 
 <project name="composer-require-checker" default="phar-build">
