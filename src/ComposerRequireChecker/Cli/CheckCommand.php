@@ -120,7 +120,7 @@ class CheckCommand extends Command
      * @throws InvalidInputFileException
      * @internal param string $composerJson the path to composer.json
      */
-    private function checkJsonFile(\string $jsonFile)
+    private function checkJsonFile(string $jsonFile)
     {
         if(!is_readable($jsonFile)) {
             throw new InvalidInputFileException('cannot read ' . $jsonFile);
