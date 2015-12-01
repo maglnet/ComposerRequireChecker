@@ -14,11 +14,30 @@ class Application extends AbstractApplication
 
     public function __construct()
     {
-        parent::__construct('ComposerRequireChecker', 'dev');
+        parent::__construct('ComposerRequireChecker', $this->getPackageVersion());
 
         $check = new CheckCommand();
         $this->add($check);
         $this->setDefaultCommand($check->getName());
+    }
+
+    private function getPackageVersion() : string
+    {
+        $version = null;
+        $pharFile = \Phar::running();
+        if($pharFile) {
+            $metadata = (new \Phar($pharFile))->getMetadata();
+            $version = $metadata['version'] ?? null;
+        }
+
+        if(!$version) {
+            $gitVersion = @exec('git describe --tags --dirty=-dev --always 2>&1', $output, $returnValue);
+            if($returnValue === 0) {
+                $version = $gitVersion;
+            }
+        }
+
+        return $version ?? 'unknown-development';
     }
 
 }
