@@ -33,6 +33,19 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
     }
 
+    public function testOptionsFileRepresentsDefaults()
+    {
+        $options = new Options();
+
+        $optionsFromFile = new Options(
+            json_decode(file_get_contents(
+                __DIR__ . '/../../../data/config.dist.json'
+            ), true)
+        );
+
+        $this->assertEquals($options, $optionsFromFile);
+    }
+
     public function testThrowsExceptionForUnknownOptions()
     {
         $this->setExpectedException('InvalidArgumentException');
