@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================  -->
+<!-- Phing Build instructions                      -->
+<!-- http://www.phing.info/                        -->
+<!-- http://www.phing.info/get/phing-latest.phar   -->
+<!-- ============================================  -->
+
+
+<project name="composer-require-checker" default="phar-build">
+
+    <property name="build-dir" value="build"/>
+    <property name="phar-dir" value="build/phar"/>
+
+
+    <!-- ============================================  -->
+    <!-- Target: prepare                               -->
+    <!-- ============================================  -->
+    <target name="prepare">
+        <echo msg="preparing build directory"/>
+        <mkdir dir="${build-dir}"/>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-clean                            -->
+    <!-- ============================================  -->
+    <target name="phar-clean">
+        <echo msg="removing phar build directory"/>
+        <delete dir="${phar-dir}"/>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-prepare                          -->
+    <!-- ============================================  -->
+    <target name="phar-prepare" depends="prepare">
+        <echo msg="creating phar build directory"/>
+        <mkdir dir="${phar-dir}"/>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-copy-source                      -->
+    <!-- ============================================  -->
+    <target name="phar-copy-source" depends="prepare">
+        <!--copy needed source files to phar build directory-->
+        <copy todir="${phar-dir}">
+            <fileset dir="./">
+                <include name="src/**/*.php"/>
+                <include name="bin/*"/>
+            </fileset>
+
+            <filelist dir="." files="LICENSE"/>
+            <filelist dir="." files="composer.json"/>
+            <filelist dir="." files="composer.lock"/>
+        </copy>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-prepare-dependencies             -->
+    <!-- ============================================  -->
+    <target name="phar-prepare-dependencies" depends="phar-copy-source">
+        <!--install dependencies without development requirements-->
+        <composer command="install">
+            <arg value="--no-dev"/>
+            <arg value="-o"/>
+            <arg line="-d ${phar-dir}"/>
+        </composer>
+
+        <!--delete documentation and test files from dependencies-->
+        <delete dir="${phar-dir}/vendor/symfony/console/Tests"/>
+        <delete dir="${phar-dir}/vendor/nikic/php-parser/doc"/>
+        <delete dir="${phar-dir}/vendor/nikic/php-parser/test"/>
+        <delete dir="${phar-dir}/vendor/nikic/php-parser/test_old"/>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-build                            -->
+    <!-- ============================================  -->
+    <target name="phar-build">
+        <!--find out the version / tag-->
+        <echo message="getting version string from git... "/>
+        <exec command="git describe --tags --dirty=-dev --always" outputProperty="version-string"
+              returnProperty="git-version-error"/>
+        <if>
+            <not>
+                <equals arg1="${git-version-error}" arg2="0"/>
+            </not>
+            <then>
+                <echo message="no tag found, setting version to 'development'"/>
+                <property name="version-string" value="development" override="true"/>
+            </then>
+        </if>
+        <echo message="Version is now: ${version-string}"/>
+
+        <!--create the package-->
+        <pharpackage basedir="${phar-dir}"
+                     destfile="${build-dir}/${phing.project.name}.phar"
+                     clistub="${phar-dir}/bin/composer-require-checker"
+                     compression="gzip">
+            <fileset dir="${phar-dir}">
+                <include name="**/**"/>
+            </fileset>
+            <metadata>
+                <element name="version" value="${version-string}"/>
+            </metadata>
+        </pharpackage>
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- Target: phar-build-release                    -->
+    <!-- ============================================  -->
+    <target name="phar-build-release"
+            depends="phar-clean, phar-prepare, phar-copy-source, phar-prepare-dependencies, phar-build"/>
+
+</project>

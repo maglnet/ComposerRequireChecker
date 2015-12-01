@@ -6,3 +6,5 @@ phpmd.xml
 phpdox.xml
 clover.xml
 example/test-data
+phing-latest.phar
+build/
