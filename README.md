@@ -11,7 +11,7 @@ Composer require checker is not supposed to be installed as part of your project
 Instead, please install it in a separate directory via:
 
 ```sh
-composer create-project maglnet/composer-require-checker
+composer create-project -s dev maglnet/composer-require-checker
 ```
 
 You can then use it against any of the projects on your machine:
