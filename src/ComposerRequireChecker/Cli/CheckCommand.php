@@ -12,6 +12,7 @@ use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
+use ComposerRequireChecker\Exception\InvalidInputFileException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
@@ -52,10 +53,12 @@ class CheckCommand extends Command
             $output->writeln($this->getApplication()->getLongVersion());
         }
 
+        $composerJson = $input->getArgument('composer-json');
+        $this->checkJsonFile($composerJson);
+
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
         $sourcesASTs  = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
-        $composerJson = $input->getArgument('composer-json');
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
@@ -109,6 +112,23 @@ class CheckCommand extends Command
         }
 
         return new Options($jsonData);
+
+    }
+
+    /**
+     * @param string $jsonFile
+     * @throws InvalidInputFileException
+     * @internal param string $composerJson the path to composer.json
+     */
+    private function checkJsonFile(\string $jsonFile)
+    {
+        if(!is_readable($jsonFile)) {
+            throw new InvalidInputFileException('cannot read ' . $jsonFile);
+        }
+
+        if(false == json_decode(file_get_contents($jsonFile))) {
+            throw new InvalidInputFileException('error parsing ' . $jsonFile . ': ' . json_last_error_msg());
+        }
 
     }
 
