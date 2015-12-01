@@ -99,7 +99,7 @@
         <!--create the package-->
         <pharpackage basedir="${phar-dir}"
                      destfile="${build-dir}/${phing.project.name}.phar"
-                     clistub="${phar-dir}/bin/composer-require-checker"
+                     clistub="${phar-dir}/bin/composer-require-checker.php"
                      compression="gzip">
             <fileset dir="${phar-dir}">
                 <include name="**/**"/>
