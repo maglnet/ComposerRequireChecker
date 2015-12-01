@@ -48,6 +48,10 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
 
+        if(!$output->isQuiet()) {
+            $output->writeln($this->getApplication()->getLongVersion());
+        }
+
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
         $sourcesASTs  = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
@@ -107,4 +111,5 @@ class CheckCommand extends Command
         return new Options($jsonData);
 
     }
+
 }
