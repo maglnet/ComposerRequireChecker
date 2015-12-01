@@ -30,6 +30,12 @@ class CheckCommand extends Command
         $this
             ->setName('check')
             ->setDescription('check the defined dependencies against your code')
+            ->addOption(
+                'config-file',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'the config.json file to configure the checking options'
+            )
             ->addArgument(
                 'composer-json',
                 InputArgument::OPTIONAL,
@@ -54,7 +60,7 @@ class CheckCommand extends Command
             )
         ));
 
-        $options = new Options();
+        $options = $this->getCheckOptions($input);
 
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
@@ -80,5 +86,25 @@ class CheckCommand extends Command
         }
 
         return ((int) (bool) $unknownSymbols);
+    }
+
+    private function getCheckOptions(InputInterface $input) : Options
+    {
+        $fileName = $input->getOption('config-file');
+        if(!$fileName) {
+            return new Options();
+        }
+
+        if(!is_readable($fileName)) {
+            throw new \InvalidArgumentException('unable to read ' . $fileName);
+        }
+
+        $jsonData = json_decode(file_get_contents($fileName), true);
+        if(false === $jsonData) {
+            throw new \Exception('error parsing the config file: ' . json_last_error_msg());
+        }
+
+        return new Options($jsonData);
+
     }
 }
