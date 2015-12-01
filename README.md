@@ -5,6 +5,15 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 [![Build Status](https://travis-ci.org/maglnet/ComposerRequireChecker.svg?branch=master)](https://travis-ci.org/maglnet/ComposerRequireChecker)
 
+## Usage
+
+Composer require checker is not supposed to be installed as part of your project dependencies.
+Instead, please install it in a separate directory via:
+
+```sh
+composer create-project maglnet/composer-require-checker
+```
+
 ## License
 
 This package is made available under the [MIT LICENSE](LICENSE).
