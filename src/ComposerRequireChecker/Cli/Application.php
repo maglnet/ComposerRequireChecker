@@ -31,7 +31,10 @@ class Application extends AbstractApplication
         }
 
         if(!$version) {
+            $pwd = getcwd();
+            chdir(realpath(__DIR__ . '/../../../'));
             $gitVersion = @exec('git describe --tags --dirty=-dev --always 2>&1', $output, $returnValue);
+            chdir($pwd);
             if($returnValue === 0) {
                 $version = $gitVersion;
             }
