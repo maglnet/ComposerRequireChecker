@@ -17,7 +17,7 @@ composer create-project maglnet/composer-require-checker
 You can then use it against any of the projects on your machine:
 
 ```sh
-./composer-require-checker check /path/to/your/project/composer.json
+bin/composer-require-checker check /path/to/your/project/composer.json
 ```
 
 ## License
