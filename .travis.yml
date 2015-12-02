@@ -2,6 +2,12 @@ language: php
 
 php:
   - '7'
+  - nightly
+
+matrix:
+  fast_finish : true
+  allow_failures:
+    - php: nightly
 
 install:
   - composer install
