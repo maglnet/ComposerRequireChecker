@@ -12,7 +12,7 @@ class Options
         'array', 'string', 'int', 'float', 'bool' // types
     ];
 
-    private $phpCoreExtensions = ["Core", "standard"];
+    private $phpCoreExtensions = ["Core", "standard", 'date', 'SPL', 'pcre'];
 
 
     public function __construct(array $options = [])
