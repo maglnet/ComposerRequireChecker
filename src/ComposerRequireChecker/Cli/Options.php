@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\Cli;
 
-
 class Options
 {
 
@@ -12,7 +11,14 @@ class Options
         'array', 'string', 'int', 'float', 'bool' // types
     ];
 
-    private $phpCoreExtensions = ["Core", "standard", 'date', 'SPL', 'pcre'];
+    private $phpCoreExtensions = [
+        "Core",
+        "date",
+        "pcre",
+        "Reflection",
+        "SPL",
+        "standard",
+    ];
 
 
     public function __construct(array $options = [])
