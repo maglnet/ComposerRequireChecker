@@ -5,6 +5,6 @@
     "array", "string", "int", "float", "bool"
   ],
   "php-core-extensions" : [
-    "Core", "standard"
+    "Core", "date", "pcre", "Reflection", "SPL", "standard"
   ]
 }
