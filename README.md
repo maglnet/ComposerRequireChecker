@@ -42,4 +42,5 @@ This package is made available under the [MIT LICENSE](LICENSE).
 
 ## Credits
 
-This package was initially designed by [Marco Pivetta](https://github.com/ocramius) and [Matthias Glaub](https://github.com/maglnet).
+This package was initially designed by [Marco Pivetta](https://github.com/ocramius) and [Matthias Glaub](https://github.com/maglnet).  
+And of course all [Contributors](https://github.com/maglnet/ComposerRequireChecker/graphs/contributors).
