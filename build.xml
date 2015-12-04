@@ -13,7 +13,6 @@
     <property name="build-dir" value="build"/>
     <property name="phar-dir" value="build/phar"/>
 
-    <property name="phpunit-phar" value="./phpunit.phar"/>
 
     <!-- ============================================  -->
     <!-- Target: prepare                               -->
@@ -25,23 +24,9 @@
 
 
     <!-- ============================================  -->
-    <!-- Target: prepare-dev-env                               -->
-    <!-- ============================================  -->
-    <target name="prepare-dev-env">
-        <if>
-            <not><available file='${phpunit-phar}' type='file' /></not>
-            <then>
-                <echo message="downloading PHPUnit..."/>
-                <exec command="curl -o ${phpunit-phar} https://phar.phpunit.de/phpunit.phar"/>
-            </then>
-        </if>
-    </target>
-
-
-    <!-- ============================================  -->
     <!-- Target: run-test                               -->
     <!-- ============================================  -->
-    <target name="run-test" depends="prepare-dev-env">
+    <target name="run-test">
         <php returnProperty="php-executable" expression="PHP_BINARY" level="debug"/>
         <exec command="${php-executable} vendor/phpunit/phpunit/phpunit" passthru="true" checkreturn="true"/>
         <exec command="${php-executable} bin/composer-require-checker.php" passthru="true" checkreturn="true"/>
