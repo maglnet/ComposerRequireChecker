@@ -4,7 +4,6 @@ composer.phar
 phpunit.xml
 phpmd.xml
 phpdox.xml
-phpunit.phar
 clover.xml
 example/test-data
 phing-latest.phar
