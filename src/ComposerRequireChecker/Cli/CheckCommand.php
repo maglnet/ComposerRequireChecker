@@ -12,6 +12,7 @@ use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
+use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use ComposerRequireChecker\Exception\InvalidInputFileException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
@@ -19,6 +20,8 @@ use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -88,9 +91,17 @@ class CheckCommand extends Command
         }
 
         $output->writeln("The following unknown symbols were found:");
+        $table = new Table($output);
+        $table->setHeaders(['unknown symbol', 'guessed dependency']);
+        $guesser = new DependencyGuesser();
         foreach ($unknownSymbols as $unknownSymbol) {
-            $output->writeln("  " . $unknownSymbol);
+            $guessedDependencies = [];
+            foreach($guesser($unknownSymbol) as $guessedDependency) {
+                $guessedDependencies[] = $guessedDependency;
+            }
+            $table->addRow([$unknownSymbol, implode("\n", $guessedDependencies)]);
         }
+        $table->render();
 
         return ((int) (bool) $unknownSymbols);
     }
