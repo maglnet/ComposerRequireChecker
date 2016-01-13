@@ -5,13 +5,22 @@ php:
   - nightly
 
 matrix:
-  fast_finish : true
+  fast_finish: true
   allow_failures:
     - php: nightly
+
+before_install:
+  - phpenv config-rm xdebug.ini || true
+  - composer self-update
+  - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ~/.composer/composer.json
 
 install:
   - composer install
 
+  - composer global require maglnet/composer-require-checker:@dev
+  - export PATH=$PATH:~/.composer/vendor/bin
+
 script:
   - vendor/bin/phpunit
-  - php bin/composer-require-checker
+
+  - composer-require-checker
