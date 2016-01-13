@@ -5,7 +5,26 @@ if (PHP_MAJOR_VERSION < 7) {
     exit(1);
 }
 
-require __DIR__ . '/../vendor/autoload.php';
+$autoloadFileLocations = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../../vendor/autoload.php',
+];
+
+$foundAutoloadFile = false;
+foreach ($autoloadFileLocations as $autoloadFileLocation) {
+    if (!file_exists($autoloadFileLocation)) {
+        continue;
+    }
+
+    $foundAutoloadFile = true;
+    require $autoloadFileLocation;
+    break;
+}
+
+if (false === $foundAutoloadFile) {
+    fprintf(STDERR, "Could not find Composer autoloader! Checked paths: %s\n", implode(', ', $autoloadFileLocations));
+    exit(2);
+}
 
 use ComposerRequireChecker\Cli\Application;
 
