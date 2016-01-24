@@ -1,0 +1,9 @@
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "TRAVIS_BUILD_DIR"
+        }
+    ],
+    "minimum-stability": "dev"
+}

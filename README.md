@@ -11,8 +11,40 @@ This will prevent you from using "soft" dependencies that are not defined within
 ## Usage
 
 Composer require checker is not supposed to be installed as part of your project dependencies.  
-Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files or
-install it in a separate directory via:
+
+### As a global command
+
+This package can be easily globally installed by using Composer! Just run:
+
+```sh
+composer global require maglnet/composer-require-checker
+```
+
+If you haven't installed any Composer global binaries, it may be needed to customize your 
+`~/.bashrc` / `~/.zshrc` by adding Composer binaries path to your $PATH environmental variable:
+
+```sh
+PATH="$PATH:$COMPOSER_HOME/vendor/bin"
+```
+
+Then just run `source ~/.bashrc` / `source ~/.zshrc` or start a new shell, the command can be used as:
+
+```sh
+composer-require-checker check /path/to/your/project/composer.json
+```
+
+##### Troubleshooting
+
+If command can't be located, try putting `export` just before modifying `PATH` environmental variable 
+in `~/.bashrc` / `~/.zshrc` or replacing `$COMPOSER_HOME` with `~/.composer/`.
+
+### Using PHAR file
+
+Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
+ 
+### As dev project
+
+Composer require checker can also be installed in a separate directory via:
 
 ```sh
 composer create-project -s dev maglnet/composer-require-checker

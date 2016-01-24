@@ -36,6 +36,9 @@
     "require-dev": {
         "phpunit/phpunit": "~5.0"
     },
+    "bin": [
+        "bin/composer-require-checker"
+    ],
     "autoload": {
         "psr-4": {
             "ComposerRequireChecker\\": "src/ComposerRequireChecker"
