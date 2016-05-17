@@ -121,11 +121,21 @@
         </pharpackage>
     </target>
 
+    <target name="phar-sign" depends="phar-build">
+        <exec executable="gpg">
+            <arg value="--local-user" />
+            <arg value="magl@magl.net" />
+            <arg value="--detach-sign" />
+            <arg value="--output" />
+            <arg path="${build-dir}/${phing.project.name}.phar.asc" />
+            <arg path="${build-dir}/${phing.project.name}.phar" />
+        </exec>
+    </target>
 
     <!-- ============================================  -->
     <!-- Target: phar-build-release                    -->
     <!-- ============================================  -->
     <target name="phar-build-release"
-            depends="phar-clean, phar-prepare, phar-copy-source, phar-prepare-dependencies, phar-build"/>
+            depends="phar-clean, phar-prepare, phar-copy-source, phar-prepare-dependencies, phar-build, phar-sign"/>
 
 </project>
