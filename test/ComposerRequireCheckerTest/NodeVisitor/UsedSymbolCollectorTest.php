@@ -142,8 +142,7 @@ class UsedSymbolCollectorTest extends TestCase
     public function testCatch()
     {
         $class = new Name('Foo');
-        $node = new Catch_($class, 'e');
-        $node->type = $class;
+        $node = new Catch_([$class], 'e');
 
         $this->visitor->enterNode($node);
 
