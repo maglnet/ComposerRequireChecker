@@ -21,6 +21,9 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\NodeVisitor\UsedSymbolCollector
+ */
 class UsedSymbolCollectorTest extends TestCase
 {
     /** @var UsedSymbolCollector */

@@ -8,6 +8,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots
+ */
 class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
     /** @var LocateUsedSymbolsFromASTRoots */

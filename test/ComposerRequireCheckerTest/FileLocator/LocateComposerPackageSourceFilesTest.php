@@ -8,6 +8,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
  * @todo We're missing tests for the "classmap" and "files" keys.
  */
 class LocateComposerPackageSourceFilesTest extends TestCase

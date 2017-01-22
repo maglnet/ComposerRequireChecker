@@ -7,6 +7,9 @@ use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoot
 use PhpParser\Node\Stmt\Class_;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots
+ */
 class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
     /** @var LocateDefinedSymbolsFromASTRoots */

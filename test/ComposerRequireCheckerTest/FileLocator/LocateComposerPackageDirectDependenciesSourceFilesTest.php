@@ -7,6 +7,9 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles
+ */
 class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
     /** @var LocateComposerPackageDirectDependenciesSourceFiles */

@@ -10,6 +10,9 @@ use PhpParser\Lexer;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles
+ */
 class LocateASTFromFilesTest extends TestCase
 {
     /** @var LocateASTFromFiles */
