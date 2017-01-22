@@ -90,7 +90,9 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordCatchUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\Catch_) {
-            $this->recordUsageOf($node->type);
+            foreach($node->types as $type) {
+                $this->recordUsageOf($type);
+            }
         }
     }
 
