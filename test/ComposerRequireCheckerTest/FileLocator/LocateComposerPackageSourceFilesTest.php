@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
- * @todo We're missing tests for the "classmap" and "files" keys.
+ * @todo We're missing tests for the "classmap" key.
  */
 class LocateComposerPackageSourceFilesTest extends TestCase
 {
@@ -24,6 +24,19 @@ class LocateComposerPackageSourceFilesTest extends TestCase
 
         $this->locator = new LocateComposerPackageSourceFiles();
         $this->root = vfsStream::setup();
+    }
+
+    public function testFromFiles()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"files": ["foo.php"]}}',
+            'foo.php' => '<?php class MyClass {}',
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('foo.php')->url(), $files);
     }
 
     public function testFromPsr0()
