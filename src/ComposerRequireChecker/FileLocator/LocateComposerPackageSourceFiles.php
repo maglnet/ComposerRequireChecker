@@ -55,9 +55,9 @@ final class LocateComposerPackageSourceFiles
         foreach ($locations as $location) {
             if (is_file($location)) {
                 yield $location;
+            } elseif (is_dir($location)) {
+                yield from $this->extractFilesFromDirectory($location);
             }
-
-            yield from $this->extractFilesFromDirectory($location);
         }
     }
 

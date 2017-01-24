@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
- * @todo We're missing tests for the "classmap" and "files" keys.
  */
 class LocateComposerPackageSourceFilesTest extends TestCase
 {
@@ -24,6 +23,36 @@ class LocateComposerPackageSourceFilesTest extends TestCase
 
         $this->locator = new LocateComposerPackageSourceFiles();
         $this->root = vfsStream::setup();
+    }
+
+    public function testFromClassmap()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}',
+            'src' => [
+                'MyClassA.php' => '<?php class MyClassA {}',
+            ],
+            'MyClassB.php' => '<?php class MyClassB {}',
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(2, $files);
+        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
+        $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
+    }
+
+    public function testFromFiles()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"files": ["foo.php"]}}',
+            'foo.php' => '<?php class MyClass {}',
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('foo.php')->url(), $files);
     }
 
     public function testFromPsr0()
