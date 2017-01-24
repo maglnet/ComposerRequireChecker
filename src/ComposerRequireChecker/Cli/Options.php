@@ -8,7 +8,7 @@ class Options
     private $symbolWhitelist = [
         'null', 'true', 'false', // consts
         'static', 'self', 'parent', // class hierarchy
-        'array', 'string', 'int', 'float', 'bool' // types
+        'array', 'string', 'int', 'float', 'bool', 'iterable' // types
     ];
 
     private $phpCoreExtensions = [
