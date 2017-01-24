@@ -2,7 +2,7 @@
   "symbol-whitelist" : [
     "null", "true", "false",
     "static", "self", "parent",
-    "array", "string", "int", "float", "bool", "iterable", "callable"
+    "array", "string", "int", "float", "bool", "iterable", "callable", "void"
   ],
   "php-core-extensions" : [
     "Core", "date", "pcre", "Reflection", "SPL", "standard"
