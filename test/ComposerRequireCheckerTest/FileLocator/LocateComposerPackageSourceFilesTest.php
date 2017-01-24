@@ -85,6 +85,36 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertCount(1, $files);
     }
 
+    public function testFromPsr0WithMultipleDirectories()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"psr-0": {"MyNamespace\\\\": ["src", "lib"]}}}',
+            'src' => ['MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']],
+            'lib' => ['MyNamespace' => ['MyClassB.php' => '<?php namespace MyNamespace; class MyClassB {}']],
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(2, $files);
+        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
+        $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
+    }
+
+    public function testFromPsr4WithMultipleDirectories()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src", "lib"]}}}',
+            'src' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
+            'lib' => ['MyClassB.php' => '<?php namespace MyNamespace; class MyClassB {}'],
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(2, $files);
+        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
+        $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
+    }
+
     /**
      * @return string[]
      */

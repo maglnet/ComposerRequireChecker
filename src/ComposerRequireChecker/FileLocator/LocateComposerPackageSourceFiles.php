@@ -27,11 +27,14 @@ final class LocateComposerPackageSourceFiles
 
     private function getFilePaths(array $sourceDirs, string $packageDir) : array
     {
+        $flattened = array_reduce($sourceDirs, function(array $sourceDirs, $sourceDir) {
+            return $sourceDirs + (is_array($sourceDir) ? $sourceDir : [$sourceDir]);
+        }, []);
         return array_values(array_map(
             function (string $sourceDir) use ($packageDir) {
                 return $packageDir . '/' . ltrim($sourceDir, '/');
             },
-            $sourceDirs
+            $flattened
         ));
     }
 
