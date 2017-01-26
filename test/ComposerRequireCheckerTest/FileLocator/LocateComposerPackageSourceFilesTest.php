@@ -96,8 +96,8 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $files = $this->files($this->root->getChild('composer.json')->url());
 
         $this->assertCount(2, $files);
-        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
-        $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
+        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
+        $this->assertContains($this->root->getChild('lib/MyNamespace/MyClassB.php')->url(), $files);
     }
 
     public function testFromPsr4WithMultipleDirectories()
@@ -120,6 +120,11 @@ class LocateComposerPackageSourceFilesTest extends TestCase
      */
     private function files(string $composerJson)
     {
-        return iterator_to_array(($this->locator)($composerJson));
+        $files = [];
+        $filesGenerator = ($this->locator)($composerJson);
+        foreach ($filesGenerator as $file) {
+            $files[] = $file;
+        }
+        return $files;
     }
 }
