@@ -118,7 +118,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
     /**
      * @return string[]
      */
-    private function files(string $composerJson)
+    private function files(string $composerJson): array
     {
         $files = [];
         $filesGenerator = ($this->locator)($composerJson);
