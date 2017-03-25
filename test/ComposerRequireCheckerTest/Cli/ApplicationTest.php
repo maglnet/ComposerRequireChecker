@@ -4,9 +4,10 @@ namespace ComposerRequireCheckerTest\Cli;
 
 
 use ComposerRequireChecker\Cli\Application;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
 
     /**

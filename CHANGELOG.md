@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - using nikic/php-parser 3.0
+- use PHPUnit 6.0 for testing
 
 ## [0.1.2] - 2016-05-17
 ### Added

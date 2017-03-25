@@ -10,8 +10,9 @@ namespace ComposerRequireCheckerTest\Cli;
 
 
 use ComposerRequireChecker\Cli\Options;
+use PHPUnit\Framework\TestCase;
 
-class OptionsTest extends \PHPUnit_Framework_TestCase
+class OptionsTest extends TestCase
 {
 
 
@@ -48,7 +49,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionForUnknownOptions()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $options = new Options([
             'foo-bar' => ['foo', 'bar']
         ]);

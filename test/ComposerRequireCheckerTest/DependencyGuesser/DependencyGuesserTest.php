@@ -4,8 +4,9 @@ namespace ComposerRequireCheckerTest\DependencyGuesser;
 
 
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use PHPUnit\Framework\TestCase;
 
-class DependencyGuesserTest extends \PHPUnit_Framework_TestCase
+class DependencyGuesserTest extends TestCase
 {
 
     /**

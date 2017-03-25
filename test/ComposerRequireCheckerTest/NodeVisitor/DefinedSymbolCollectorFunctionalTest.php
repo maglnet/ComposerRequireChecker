@@ -9,13 +9,14 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
  *
  * @group functional
  */
-final class DefinedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCase
+final class DefinedSymbolCollectorFunctionalTest extends TestCase
 {
     /**
      * @var DefinedSymbolCollector
