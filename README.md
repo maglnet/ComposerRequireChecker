@@ -7,6 +7,7 @@ This will prevent you from using "soft" dependencies that are not defined within
 [![current version](https://img.shields.io/packagist/v/maglnet/composer-require-checker.svg?style=flat-square)](https://packagist.org/packages/maglnet/composer-require-checker)
 [![Build Status](https://img.shields.io/travis/maglnet/ComposerRequireChecker.svg?style=flat-square)](https://travis-ci.org/maglnet/ComposerRequireChecker)
 [![Dependency Status](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea/badge.svg?style=flat)](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea)
+[![Code Coverage](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/?branch=master)
 
 ## Installation / Usage
 
