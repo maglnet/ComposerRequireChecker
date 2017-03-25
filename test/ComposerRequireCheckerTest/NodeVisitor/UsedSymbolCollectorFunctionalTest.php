@@ -9,13 +9,14 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversNothing
  *
  * @group functional
  */
-final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCase
+final class UsedSymbolCollectorFunctionalTest extends TestCase
 {
     /**
      * @var UsedSymbolCollector
@@ -52,7 +53,7 @@ final class UsedSymbolCollectorFunctionalTest extends \PHPUnit_Framework_TestCas
         self::assertSameCollectedSymbols(
             [
                 'ComposerRequireChecker\NodeVisitor\UsedSymbolCollector',
-                'PHPUnit_Framework_TestCase',
+                'PHPUnit\Framework\TestCase',
                 'PhpParser\NodeTraverser',
                 'PhpParser\ParserFactory',
                 'file_get_contents',

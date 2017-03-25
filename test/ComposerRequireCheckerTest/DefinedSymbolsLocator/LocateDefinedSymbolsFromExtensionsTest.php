@@ -4,8 +4,9 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
+use PHPUnit\Framework\TestCase;
 
-class LocateDefinedSymbolsFromExtensionsTest extends \PHPUnit_Framework_TestCase
+class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 {
 
     /**
@@ -23,7 +24,7 @@ class LocateDefinedSymbolsFromExtensionsTest extends \PHPUnit_Framework_TestCase
 
     public function testThrowsExceptionForUnknownExtension()
     {
-        $this->setExpectedException('ComposerRequireChecker\Exception\UnknownExtensionException');
+        $this->expectException('ComposerRequireChecker\Exception\UnknownExtensionException');
         $this->locator->__invoke(['unknown_extension_name']);
     }
 
