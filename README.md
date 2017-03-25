@@ -8,52 +8,31 @@ This will prevent you from using "soft" dependencies that are not defined within
 [![Build Status](https://img.shields.io/travis/maglnet/ComposerRequireChecker.svg?style=flat-square)](https://travis-ci.org/maglnet/ComposerRequireChecker)
 [![Dependency Status](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea/badge.svg?style=flat)](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea)
 
-## Usage
+## Installation / Usage
 
-Composer require checker is not supposed to be installed as part of your project dependencies.  
+Composer require checker is not supposed to be installed as part of your project dependencies.
+  
+### Composer - global command
 
-### As a global command
-
-This package can be easily globally installed by using Composer! Just run:
+This package can be easily globally installed by using [Composer]:
 
 ```sh
 composer global require maglnet/composer-require-checker
 ```
 
-If you haven't installed any Composer global binaries, it may be needed to customize your 
-`~/.bashrc` / `~/.zshrc` by adding Composer binaries path to your $PATH environmental variable:
+If you haven't already setup you composer installation to support global requirements, please refer to the [Composer cli - global]
+If this is already done, run it like this:
 
-```sh
-PATH="$PATH:$COMPOSER_HOME/vendor/bin"
 ```
-
-Then just run `source ~/.bashrc` / `source ~/.zshrc` or start a new shell, the command can be used as:
-
-```sh
 composer-require-checker check /path/to/your/project/composer.json
 ```
 
-##### Troubleshooting
-
-If command can't be located, try putting `export` just before modifying `PATH` environmental variable 
-in `~/.bashrc` / `~/.zshrc` or replacing `$COMPOSER_HOME` with `~/.composer/`.
-
-### Using PHAR file
+### PHAR file
 
 Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
- 
-### As dev project
-
-Composer require checker can also be installed in a separate directory via:
-
-```sh
-composer create-project -s dev maglnet/composer-require-checker
+Download the latest release and and run it like this:
 ```
-
-You can then use it against any of the projects on your machine:
-
-```sh
-bin/composer-require-checker check /path/to/your/project/composer.json
+php composer-require-checker.phar check /path/to/your/project/composer.json
 ```
 
 ## Configuration
@@ -62,7 +41,6 @@ Composer require checker is configured to whitelist some symbols per default. Ha
 [config file example](data/config.dist.json) to see which configuration options are available.
 
 You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration.
-
 
 ```sh
 bin/composer-require-checker check --config-file path/to/config.json /path/to/your/project/composer.json
@@ -76,3 +54,6 @@ This package is made available under the [MIT LICENSE](LICENSE).
 
 This package was initially designed by [Marco Pivetta](https://github.com/ocramius) and [Matthias Glaub](https://github.com/maglnet).  
 And of course all [Contributors](https://github.com/maglnet/ComposerRequireChecker/graphs/contributors).
+
+[Composer]: https://getcomposer.org
+[Composer cli - global]: https://getcomposer.org/doc/03-cli.md#global
