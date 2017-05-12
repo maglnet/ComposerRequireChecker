@@ -56,7 +56,7 @@ class CheckCommand extends Command
             $output->writeln($this->getApplication()->getLongVersion());
         }
 
-        $composerJson = $input->getArgument('composer-json');
+        $composerJson = getcwd() . '/' . $input->getArgument('composer-json');
         $this->checkJsonFile($composerJson);
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
