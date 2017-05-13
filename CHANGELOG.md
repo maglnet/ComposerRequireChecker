@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- fixes problems when provided composer.json path was absolute
+
+## [0.1.3] - 2017-05-13
 ### Added
 - CHANGELOG
 - support for PHP 7.1
@@ -12,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - using nikic/php-parser 3.0
 - use PHPUnit 6.0 for testing
+- fixes problems with relative paths when used as phar file
 
 ## [0.1.2] - 2016-05-17
 ### Added
