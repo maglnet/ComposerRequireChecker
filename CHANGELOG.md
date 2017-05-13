@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+## [0.1.4] - 2017-05-13
 ### Changed
 - fixes problems when provided composer.json path was absolute
 
@@ -28,7 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.3...HEAD
+[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.4...HEAD
+[0.1.4]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.3...0.1.4
 [0.1.3]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.0...0.1.1
