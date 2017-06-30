@@ -38,9 +38,24 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(3, $symbols);
+
         $this->assertContains('MyClassA', $symbols);
         $this->assertContains('MyClassB', $symbols);
         $this->assertContains('MyClassC', $symbols);
+    }
+
+    public function testBasicLocateAnonymous()
+    {
+        $roots = [
+            [new Class_(null)],
+        ];
+
+        $symbols = $this->locate([$roots]);
+
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(0, $symbols);
     }
 
     private function locate(array $roots): array
