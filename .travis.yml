@@ -1,29 +1,34 @@
 language: php
 
-php:
-  - '7.0'
-  - '7.1'
-  - nightly
+sudo: false
+
+git:
+    depth: 1
 
 matrix:
-  fast_finish: true
-  allow_failures:
-    - php: nightly
+    fast_finish: true
+    include:
+        - php: 7.0
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+        - php: 7.1
+        - php: nightly
+    allow_failures:
+        - php: nightly
 
 before_install:
-  - composer self-update
-  - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ~/.composer/composer.json
+    - composer self-update
+    - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ~/.composer/composer.json
 
 install:
-  - composer install -vvv
-
-  - composer global require maglnet/composer-require-checker:@dev
-  - export PATH=$PATH:~/.composer/vendor/bin
+    - composer update $COMPOSER_FLAGS --no-interaction --no-progress -vvv
+    - composer global require maglnet/composer-require-checker:@dev
+    - export PATH=$PATH:~/.composer/vendor/bin
+    - composer info -D | sort
 
 script:
-  - vendor/bin/phpunit --coverage-clover=clover.xml
-  - composer-require-checker
+    - vendor/bin/phpunit --coverage-clover=clover.xml
+    - composer-require-checker
 
 after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover clover.xml
+    - wget https://scrutinizer-ci.com/ocular.phar
+    - php ocular.phar code-coverage:upload --format=php-clover clover.xml

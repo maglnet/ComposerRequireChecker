@@ -48,7 +48,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
 
     private function recordClassDefinition(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_) {
+        if ($node instanceof Node\Stmt\Class_ && !$node->isAnonymous()) {
             $this->recordDefinitionOf($node);
         }
     }
