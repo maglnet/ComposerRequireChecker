@@ -37,6 +37,9 @@
         "phpunit/phpunit":    "~6.0",
         "mikey179/vfsStream": "^1.6"
     },
+    "config": {
+        "optimize-autoloader": true
+    },
     "bin": [
         "bin/composer-require-checker"
     ],

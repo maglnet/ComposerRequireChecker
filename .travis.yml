@@ -20,7 +20,7 @@ before_install:
     - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ~/.composer/composer.json
 
 install:
-    - composer update $COMPOSER_FLAGS --no-interaction --no-progress --optimize-autoloader -vvv
+    - composer update $COMPOSER_FLAGS --no-interaction --no-progress -vvv
     - composer global require maglnet/composer-require-checker:@dev
     - export PATH=$PATH:~/.composer/vendor/bin
     - composer info -D | sort
