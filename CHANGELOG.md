@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- print the count of found symbols for a manual sanity check
 
 ### Changed
 
