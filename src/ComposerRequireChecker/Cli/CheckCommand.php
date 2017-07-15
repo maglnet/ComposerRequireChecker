@@ -88,6 +88,8 @@ class CheckCommand extends Command
             $options->getSymbolWhitelist()
         );
 
+        $output->writeln("Symbols checked: " . count($usedSymbols));
+
         if (!$unknownSymbols) {
             $output->writeln("There were no unknown symbols found.");
             return 0;
