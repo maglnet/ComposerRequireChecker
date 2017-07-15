@@ -5,6 +5,11 @@
     "array", "string", "int", "float", "bool", "iterable", "callable", "void"
   ],
   "php-core-extensions" : [
-    "Core", "date", "pcre", "Reflection", "SPL", "standard"
+    "Core",
+    "date",
+    "pcre",
+    "Reflection",
+    "SPL",
+    "standard"
   ]
 }
