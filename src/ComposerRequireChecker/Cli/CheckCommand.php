@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: matthias
- * Date: 28.11.15
- * Time: 16:16
- */
 
 namespace ComposerRequireChecker\Cli;
 
@@ -21,7 +15,6 @@ use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -62,9 +55,11 @@ class CheckCommand extends Command
         }
         $this->checkJsonFile($composerJson);
 
+        $options = $this->getCheckOptions($input);
+
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        $sourcesASTs  = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
@@ -73,13 +68,16 @@ class CheckCommand extends Command
             )
         ));
 
-        $options = $this->getCheckOptions($input);
-
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
 
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
+
+        if (!count($usedSymbols)) {
+            $output->writeln("There were no symbols found, please check your configuration.");
+            return 255;
+        }
 
         $unknownSymbols = array_diff(
             $usedSymbols,
