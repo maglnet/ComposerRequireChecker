@@ -44,7 +44,7 @@ final class LocateComposerPackageSourceFiles
 
     private function normalizePath(string $path) : string
     {
-        return str_replace(['\\', '/'], '/', $path);
+        return str_replace('\\', '/', $path);
     }
 
     private function locateFilesInPsr0Definitions(array $locations) : Generator
