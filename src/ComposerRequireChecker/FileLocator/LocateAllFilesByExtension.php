@@ -25,7 +25,7 @@ final class LocateAllFilesByExtension
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
-            if ($file->isDir() || ! preg_match($extensionMatcher, $file->getBasename())) {
+            if ( ! preg_match($extensionMatcher, $file->getBasename())) {
                 continue;
             }
 
