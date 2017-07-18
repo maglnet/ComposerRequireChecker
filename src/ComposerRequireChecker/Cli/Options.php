@@ -15,6 +15,7 @@ class Options
         "Core",
         "date",
         "pcre",
+        "Phar",
         "Reflection",
         "SPL",
         "standard",
