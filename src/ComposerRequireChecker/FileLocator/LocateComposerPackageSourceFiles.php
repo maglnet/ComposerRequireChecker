@@ -42,9 +42,9 @@ final class LocateComposerPackageSourceFiles
         ));
     }
 
-    private function normalizePath(string $path)
+    private function normalizePath(string $path) : string
     {
-        return str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
+        return str_replace(['\\', '/'], '/', $path);
     }
 
     private function locateFilesInPsr0Definitions(array $locations) : Generator

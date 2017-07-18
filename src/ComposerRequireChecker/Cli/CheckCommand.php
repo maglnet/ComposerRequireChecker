@@ -75,8 +75,7 @@ class CheckCommand extends Command
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
         if (!count($usedSymbols)) {
-            $output->writeln("There were no symbols found, please check your configuration.");
-            return 255;
+            throw new \LogicException('There were no symbols found, please check your configuration.');
         }
 
         $unknownSymbols = array_diff(
