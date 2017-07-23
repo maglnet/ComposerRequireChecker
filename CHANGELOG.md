@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.1.5] - 2017-07-23
 ### Added
 - added builtin phar extension to default list
 - fixes problems when parsing anonymous classes (#23)
@@ -35,7 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.4...HEAD
+[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.5...HEAD
+[0.1.5]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.3...0.1.4
 [0.1.3]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.1...0.1.2
