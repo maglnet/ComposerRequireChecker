@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - added builtin phar extension to default list
+- fixes problems when parsing anonymous classes (#23)
 
 ### Changed
 
