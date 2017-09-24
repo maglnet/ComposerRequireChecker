@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+## [0.1.6] - 2017-09-24
+### Added
 - add shebang `#!/usr/bin/env php` to phar file / allows direct execution of phar file 
 
 ### Changed
@@ -41,7 +46,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.5...HEAD
+[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.6...HEAD
+[0.1.6]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.5...0.1.6
 [0.1.5]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.3...0.1.4
 [0.1.3]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.2...0.1.3
