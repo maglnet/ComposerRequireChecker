@@ -91,7 +91,7 @@
     <!-- ============================================  -->
     <!-- Target: phar-build                            -->
     <!-- ============================================  -->
-    <target name="phar-build" depends="run-test">
+    <target name="phar-build" depends="run-test,phar-copy-source">
         <!--find out the version / tag-->
         <echo message="getting version string from git... "/>
         <exec command="git describe --tags --dirty=-dev --always" outputProperty="version-string"
@@ -108,9 +108,10 @@
         <echo message="Version is now: ${version-string}"/>
 
         <!--create the package-->
+        <php expression="file_put_contents('${phar-dir}/clistub.php', '#!/usr/bin/env php' . PHP_EOL . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
         <pharpackage basedir="${phar-dir}"
                      destfile="${build-dir}/${phing.project.name}.phar"
-                     clistub="${phar-dir}/bin/composer-require-checker.php"
+                     stub="${phar-dir}/clistub.php"
                      compression="gzip">
             <fileset dir="${phar-dir}">
                 <include name="**/**"/>

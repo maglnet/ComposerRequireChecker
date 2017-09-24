@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- add shebang `#!/usr/bin/env php` to phar file / allows direct execution of phar file 
 
 ### Changed
 
