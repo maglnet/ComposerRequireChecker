@@ -17,6 +17,7 @@ use ComposerRequireChecker\Exception\InvalidInputFileException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
+use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
@@ -116,17 +117,15 @@ class CheckCommand extends Command
             return new Options();
         }
 
-        if(!is_readable($fileName)) {
-            throw new \InvalidArgumentException('unable to read ' . $fileName);
+        $loader = new JsonLoader($fileName);
+        switch ($loader->getErrorCode()) {
+            case JsonLoader::ERROR_NO_READABLE:
+                throw new \InvalidArgumentException('unable to read ' . $fileName);
+            case JsonLoader::ERROR_INVALID_JSON:
+                throw new \Exception('error parsing the config file: ' . $loader->getErrorMessage());
+            default:
+                return new Options($loader->getData());
         }
-
-        $jsonData = json_decode(file_get_contents($fileName), true);
-        if(false === $jsonData || null === $jsonData) {
-            throw new \Exception('error parsing the config file: ' . json_last_error_msg());
-        }
-
-        return new Options($jsonData);
-
     }
 
     /**
@@ -136,12 +135,14 @@ class CheckCommand extends Command
      */
     private function checkJsonFile(string $jsonFile)
     {
-        if(!is_readable($jsonFile)) {
-            throw new InvalidInputFileException('cannot read ' . $jsonFile);
-        }
-
-        if(false == json_decode(file_get_contents($jsonFile))) {
-            throw new InvalidInputFileException('error parsing ' . $jsonFile . ': ' . json_last_error_msg());
+        $loader = new JsonLoader($jsonFile);
+        switch ($loader->getErrorCode()) {
+            case JsonLoader::ERROR_NO_READABLE:
+                throw new InvalidInputFileException('cannot read ' . $jsonFile);
+            case JsonLoader::ERROR_INVALID_JSON:
+                throw new InvalidInputFileException('error parsing ' . $jsonFile . ': ' . $loader->getErrorMessage());
+            default:
+                break;
         }
 
     }
