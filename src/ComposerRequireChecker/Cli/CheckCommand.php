@@ -121,7 +121,7 @@ class CheckCommand extends Command
         }
 
         $jsonData = json_decode(file_get_contents($fileName), true);
-        if(false === $jsonData) {
+        if(false === $jsonData || null === $jsonData) {
             throw new \Exception('error parsing the config file: ' . json_last_error_msg());
         }
 
