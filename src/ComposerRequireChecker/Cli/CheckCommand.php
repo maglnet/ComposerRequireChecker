@@ -13,7 +13,6 @@ use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
-use ComposerRequireChecker\Exception\InvalidInputFileException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
@@ -116,35 +115,19 @@ class CheckCommand extends Command
         if(!$fileName) {
             return new Options();
         }
-
-        $loader = new JsonLoader($fileName);
-        switch ($loader->getErrorCode()) {
-            case JsonLoader::ERROR_NO_READABLE:
-                throw new \InvalidArgumentException('unable to read ' . $fileName);
-            case JsonLoader::ERROR_INVALID_JSON:
-                throw new \Exception('error parsing the config file: ' . $loader->getErrorMessage());
-            default:
-                return new Options($loader->getData());
-        }
+        return new Options((new JsonLoader($fileName))->getData());
     }
 
     /**
      * @param string $jsonFile
-     * @throws InvalidInputFileException
+     * @throws \ComposerRequireChecker\Exception\InvalidJsonException
+     * @throws \ComposerRequireChecker\Exception\NotReadableException
      * @internal param string $composerJson the path to composer.json
      */
     private function checkJsonFile(string $jsonFile)
     {
-        $loader = new JsonLoader($jsonFile);
-        switch ($loader->getErrorCode()) {
-            case JsonLoader::ERROR_NO_READABLE:
-                throw new InvalidInputFileException('cannot read ' . $jsonFile);
-            case JsonLoader::ERROR_INVALID_JSON:
-                throw new InvalidInputFileException('error parsing ' . $jsonFile . ': ' . $loader->getErrorMessage());
-            default:
-                break;
-        }
-
+        // JsonLoader throws an exception if it cannot load the file
+        new JsonLoader($jsonFile);
     }
 
 }

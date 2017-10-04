@@ -2,38 +2,35 @@
 
 namespace ComposerRequireCheckerTest;
 
+use ComposerRequireChecker\Exception\InvalidJsonException;
+use ComposerRequireChecker\Exception\NotReadableException;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \ComposerRequireChecker\JsonLoader
+ */
 class JsonLoaderTest extends TestCase
 {
 
     public function testHasErrorWithWrongPath()
     {
         $path = __DIR__ . '/wrong/path/non-existing-file.json';
-        $loader = new JsonLoader($path);
-        $this->assertEquals($loader->getErrorCode(), JsonLoader::ERROR_NO_READABLE);
-        $this->assertEquals($loader->getPath(), $path);
-        $this->assertNull($loader->getData());
+        $this->expectException(NotReadableException::class);
+        new JsonLoader($path);
     }
 
     public function testHasErrorWithInvalidFile()
     {
         $path = __DIR__ . '/../fixtures/invalidJson';
-        $loader = new JsonLoader($path);
-        $this->assertEquals($loader->getErrorCode(), JsonLoader::ERROR_INVALID_JSON);
-        $this->assertEquals($loader->getPath(), $path);
-        $this->assertNotEmpty($loader->getErrorMessage());
-        $this->assertNull($loader->getData());
+        $this->expectException(InvalidJsonException::class);
+        new JsonLoader($path);
     }
 
     public function testHasDataWithValidFile()
     {
         $path = __DIR__ . '/../fixtures/validJson.json';
         $loader = new JsonLoader($path);
-        $this->assertEquals($loader->getErrorCode(), JsonLoader::NO_ERROR);
-        $this->assertEquals($loader->getPath(), $path);
-        $this->assertEmpty($loader->getErrorMessage());
         $this->assertEquals($loader->getData(), ['foo' => 'bar']);
     }
 
