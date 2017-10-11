@@ -16,6 +16,7 @@ class JsonLoader {
      * @param string $path
      * @throws InvalidJsonException
      * @throws NotReadableException
+     * @internal
      */
     public function __construct($path)
     {
@@ -29,6 +30,7 @@ class JsonLoader {
     }
 
     /**
+     * @internal
      * @return mixed
      */
     public function getData()
