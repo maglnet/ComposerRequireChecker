@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
-
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 
 class GuessFromLoadedExtensions implements GuesserInterface

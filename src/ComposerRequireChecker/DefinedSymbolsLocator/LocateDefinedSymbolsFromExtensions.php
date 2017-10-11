@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
-
 use ComposerRequireChecker\Exception\UnknownExtensionException;
 
 class LocateDefinedSymbolsFromExtensions
@@ -31,6 +30,4 @@ class LocateDefinedSymbolsFromExtensions
         }
         return $definedSymbols;
     }
-
-
 }

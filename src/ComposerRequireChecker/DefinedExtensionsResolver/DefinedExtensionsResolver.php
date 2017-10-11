@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DefinedExtensionsResolver;
 
-
 class DefinedExtensionsResolver
 {
 

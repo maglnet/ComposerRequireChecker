@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
-
 class DependencyGuesser
 {
 
@@ -22,6 +21,4 @@ class DependencyGuesser
             yield from $guesser($symbolName);
         }
     }
-
-
 }

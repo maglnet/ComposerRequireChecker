@@ -38,5 +38,4 @@ class JsonLoader
     {
         return $this->data;
     }
-
 }

@@ -71,7 +71,8 @@ class CheckCommand extends Command
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
 
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())
+            ->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
         if (!count($usedSymbols)) {
             throw new \LogicException('There were no symbols found, please check your configuration.');
@@ -125,5 +126,4 @@ class CheckCommand extends Command
         // JsonLoader throws an exception if it cannot load the file
         new JsonLoader($jsonFile);
     }
-
 }

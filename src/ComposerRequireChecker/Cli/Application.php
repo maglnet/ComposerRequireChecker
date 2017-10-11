@@ -43,5 +43,4 @@ class Application extends AbstractApplication
 
         return $version ?? 'unknown-development';
     }
-
 }

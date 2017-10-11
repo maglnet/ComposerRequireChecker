@@ -38,7 +38,9 @@ class Options
         foreach ($options as $key => $option) {
             $methodName = 'set' . $this->getCamelCase($key);
             if (!method_exists($this, $methodName)) {
-                throw new \InvalidArgumentException($key . ' is not a known option - there is no method ' . $methodName);
+                throw new \InvalidArgumentException(
+                    $key . ' is not a known option - there is no method ' . $methodName
+                );
             }
             $this->$methodName($option);
         }
