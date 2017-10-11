@@ -16,9 +16,9 @@ class DependencyGuesser
         $this->guessers[] = new GuessFromLoadedExtensions();
     }
 
-    public function __invoke($symbolName) : \Generator
+    public function __invoke($symbolName): \Generator
     {
-        foreach($this->guessers as $guesser) {
+        foreach ($this->guessers as $guesser) {
             yield from $guesser($symbolName);
         }
     }

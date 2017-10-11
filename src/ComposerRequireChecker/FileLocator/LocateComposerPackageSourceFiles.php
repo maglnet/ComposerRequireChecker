@@ -6,9 +6,9 @@ use Generator;
 
 final class LocateComposerPackageSourceFiles
 {
-    public function __invoke(string $composerJsonPath) : Generator
+    public function __invoke(string $composerJsonPath): Generator
     {
-        $packageDir   = dirname($composerJsonPath);
+        $packageDir = dirname($composerJsonPath);
         $composerData = json_decode(file_get_contents($composerJsonPath), true);
 
         yield from $this->locateFilesInClassmapDefinitions(
@@ -25,7 +25,7 @@ final class LocateComposerPackageSourceFiles
         );
     }
 
-    private function getFilePaths(array $sourceDirs, string $packageDir) : array
+    private function getFilePaths(array $sourceDirs, string $packageDir): array
     {
         $flattened = array_reduce(
             $sourceDirs,
@@ -42,27 +42,27 @@ final class LocateComposerPackageSourceFiles
         ));
     }
 
-    private function normalizePath(string $path) : string
+    private function normalizePath(string $path): string
     {
         return str_replace('\\', '/', $path);
     }
 
-    private function locateFilesInPsr0Definitions(array $locations) : Generator
+    private function locateFilesInPsr0Definitions(array $locations): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations);
     }
 
-    private function locateFilesInPsr4Definitions(array $locations) : Generator
+    private function locateFilesInPsr4Definitions(array $locations): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations);
     }
 
-    private function locateFilesInClassmapDefinitions(array $locations) : Generator
+    private function locateFilesInClassmapDefinitions(array $locations): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations);
     }
 
-    private function locateFilesInFilesInFilesDefinitions(array $locations) : Generator
+    private function locateFilesInFilesInFilesDefinitions(array $locations): Generator
     {
         foreach ($locations as $location) {
             if (is_file($location)) {
@@ -73,7 +73,7 @@ final class LocateComposerPackageSourceFiles
         }
     }
 
-    private function extractFilesFromDirectory(string $directory) : Generator
+    private function extractFilesFromDirectory(string $directory): Generator
     {
         yield from (new LocateAllFilesByExtension())->__invoke(new \ArrayIterator([$directory]), '.php');
     }

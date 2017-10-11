@@ -1,4 +1,5 @@
 <?php
+
 namespace ComposerRequireChecker\Exception;
 
 

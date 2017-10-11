@@ -19,7 +19,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     /**
      * @return string[]
      */
-    public function getCollectedSymbols() : array
+    public function getCollectedSymbols(): array
     {
         return array_keys($this->collectedSymbols);
     }
@@ -90,7 +90,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordCatchUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\Catch_) {
-            foreach($node->types as $type) {
+            foreach ($node->types as $type) {
                 $this->recordUsageOf($type);
             }
         }
@@ -146,7 +146,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordTraitUsage(Node $node)
     {
-        if (! $node instanceof Node\Stmt\TraitUse) {
+        if (!$node instanceof Node\Stmt\TraitUse) {
             return;
         }
 
@@ -168,7 +168,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
      */
     private function recordUsageOf(Node\Name $symbol)
     {
-        $this->collectedSymbols[(string) $symbol] = $symbol;
+        $this->collectedSymbols[(string)$symbol] = $symbol;
     }
 
     /**

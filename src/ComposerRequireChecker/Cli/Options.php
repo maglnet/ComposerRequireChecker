@@ -6,9 +6,20 @@ class Options
 {
 
     private $symbolWhitelist = [
-        'null', 'true', 'false', // consts
-        'static', 'self', 'parent', // class hierarchy
-        'array', 'string', 'int', 'float', 'bool', 'iterable', 'callable', 'void' // types
+        'null',
+        'true',
+        'false', // consts
+        'static',
+        'self',
+        'parent', // class hierarchy
+        'array',
+        'string',
+        'int',
+        'float',
+        'bool',
+        'iterable',
+        'callable',
+        'void' // types
     ];
 
     private $phpCoreExtensions = [
@@ -25,8 +36,8 @@ class Options
     public function __construct(array $options = [])
     {
         foreach ($options as $key => $option) {
-            $methodName = 'set'.$this->getCamelCase($key);
-            if(!method_exists($this, $methodName)) {
+            $methodName = 'set' . $this->getCamelCase($key);
+            if (!method_exists($this, $methodName)) {
                 throw new \InvalidArgumentException($key . ' is not a known option - there is no method ' . $methodName);
             }
             $this->$methodName($option);
@@ -36,7 +47,7 @@ class Options
     /**
      * @return array
      */
-    public function getSymbolWhitelist() : array
+    public function getSymbolWhitelist(): array
     {
         return $this->symbolWhitelist;
     }
@@ -44,7 +55,7 @@ class Options
     /**
      * @return array
      */
-    public function getPhpCoreExtensions() : array
+    public function getPhpCoreExtensions(): array
     {
         return $this->phpCoreExtensions;
     }
@@ -69,7 +80,7 @@ class Options
      * @param string $string some-string
      * @return string someString
      */
-    private function getCamelCase(string $string) : string
+    private function getCamelCase(string $string): string
     {
         return ucfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
     }

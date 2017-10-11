@@ -29,7 +29,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     /**
      * @return string[]
      */
-    public function getDefinedSymbols() : array
+    public function getDefinedSymbols(): array
     {
         return array_keys($this->definedSymbols);
     }
@@ -90,7 +90,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
      */
     private function recordDefinitionOf(Node $node)
     {
-        if (! isset($node->namespacedName)) {
+        if (!isset($node->namespacedName)) {
             throw new \UnexpectedValueException(sprintf(
                 'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
                 . 'did you pass it through a name resolver visitor?',
@@ -99,6 +99,6 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             ));
         }
 
-        $this->definedSymbols[(string) $node->namespacedName] = $node->namespacedName;
+        $this->definedSymbols[(string)$node->namespacedName] = $node->namespacedName;
     }
 }

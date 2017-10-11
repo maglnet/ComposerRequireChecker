@@ -6,7 +6,7 @@ namespace ComposerRequireChecker\DefinedExtensionsResolver;
 class DefinedExtensionsResolver
 {
 
-    public function __invoke(string $composerJson, array $phpCoreExtensions = []) : array
+    public function __invoke(string $composerJson, array $phpCoreExtensions = []): array
     {
         $requires = json_decode(file_get_contents($composerJson), true)['require'] ?? [];
 

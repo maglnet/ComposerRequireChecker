@@ -13,11 +13,11 @@ class LocateDefinedSymbolsFromExtensions
      * @return string[]
      * @throws UnknownExtensionException if the extension cannot be found
      */
-    public function __invoke(array $extensionNames) : array
+    public function __invoke(array $extensionNames): array
     {
         $definedSymbols = [];
-        foreach($extensionNames as $extensionName) {
-            try{
+        foreach ($extensionNames as $extensionName) {
+            try {
                 $extensionReflection = new \ReflectionExtension($extensionName);
                 $definedSymbols = array_merge(
                     $definedSymbols,
@@ -31,7 +31,6 @@ class LocateDefinedSymbolsFromExtensions
         }
         return $definedSymbols;
     }
-
 
 
 }
