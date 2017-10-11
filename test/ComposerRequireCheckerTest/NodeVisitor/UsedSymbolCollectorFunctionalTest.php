@@ -3,7 +3,6 @@
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
-use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -149,10 +148,10 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private function traverseClassAST(string $className) : array
+    private function traverseClassAST(string $className): array
     {
         return $this->traverseStringAST(
-                file_get_contents((new \ReflectionClass($className))->getFileName())
+            file_get_contents((new \ReflectionClass($className))->getFileName())
         );
     }
 

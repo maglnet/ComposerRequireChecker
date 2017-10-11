@@ -3,7 +3,6 @@
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
-use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -39,7 +38,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     protected function setUp()
     {
         $this->collector = new DefinedSymbolCollector();
-        $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());
@@ -96,12 +95,12 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private function traverseStringAST(string $phpSource) : array
+    private function traverseStringAST(string $phpSource): array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
     }
 
-    private function traverseClassAST(string $className) : array
+    private function traverseClassAST(string $className): array
     {
         return $this->traverser->traverse(
             $this->parser->parse(

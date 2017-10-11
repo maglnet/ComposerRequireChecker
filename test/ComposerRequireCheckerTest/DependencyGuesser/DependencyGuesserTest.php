@@ -21,7 +21,7 @@ class DependencyGuesserTest extends TestCase
 
     public function testGuessExtJson()
     {
-        if(!extension_loaded('json')) {
+        if (!extension_loaded('json')) {
             $this->markTestSkipped('extension json is not available');
         }
         $result = $this->guesser->__invoke('json_decode');
