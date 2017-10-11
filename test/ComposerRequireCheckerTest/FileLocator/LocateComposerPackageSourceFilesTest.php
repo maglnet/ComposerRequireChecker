@@ -115,6 +115,36 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
     }
 
+    public function testFromPsr4WithNestedDirectory()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src/MyNamespace"]}}}',
+            'src' => [
+                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']
+            ],
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
+    }
+
+    public function testFromPsr4WithNestedDirectoryAlternativeDirectorySeparator()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src\\\\MyNamespace"]}}}',
+            'src' => [
+                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']
+            ],
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
+    }
+
     /**
      * @return string[]
      */

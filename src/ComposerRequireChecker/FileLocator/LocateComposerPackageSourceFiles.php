@@ -36,10 +36,15 @@ final class LocateComposerPackageSourceFiles
         );
         return array_values(array_map(
             function (string $sourceDir) use ($packageDir) {
-                return $packageDir . '/' . ltrim($sourceDir, '/');
+                return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
             },
             $flattened
         ));
+    }
+
+    private function normalizePath(string $path) : string
+    {
+        return str_replace('\\', '/', $path);
     }
 
     private function locateFilesInPsr0Definitions(array $locations) : Generator
