@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- displays more detailed errors if json config format is not valid
 
 ## [0.1.6] - 2017-09-24
 ### Added

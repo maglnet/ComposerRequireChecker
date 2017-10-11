@@ -44,7 +44,7 @@ Composer require checker is configured to whitelist some symbols per default. Ha
 You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration.
 
 ```sh
-bin/composer-require-checker check --config-file path/to/config.json /path/to/your/project/composer.json
+bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
 ``` 
 
 ## License

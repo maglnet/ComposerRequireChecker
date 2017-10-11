@@ -3,7 +3,7 @@
 namespace ComposerRequireChecker\Exception;
 
 
-class InvalidInputFileException extends \Exception
+class NotReadableException extends \Exception
 {
 
 }

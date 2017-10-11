@@ -7,10 +7,10 @@ use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
-use ComposerRequireChecker\Exception\InvalidInputFileException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
+use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
@@ -112,35 +112,19 @@ class CheckCommand extends Command
         if(!$fileName) {
             return new Options();
         }
-
-        if(!is_readable($fileName)) {
-            throw new \InvalidArgumentException('unable to read ' . $fileName);
-        }
-
-        $jsonData = json_decode(file_get_contents($fileName), true);
-        if(false === $jsonData) {
-            throw new \Exception('error parsing the config file: ' . json_last_error_msg());
-        }
-
-        return new Options($jsonData);
-
+        return new Options((new JsonLoader($fileName))->getData());
     }
 
     /**
      * @param string $jsonFile
-     * @throws InvalidInputFileException
+     * @throws \ComposerRequireChecker\Exception\InvalidJsonException
+     * @throws \ComposerRequireChecker\Exception\NotReadableException
      * @internal param string $composerJson the path to composer.json
      */
     private function checkJsonFile(string $jsonFile)
     {
-        if(!is_readable($jsonFile)) {
-            throw new InvalidInputFileException('cannot read ' . $jsonFile);
-        }
-
-        if(false == json_decode(file_get_contents($jsonFile))) {
-            throw new InvalidInputFileException('error parsing ' . $jsonFile . ': ' . json_last_error_msg());
-        }
-
+        // JsonLoader throws an exception if it cannot load the file
+        new JsonLoader($jsonFile);
     }
 
 }
