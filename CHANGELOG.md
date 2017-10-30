@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - when locating files "exclude-from-classmap" will be taken into account
 - add option "--fail-on-parse-error"  
   ComposerRequireChecker will only throw parser exceptions if this is set (#35)
+- add option "--ignore-parse-errors"  
+  ComposerRequireChecker will not throw parser exceptions if this is set (#35)
 
 ## [0.1.6] - 2017-09-24
 ### Added

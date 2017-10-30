@@ -41,11 +41,11 @@ class CheckCommand extends Command
                 './composer.json'
             )
         ->addOption(
-                'fail-on-parse-error',
+                'ignore-parse-errors',
                 null,
                 InputOption::VALUE_NONE,
-                'this will cause ComposerRequireChecker to fail when files cannot be parsed, otherwise'
-                . ' parse errors will be ignored'
+                'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
+                . ' errors will be thrown'
             );
     }
 
@@ -65,7 +65,7 @@ class CheckCommand extends Command
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        $errorHandler = $input->getOption('fail-on-parse-error') ? null : new CollectingErrorHandler();
+        $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
         $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
