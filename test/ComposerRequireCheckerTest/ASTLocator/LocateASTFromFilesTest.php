@@ -7,6 +7,7 @@ use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PhpParser\Error;
+use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
@@ -53,12 +54,16 @@ class LocateASTFromFilesTest extends TestCase
 
     public function testDoNotFailOnParseErrorWithErrorHandler()
     {
+        $collectingErrorHandler = new Collecting();
+        $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), $collectingErrorHandler);
         $files = [
             $this->createFile('MyBadCode', '<?php this causes a parse error'),
         ];
 
         $roots = $this->locate($files);
         $this->assertCount(1, $roots); // one file should be parsed (partially)
+        $this->assertTrue($collectingErrorHandler->hasErrors());
+        $this->assertCount(1, $collectingErrorHandler->getErrors()); //should have one parse error
     }
 
     private function createFile(string $path, string $content = null): string
