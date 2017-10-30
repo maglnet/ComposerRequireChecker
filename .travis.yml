@@ -26,7 +26,7 @@ install:
     - composer info -D | sort
 
 script:
-    - vendor/bin/phpunit --coverage-clover=clover.xml
+    - vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text
     - composer-require-checker
 
 after_script:
