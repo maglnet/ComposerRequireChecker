@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - displays more detailed errors if json config format is not valid
 - fixed fatal error when parsing trait usage with modified visibility (#44)
 - when locating files "exclude-from-classmap" will be taken into account
+- add option "--fail-on-parse-error"  
+  ComposerRequireChecker will only throw parser exceptions if this is set (#35)
 
 ## [0.1.6] - 2017-09-24
 ### Added

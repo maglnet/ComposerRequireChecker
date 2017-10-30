@@ -12,6 +12,7 @@ use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -38,6 +39,13 @@ class CheckCommand extends Command
                 InputArgument::OPTIONAL,
                 'the composer.json of your package, that should be checked',
                 './composer.json'
+            )
+        ->addOption(
+                'fail-on-parse-error',
+                null,
+                InputOption::VALUE_NONE,
+                'this will cause ComposerRequireChecker to fail when files cannot be parsed, otherwise'
+                . ' parse errors will be ignored'
             );
     }
 
@@ -57,7 +65,8 @@ class CheckCommand extends Command
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $errorHandler = $input->getOption('fail-on-parse-error') ? null : new CollectingErrorHandler();
+        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
