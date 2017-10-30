@@ -65,8 +65,7 @@ class CheckCommand extends Command
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
-        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
+        $sourcesASTs = $this->getASTFromFilesLocator($input);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
@@ -134,4 +133,16 @@ class CheckCommand extends Command
         // JsonLoader throws an exception if it cannot load the file
         new JsonLoader($jsonFile);
     }
+
+    /**
+     * @param InputInterface $input
+     * @return LocateASTFromFiles
+     */
+    private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
+    {
+        $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
+        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
+        return $sourcesASTs;
+    }
+
 }
