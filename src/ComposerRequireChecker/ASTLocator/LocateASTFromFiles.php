@@ -2,6 +2,7 @@
 
 namespace ComposerRequireChecker\ASTLocator;
 
+use PhpParser\ErrorHandler;
 use PhpParser\Parser;
 use Traversable;
 
@@ -12,9 +13,15 @@ final class LocateASTFromFiles
      */
     private $parser;
 
-    public function __construct(Parser $parser)
+    /**
+     * @var ErrorHandler
+     */
+    private $errorHandler;
+
+    public function __construct(Parser $parser, ErrorHandler $errorHandler = null)
     {
         $this->parser = $parser;
+        $this->errorHandler = $errorHandler;
     }
 
     /**
@@ -25,7 +32,7 @@ final class LocateASTFromFiles
     public function __invoke(Traversable $files): Traversable
     {
         foreach ($files as $file) {
-            yield $this->parser->parse(file_get_contents($file));
+            yield $this->parser->parse(file_get_contents($file), $this->errorHandler);
         }
     }
 }
