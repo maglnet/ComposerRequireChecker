@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
-
 interface GuesserInterface
 {
 
@@ -10,6 +9,5 @@ interface GuesserInterface
      * @param string $symbolName
      * @return \Generator
      */
-    public function __invoke(string $symbolName) : \Generator;
-
+    public function __invoke(string $symbolName): \Generator;
 }

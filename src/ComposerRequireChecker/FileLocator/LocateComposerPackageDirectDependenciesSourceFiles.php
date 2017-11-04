@@ -6,7 +6,7 @@ use Generator;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
-    public function __invoke(string $composerJsonPath) : Generator
+    public function __invoke(string $composerJsonPath): Generator
     {
         $packageDir = dirname($composerJsonPath);
 
@@ -18,7 +18,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
         ));
 
         foreach ($vendorDirs as $vendorDir) {
-            if (! file_exists($vendorDir . '/composer.json')) {
+            if (!file_exists($vendorDir . '/composer.json')) {
                 continue;
             }
 

@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
-
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 
 class GuessFromLoadedExtensions implements GuesserInterface
@@ -15,7 +14,7 @@ class GuessFromLoadedExtensions implements GuesserInterface
         $this->loadedExtensions = get_loaded_extensions();
     }
 
-    public function __invoke(string $symbolName) : \Generator
+    public function __invoke(string $symbolName): \Generator
     {
         $definedSymbolsFromExtensions = new LocateDefinedSymbolsFromExtensions();
         foreach ($this->loadedExtensions as $extensionName) {

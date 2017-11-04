@@ -1,6 +1,6 @@
 <?php
-namespace ComposerRequireChecker\Exception;
 
+namespace ComposerRequireChecker\Exception;
 
 class UnknownExtensionException extends \Exception
 {

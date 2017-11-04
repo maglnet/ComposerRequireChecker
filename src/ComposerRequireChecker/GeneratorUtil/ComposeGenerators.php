@@ -6,7 +6,7 @@ use Generator;
 
 final class ComposeGenerators
 {
-    public function __invoke(Generator ...$generators) : Generator
+    public function __invoke(Generator ...$generators): Generator
     {
         foreach ($generators as $generator) {
             yield from $generator;

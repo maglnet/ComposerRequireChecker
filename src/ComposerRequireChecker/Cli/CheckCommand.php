@@ -38,19 +38,18 @@ class CheckCommand extends Command
                 InputArgument::OPTIONAL,
                 'the composer.json of your package, that should be checked',
                 './composer.json'
-            )
-        ;
+            );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        if(!$output->isQuiet()) {
+        if (!$output->isQuiet()) {
             $output->writeln($this->getApplication()->getLongVersion());
         }
 
         $composerJson = realpath($input->getArgument('composer-json'));
-        if(false === $composerJson) {
+        if (false === $composerJson) {
             throw new \InvalidArgumentException('file not found: [' . $input->getArgument('composer-json') . ']');
         }
         $this->checkJsonFile($composerJson);
@@ -72,7 +71,8 @@ class CheckCommand extends Command
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
 
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())
+            ->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
 
         if (!count($usedSymbols)) {
             throw new \LogicException('There were no symbols found, please check your configuration.');
@@ -96,20 +96,20 @@ class CheckCommand extends Command
         $guesser = new DependencyGuesser();
         foreach ($unknownSymbols as $unknownSymbol) {
             $guessedDependencies = [];
-            foreach($guesser($unknownSymbol) as $guessedDependency) {
+            foreach ($guesser($unknownSymbol) as $guessedDependency) {
                 $guessedDependencies[] = $guessedDependency;
             }
             $table->addRow([$unknownSymbol, implode("\n", $guessedDependencies)]);
         }
         $table->render();
 
-        return ((int) (bool) $unknownSymbols);
+        return ((int)(bool)$unknownSymbols);
     }
 
-    private function getCheckOptions(InputInterface $input) : Options
+    private function getCheckOptions(InputInterface $input): Options
     {
         $fileName = $input->getOption('config-file');
-        if(!$fileName) {
+        if (!$fileName) {
             return new Options();
         }
         return new Options((new JsonLoader($fileName))->getData());
@@ -126,5 +126,4 @@ class CheckCommand extends Command
         // JsonLoader throws an exception if it cannot load the file
         new JsonLoader($jsonFile);
     }
-
 }

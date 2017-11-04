@@ -19,7 +19,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     /**
      * @return string[]
      */
-    public function getCollectedSymbols() : array
+    public function getCollectedSymbols(): array
     {
         return array_keys($this->collectedSymbols);
     }
@@ -72,9 +72,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordClassExpressionUsage(Node $node)
     {
-        if (
-            (
-                $node instanceof Node\Expr\StaticCall
+        if (($node instanceof Node\Expr\StaticCall
                 || $node instanceof Node\Expr\StaticPropertyFetch
                 || $node instanceof Node\Expr\ClassConstFetch
                 || $node instanceof Node\Expr\New_
@@ -90,7 +88,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordCatchUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\Catch_) {
-            foreach($node->types as $type) {
+            foreach ($node->types as $type) {
                 $this->recordUsageOf($type);
             }
         }
@@ -98,8 +96,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordFunctionCallUsage(Node $node)
     {
-        if (
-            $node instanceof Node\Expr\FuncCall
+        if ($node instanceof Node\Expr\FuncCall
             && ($nodeName = $node->name)
             && $nodeName instanceof Node\Name
         ) {
@@ -146,7 +143,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordTraitUsage(Node $node)
     {
-        if (! $node instanceof Node\Stmt\TraitUse) {
+        if (!$node instanceof Node\Stmt\TraitUse) {
             return;
         }
 
@@ -168,7 +165,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
      */
     private function recordUsageOf(Node\Name $symbol)
     {
-        $this->collectedSymbols[(string) $symbol] = $symbol;
+        $this->collectedSymbols[(string)$symbol] = $symbol;
     }
 
     /**

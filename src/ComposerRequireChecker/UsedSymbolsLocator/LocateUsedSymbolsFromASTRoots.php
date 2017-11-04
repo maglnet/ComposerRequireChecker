@@ -5,7 +5,6 @@ namespace ComposerRequireChecker\UsedSymbolsLocator;
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser;
 use Traversable;
 
 final class LocateUsedSymbolsFromASTRoots
@@ -15,7 +14,7 @@ final class LocateUsedSymbolsFromASTRoots
      *
      * @return string[] all the found symbols
      */
-    public function __invoke(Traversable $ASTs) : array
+    public function __invoke(Traversable $ASTs): array
     {
         // note: dependency injection is not really feasible for these two, as they need to co-exist in parallel
         $traverser = new NodeTraverser();

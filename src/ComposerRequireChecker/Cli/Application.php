@@ -7,6 +7,7 @@
  */
 
 namespace ComposerRequireChecker\Cli;
+
 use Symfony\Component\Console\Application as AbstractApplication;
 
 class Application extends AbstractApplication
@@ -21,26 +22,25 @@ class Application extends AbstractApplication
         $this->setDefaultCommand($check->getName());
     }
 
-    private function getPackageVersion() : string
+    private function getPackageVersion(): string
     {
         $version = null;
         $pharFile = \Phar::running();
-        if($pharFile) {
+        if ($pharFile) {
             $metadata = (new \Phar($pharFile))->getMetadata();
             $version = $metadata['version'] ?? null;
         }
 
-        if(!$version) {
+        if (!$version) {
             $pwd = getcwd();
             chdir(realpath(__DIR__ . '/../../../'));
             $gitVersion = @exec('git describe --tags --dirty=-dev --always 2>&1', $output, $returnValue);
             chdir($pwd);
-            if($returnValue === 0) {
+            if ($returnValue === 0) {
                 $version = $gitVersion;
             }
         }
 
         return $version ?? 'unknown-development';
     }
-
 }

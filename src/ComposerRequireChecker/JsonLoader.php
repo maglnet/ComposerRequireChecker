@@ -5,7 +5,8 @@ namespace ComposerRequireChecker;
 use ComposerRequireChecker\Exception\InvalidJsonException;
 use ComposerRequireChecker\Exception\NotReadableException;
 
-class JsonLoader {
+class JsonLoader
+{
 
     /**
      * @var mixed
@@ -37,5 +38,4 @@ class JsonLoader {
     {
         return $this->data;
     }
-
 }

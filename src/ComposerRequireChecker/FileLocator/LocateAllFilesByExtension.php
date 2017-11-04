@@ -6,7 +6,7 @@ use Traversable;
 
 final class LocateAllFilesByExtension
 {
-    public function __invoke(Traversable $directories, string $fileExtension) : Traversable
+    public function __invoke(Traversable $directories, string $fileExtension): Traversable
     {
         foreach ($directories as $directory) {
             yield from $this->filterFilesByExtension(
@@ -19,13 +19,13 @@ final class LocateAllFilesByExtension
         }
     }
 
-    private function filterFilesByExtension(Traversable $files, string $fileExtension) : Traversable
+    private function filterFilesByExtension(Traversable $files, string $fileExtension): Traversable
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
-            if (! preg_match($extensionMatcher, $file->getBasename())) {
+            if (!preg_match($extensionMatcher, $file->getBasename())) {
                 continue;
             }
 
