@@ -44,7 +44,7 @@ class LocateASTFromFilesTest extends TestCase
 
     public function testFailOnParseError()
     {
-        self::expectException(Error::class);
+        $this->expectException(Error::class);
         $files = [
             $this->createFile('MyBadCode', '<?php this causes a parse error'),
         ];
