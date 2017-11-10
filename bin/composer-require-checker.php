@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 if (PHP_MAJOR_VERSION < 7) {
     fwrite(STDERR, "PHP7 is required\n");
     exit(1);
