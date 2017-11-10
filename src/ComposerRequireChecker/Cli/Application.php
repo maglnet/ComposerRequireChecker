@@ -12,7 +12,6 @@ use Symfony\Component\Console\Application as AbstractApplication;
 
 class Application extends AbstractApplication
 {
-
     public function __construct()
     {
         parent::__construct('ComposerRequireChecker', $this->getPackageVersion());

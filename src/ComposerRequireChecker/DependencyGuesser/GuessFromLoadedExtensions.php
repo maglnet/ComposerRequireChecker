@@ -6,7 +6,6 @@ use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensi
 
 class GuessFromLoadedExtensions implements GuesserInterface
 {
-
     private $loadedExtensions;
 
     public function __construct()

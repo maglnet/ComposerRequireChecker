@@ -8,14 +8,11 @@
 
 namespace ComposerRequireCheckerTest\Cli;
 
-
 use ComposerRequireChecker\Cli\Options;
 use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
-
-
     public function testOptionsAcceptPhpCoreExtensions()
     {
         $options = new Options([
@@ -53,7 +50,5 @@ class OptionsTest extends TestCase
         $options = new Options([
             'foo-bar' => ['foo', 'bar']
         ]);
-
     }
-
 }

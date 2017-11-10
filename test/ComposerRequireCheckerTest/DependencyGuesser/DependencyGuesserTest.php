@@ -2,7 +2,6 @@
 
 namespace ComposerRequireCheckerTest\DependencyGuesser;
 
-
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use PHPUnit\Framework\TestCase;
 
@@ -34,5 +33,4 @@ class DependencyGuesserTest extends TestCase
         $result = $this->guesser->__invoke('an_hopefully_unique_unknown_symbol');
         $this->assertFalse($result->valid());
     }
-
 }

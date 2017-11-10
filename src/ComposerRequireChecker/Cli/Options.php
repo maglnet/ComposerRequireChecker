@@ -4,7 +4,6 @@ namespace ComposerRequireChecker\Cli;
 
 class Options
 {
-
     private $symbolWhitelist = [
         'null',
         'true',
