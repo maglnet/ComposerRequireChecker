@@ -28,7 +28,7 @@ class LocateAllFilesByExtensionTest extends TestCase
 
     public function testLocateFromNoDirectories()
     {
-        $files = $this->locate([], '.php');
+        $files = $this->locate([], '.php', null);
 
         $this->assertCount(0, $files);
     }
@@ -41,7 +41,7 @@ class LocateAllFilesByExtensionTest extends TestCase
             $files[] = vfsStream::newFile("MyClass$i.php")->at($dir);
         }
 
-        $foundFiles = $this->locate([$dir->url()], '.php');
+        $foundFiles = $this->locate([$dir->url()], '.php', null);
 
         $this->assertCount(count($files), $foundFiles);
         foreach ($files as $file) {
@@ -51,10 +51,12 @@ class LocateAllFilesByExtensionTest extends TestCase
 
     /**
      * @param string[] $directories
-     * @return string[]
+     * @param string $fileExtension
+     * @param array|null $blacklist
+     * @return array|\string[]
      */
-    private function locate(array $directories, string $fileExtension): array
+    private function locate(array $directories, string $fileExtension, ?array $blacklist): array
     {
-        return iterator_to_array(($this->locator)(new ArrayObject($directories), $fileExtension));
+        return iterator_to_array(($this->locator)(new ArrayObject($directories), $fileExtension, $blacklist));
     }
 }
