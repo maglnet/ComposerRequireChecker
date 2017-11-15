@@ -150,7 +150,9 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         array_map([$this, 'recordUsageOf'], $node->traits);
 
         foreach ($node->adaptations as $adaptation) {
-            $this->recordUsageOf($adaptation->trait);
+            if (null !== $adaptation->trait) {
+                $this->recordUsageOf($adaptation->trait);
+            }
 
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 array_map([$this, 'recordUsageOf'], $adaptation->insteadof);

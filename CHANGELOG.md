@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - displays more detailed errors if json config format is not valid
+- fixed fatal error when parsing trait usage with modified visibility (#44)
 
 ## [0.1.6] - 2017-09-24
 ### Added
