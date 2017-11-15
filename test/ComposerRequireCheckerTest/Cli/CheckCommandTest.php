@@ -41,5 +41,4 @@ class CheckCommandTest extends TestCase
         $this->assertSame(0, $this->commandTester->getStatusCode());
         $this->assertContains('no unknown symbols found', $this->commandTester->getDisplay());
     }
-
 }

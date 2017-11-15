@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonLoaderTest extends TestCase
 {
-
     public function testHasErrorWithWrongPath()
     {
         $path = __DIR__ . '/wrong/path/non-existing-file.json';
@@ -33,5 +32,4 @@ class JsonLoaderTest extends TestCase
         $loader = new JsonLoader($path);
         $this->assertEquals($loader->getData(), ['foo' => 'bar']);
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
-
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use PHPUnit\Framework\TestCase;
 
@@ -64,5 +63,4 @@ class LocateDefinedSymbolsFromExtensionsTest extends TestCase
         $combinedSymbols = $this->locator->__invoke(['Core', 'standard']);
         $this->assertSame(array_merge($coreSymbols, $standardSymbols), $combinedSymbols);
     }
-
 }

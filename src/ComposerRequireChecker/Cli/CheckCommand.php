@@ -43,7 +43,6 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         if (!$output->isQuiet()) {
             $output->writeln($this->getApplication()->getLongVersion());
         }
