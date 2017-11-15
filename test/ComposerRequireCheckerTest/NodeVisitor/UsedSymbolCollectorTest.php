@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -298,6 +299,18 @@ class UsedSymbolCollectorTest extends TestCase
         $node = new TraitUse([new Name('Foo')]);
 
         $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(1, $symbols);
+        $this->assertContains('Foo', $symbols);
+    }
+
+    public function testTraitUseVisibilityAdaptation()
+    {
+        $traitUseAdaption = new Alias(null, 'testMethod', Class_::MODIFIER_PUBLIC, null);
+        $traitUse = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
+
+        $this->visitor->enterNode($traitUse);
 
         $symbols = $this->visitor->getCollectedSymbols();
         $this->assertCount(1, $symbols);

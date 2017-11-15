@@ -95,6 +95,17 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    public function testTraitAdaptionDefinition()
+    {
+        $this->traverseStringAST('namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
+
+        self::assertSameCollectedSymbols(
+            ['Foo\BarTrait', 'Foo\UseTrait'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
+
     private function traverseStringAST(string $phpSource): array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
