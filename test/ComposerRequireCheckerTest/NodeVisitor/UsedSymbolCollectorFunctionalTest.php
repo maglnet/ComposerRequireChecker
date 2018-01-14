@@ -139,6 +139,16 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    public function testUseTraitAdaptionAlias()
+    {
+        $this->traverseStringAST('<?php namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
+
+        self::assertSameCollectedSymbols(
+            ['Foo\BarTrait'],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
     private function traverseStringAST(string $stringAST)
     {
         return $this->traverser->traverse(
