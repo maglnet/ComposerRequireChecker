@@ -26,7 +26,7 @@ class LocateASTFromFilesTest extends TestCase
     {
         parent::setUp();
 
-        $this->locator = new LocateASTFromFiles(new Php7(new Lexer()));
+        $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), null);
         $this->root = vfsStream::setup();
     }
 
