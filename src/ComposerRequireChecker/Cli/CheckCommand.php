@@ -12,6 +12,7 @@ use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -38,6 +39,13 @@ class CheckCommand extends Command
                 InputArgument::OPTIONAL,
                 'the composer.json of your package, that should be checked',
                 './composer.json'
+            )
+        ->addOption(
+                'ignore-parse-errors',
+                null,
+                InputOption::VALUE_NONE,
+                'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
+                . ' errors will be thrown'
             );
     }
 
@@ -57,7 +65,7 @@ class CheckCommand extends Command
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
 
-        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $sourcesASTs = $this->getASTFromFilesLocator($input);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
@@ -125,4 +133,16 @@ class CheckCommand extends Command
         // JsonLoader throws an exception if it cannot load the file
         new JsonLoader($jsonFile);
     }
+
+    /**
+     * @param InputInterface $input
+     * @return LocateASTFromFiles
+     */
+    private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
+    {
+        $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
+        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
+        return $sourcesASTs;
+    }
+
 }
