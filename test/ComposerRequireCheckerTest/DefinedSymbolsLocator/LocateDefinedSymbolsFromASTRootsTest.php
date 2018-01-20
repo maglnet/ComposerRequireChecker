@@ -5,6 +5,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 use ArrayObject;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPUnit\Framework\TestCase;
 
@@ -45,6 +46,22 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertContains('MyClassA', $symbols);
         $this->assertContains('MyClassB', $symbols);
         $this->assertContains('MyClassC', $symbols);
+    }
+
+    public function testBasicLocateFunctions()
+    {
+        $roots = [
+            [new Function_('myFunctionA')],
+            [new Class_('myFunctionB')],
+        ];
+
+        $symbols = $this->locate([$roots]);
+
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(2, $symbols);
+
+        $this->assertContains('myFunctionA', $symbols);
+        $this->assertContains('myFunctionB', $symbols);
     }
 
     public function testBasicLocateTrait()
