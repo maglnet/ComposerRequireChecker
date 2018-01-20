@@ -1,7 +1,7 @@
 <?php
 
-if (PHP_MAJOR_VERSION < 7) {
-    fwrite(STDERR, "PHP7 is required\n");
+if (version_compare(PHP_VERSION, '7.1.0') < 0) {
+    fwrite(STDERR, "PHP 7.1 is required\n");
     exit(1);
 }
 
