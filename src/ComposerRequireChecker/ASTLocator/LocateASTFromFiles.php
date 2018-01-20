@@ -18,7 +18,7 @@ final class LocateASTFromFiles
      */
     private $errorHandler;
 
-    public function __construct(Parser $parser, ErrorHandler $errorHandler = null)
+    public function __construct(Parser $parser, ?ErrorHandler $errorHandler)
     {
         $this->parser = $parser;
         $this->errorHandler = $errorHandler;
