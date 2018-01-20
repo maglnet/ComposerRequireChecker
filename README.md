@@ -21,6 +21,14 @@ Download the latest release and and run it like this:
 php composer-require-checker.phar check /path/to/your/project/composer.json
 ```
 
+### PHIVE
+
+If you already use [PHIVE](https://phar.io/)  to install and manage your project’s tooling, then you should be able to simply install ComposerRequireChecker like this:
+
+```
+phive install composer-require-checker
+``` 
+
 ### Composer - global command
 
 This package can be easily globally installed by using [Composer]:
