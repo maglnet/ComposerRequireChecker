@@ -13,6 +13,14 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 Composer require checker is not supposed to be installed as part of your project dependencies.
   
+### PHAR file [preferred]
+
+Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
+Download the latest release and and run it like this:
+```
+php composer-require-checker.phar check /path/to/your/project/composer.json
+```
+
 ### Composer - global command
 
 This package can be easily globally installed by using [Composer]:
@@ -26,14 +34,6 @@ If this is already done, run it like this:
 
 ```
 composer-require-checker check /path/to/your/project/composer.json
-```
-
-### PHAR file
-
-Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
-Download the latest release and and run it like this:
-```
-php composer-require-checker.phar check /path/to/your/project/composer.json
 ```
 
 ## Configuration
