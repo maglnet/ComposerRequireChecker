@@ -6,7 +6,7 @@ use Traversable;
 
 final class LocateAllFilesByExtension
 {
-    public function __invoke(Traversable $directories, string $fileExtension): Traversable
+    public function __invoke(Traversable $directories, string $fileExtension, ?array $blacklist): Traversable
     {
         foreach ($directories as $directory) {
             yield from $this->filterFilesByExtension(
@@ -14,17 +14,22 @@ final class LocateAllFilesByExtension
                     new \RecursiveDirectoryIterator($directory),
                     \RecursiveIteratorIterator::LEAVES_ONLY
                 ),
-                $fileExtension
+                $fileExtension,
+                $blacklist
             );
         }
     }
 
-    private function filterFilesByExtension(Traversable $files, string $fileExtension): Traversable
+    private function filterFilesByExtension(Traversable $files, string $fileExtension, ?array $blacklist): Traversable
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
+            if ($blacklist && preg_match('{('.implode('|', $blacklist).')}', $file->getPathname())) {
+                continue;
+            }
+
             if (!preg_match($extensionMatcher, $file->getBasename())) {
                 continue;
             }

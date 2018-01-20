@@ -145,6 +145,21 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
     }
 
+    public function testFromPsr4WithExcludeFromClassmap()
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": "./"}, "exclude-from-classmap": ["/tests/"]}}',
+            'MyClass.php' => '<?php namespace MyNamespace; class MyClass {}',
+            'tests' => [
+                'MyClassTest.php' => '<?php namespace MyNamespace; class MyClassTest {}',
+            ]
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+    }
+
     /**
      * @return string[]
      */

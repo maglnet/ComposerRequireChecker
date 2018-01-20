@@ -27,7 +27,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php":              "~7.0",
+        "php":              "~7.1",
         "ext-json":         "*",
         "ext-phar":         "*",
         "nikic/php-parser": "~3.0",
