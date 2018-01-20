@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+
+## [0.2.0] - 2018-01-20
+### Added
+
+### Changed
 - PHP 7.1 required
 - displays more detailed errors if json config format is not valid
 - fixed fatal error when parsing trait usage with modified visibility (#44)
@@ -55,7 +60,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.6...HEAD
+[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.6...0.2.0
 [0.1.6]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.5...0.1.6
 [0.1.5]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.4...0.1.5
 [0.1.4]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.3...0.1.4
