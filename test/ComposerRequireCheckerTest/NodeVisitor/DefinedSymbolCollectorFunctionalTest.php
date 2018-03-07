@@ -95,6 +95,16 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    public function testWillCollectDefinedConstDefinition()
+    {
+        $this->traverseStringAST('define("MY_CONST", "MY_VALUE");');
+
+        self::assertSameCollectedSymbols(
+            ['MY_CONST'],
+            $this->collector->getDefinedSymbols()
+        );
+    }
+
     public function testTraitAdaptionDefinition()
     {
         $this->traverseStringAST('namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
