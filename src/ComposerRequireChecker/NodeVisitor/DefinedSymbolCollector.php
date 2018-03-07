@@ -44,6 +44,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         $this->recordTraitDefinition($node);
         $this->recordFunctionDefinition($node);
         $this->recordConstDefinition($node);
+        $this->recordDefinedConstDefinition($node);
     }
 
     private function recordClassDefinition(Node $node)
@@ -83,6 +84,13 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         }
     }
 
+    private function recordDefinedConstDefinition(Node $node)
+    {
+        if ($node instanceof Node\Expr\FuncCall && $node->name instanceof Node\Name && $node->name->toString() === 'define') {
+            $this->recordDefinitionOfStringSymbol((string)$node->args[0]->value->value);
+        }
+    }
+
     /**
      * @param Node $node
      *
@@ -99,6 +107,11 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             ));
         }
 
-        $this->definedSymbols[(string)$node->namespacedName] = $node->namespacedName;
+        $this->recordDefinitionOfStringSymbol((string)$node->namespacedName);
+    }
+
+    private function recordDefinitionOfStringSymbol(string $symbolName)
+    {
+        $this->definedSymbols[$symbolName] = $symbolName;
     }
 }
