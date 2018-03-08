@@ -97,10 +97,10 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
     public function testWillCollectDefinedConstDefinition()
     {
-        $this->traverseStringAST('define("MY_CONST", "MY_VALUE");');
+        $this->traverseStringAST('define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");');
 
         self::assertSameCollectedSymbols(
-            ['MY_CONST'],
+            ['CONST_A', 'FooSpace\CONST_A'],
             $this->collector->getDefinedSymbols()
         );
     }

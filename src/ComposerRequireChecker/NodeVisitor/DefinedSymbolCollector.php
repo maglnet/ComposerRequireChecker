@@ -87,7 +87,9 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     private function recordDefinedConstDefinition(Node $node)
     {
         if ($node instanceof Node\Expr\FuncCall && $node->name instanceof Node\Name && $node->name->toString() === 'define') {
-            $this->recordDefinitionOfStringSymbol((string)$node->args[0]->value->value);
+            if ($node->args[0]->value instanceof Node\Scalar\String_) {
+                $this->recordDefinitionOfStringSymbol((string)$node->args[0]->value->value);
+            }
         }
     }
 
