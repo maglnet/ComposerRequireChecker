@@ -27,7 +27,7 @@ final class LocateASTFromFiles
     /**
      * @param Traversable $files
      *
-     * @return Traversable|array[] a series of AST roots, one for each given file
+     * @return Traversable a series of AST roots, one for each given file
      */
     public function __invoke(Traversable $files): Traversable
     {
