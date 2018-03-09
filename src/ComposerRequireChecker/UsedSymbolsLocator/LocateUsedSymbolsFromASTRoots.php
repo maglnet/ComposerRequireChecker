@@ -10,7 +10,7 @@ use Traversable;
 final class LocateUsedSymbolsFromASTRoots
 {
     /**
-     * @param Traversable $ASTs a series of AST roots
+     * @param Traversable|array[] $ASTs a series of AST roots
      *
      * @return string[] all the found symbols
      */
