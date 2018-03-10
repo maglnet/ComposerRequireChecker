@@ -113,6 +113,22 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     }
 
+    public function testBasicDoNotLocateNamespacedDefineCalls()
+    {
+        $roots = [[
+            new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
+                new Arg(new String_('NO_CONST')),
+                new Arg(new String_('NO_SOMETHING')),
+            ])
+        ]];
+
+        $symbols = $this->locate([$roots]);
+
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(0, $symbols);
+
+    }
+
     private function locate(array $roots): array
     {
         return ($this->locator)(new ArrayObject($roots));
