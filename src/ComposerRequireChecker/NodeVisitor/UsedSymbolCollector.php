@@ -171,7 +171,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node\Name $symbol
+     * @param string $symbol
      *
      * @return void
      */

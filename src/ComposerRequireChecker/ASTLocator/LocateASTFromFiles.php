@@ -25,7 +25,7 @@ final class LocateASTFromFiles
     }
 
     /**
-     * @param Traversable $files
+     * @param Traversable|string[] $files
      *
      * @return Traversable|array[] a series of AST roots, one for each given file
      */
