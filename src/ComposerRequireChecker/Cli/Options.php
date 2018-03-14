@@ -18,7 +18,8 @@ class Options
         'bool',
         'iterable',
         'callable',
-        'void' // types
+        'void',
+        'object' // types
     ];
 
     private $phpCoreExtensions = [
