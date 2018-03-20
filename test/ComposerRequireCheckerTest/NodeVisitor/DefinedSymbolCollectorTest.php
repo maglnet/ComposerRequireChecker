@@ -3,6 +3,10 @@
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
@@ -46,6 +50,29 @@ class DefinedSymbolCollectorTest extends TestCase
         $this->expectException(\UnexpectedValueException::class);
         $node = new Class_('gedöns');
         $this->collector->enterNode($node);
+    }
+
+    public function testRecordDefinedConstDefinition()
+    {
+        $node = new FuncCall(new Name('define'), [
+            new Arg(new String_('CONST_A')),
+            new Arg(new String_('VALUE_A')),
+        ]);
+        $this->collector->enterNode($node);
+
+        $this->assertContains('CONST_A', $this->collector->getDefinedSymbols());
+    }
+
+    public function testDontRecordNamespacedDefinedConstDefinition()
+    {
+        $node = new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
+            new Arg(new String_('NO_CONST')),
+            new Arg(new String_('VALUE_A')),
+        ]);
+        $this->collector->enterNode($node);
+
+        $this->assertEmpty($this->collector->getDefinedSymbols());
+        $this->assertNotContains('NO_CONST', $this->collector->getDefinedSymbols());
     }
 
 }

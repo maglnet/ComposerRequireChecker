@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 ### Changed
+- fixes recording of constants that are defined by the function `define()` (#55)
 
 ## [0.2.0] - 2018-01-20
 ### Added

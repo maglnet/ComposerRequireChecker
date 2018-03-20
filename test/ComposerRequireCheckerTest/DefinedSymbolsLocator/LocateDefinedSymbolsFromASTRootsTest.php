@@ -4,6 +4,10 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Trait_;
@@ -91,6 +95,38 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $this->assertInternalType('array', $symbols);
         $this->assertCount(0, $symbols);
+    }
+
+    public function testBasicLocateDefineCalls()
+    {
+        $roots = [[
+            new FuncCall(new Name('define'), [
+                new Arg(new String_('CONST_NAME')),
+                new Arg(new String_('CONST_VALUE')),
+            ])
+        ]];
+
+        $symbols = $this->locate([$roots]);
+
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(1, $symbols);
+
+    }
+
+    public function testBasicDoNotLocateNamespacedDefineCalls()
+    {
+        $roots = [[
+            new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
+                new Arg(new String_('NO_CONST')),
+                new Arg(new String_('NO_SOMETHING')),
+            ])
+        ]];
+
+        $symbols = $this->locate([$roots]);
+
+        $this->assertInternalType('array', $symbols);
+        $this->assertCount(0, $symbols);
+
     }
 
     private function locate(array $roots): array
