@@ -145,19 +145,82 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
     }
 
-    public function testFromPsr4WithExcludeFromClassmap()
+    /**
+     * @dataProvider provideExcludePattern
+     */
+    public function testFromPsr4WithExcludeFromClassmap(array $excludedPattern, array $expectedFiles)
     {
+        $excludedPatternJson = json_encode($excludedPattern);
+
         vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": "./"}, "exclude-from-classmap": ["/tests/"]}}',
-            'MyClass.php' => '<?php namespace MyNamespace; class MyClass {}',
+            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": ' . $excludedPatternJson . '}}',
+            'ClassA.php' => '<?php namespace MyNamespace; class ClassA {}',
             'tests' => [
-                'MyClassTest.php' => '<?php namespace MyNamespace; class MyClassTest {}',
-            ]
+                'ATest.php' => '<?php namespace MyNamespace; class ATest {}',
+            ],
+            'foo' => [
+                'Tests' => [
+                    'BTest.php' => '<?php namespace MyNamespace; class BTest {}',
+                ],
+                'src' => [
+                    'ClassB.php' => '<?php namespace MyNamespace; class ClassB {}',
+                    'Tests' => [
+                        'CTest.php' => '<?php namespace MyNamespace; class CTest {}',
+                    ],
+                ],
+            ],
         ]);
 
         $files = $this->files($this->root->getChild('composer.json')->url());
 
-        $this->assertCount(1, $files);
+        $this->assertCount(count($expectedFiles), $files);
+        foreach ($expectedFiles as $expectedFile) {
+            $this->assertContains($this->root->getChild($expectedFile)->url(), $files);
+        }
+    }
+
+    /**
+     * @return array[]
+     */
+    public function provideExcludePattern(): array
+    {
+        return [
+            'No exclude pattern' => [
+                [],
+                [
+                    'ClassA.php',
+                    'tests/ATest.php',
+                    'foo/Tests/BTest.php',
+                    'foo/src/ClassB.php',
+                    'foo/src/Tests/CTest.php',
+
+                ],
+            ],
+            'Exclude single directory by pattern' => [
+                ['/tests/'],
+                [
+                    'ClassA.php',
+                    'foo/Tests/BTest.php',
+                    'foo/src/ClassB.php',
+                    'foo/src/Tests/CTest.php',
+                ],
+            ],
+            'Exclude all subdirectories by pattern' => [
+                ['**/Tests/'],
+                [
+                    'ClassA.php',
+                    'tests/ATest.php',
+                    'foo/src/ClassB.php',
+                ],
+            ],
+            'Combine multiple patterns' => [
+                ['/tests/', '**/Tests/'],
+                [
+                    'ClassA.php',
+                    'foo/src/ClassB.php',
+                ],
+            ],
+        ];
     }
 
     /**

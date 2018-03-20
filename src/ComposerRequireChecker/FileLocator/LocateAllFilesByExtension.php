@@ -24,6 +24,8 @@ final class LocateAllFilesByExtension
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
+        $blacklist = $this->prepareBlacklistPatterns($blacklist);
+
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
             if ($blacklist && preg_match('{('.implode('|', $blacklist).')}', $file->getPathname())) {
@@ -36,5 +38,20 @@ final class LocateAllFilesByExtension
 
             yield $file->getPathname();
         }
+    }
+
+    private function prepareBlacklistPatterns(?array $blacklistPaths)
+    {
+        if ($blacklistPaths === null) {
+            return $blacklistPaths;
+        }
+
+        foreach ($blacklistPaths as &$path) {
+            $path = preg_replace('{/+}', '/', preg_quote(trim(strtr($path, '\\', '/'), '/')));
+            $path = str_replace('\\*\\*', '.+?', $path);
+            $path = str_replace('\\*', '[^/]+?', $path);
+        }
+
+        return $blacklistPaths;
     }
 }
