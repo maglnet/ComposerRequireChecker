@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- `object` keyword (introduced in PHP 7.2) is now whitelisted (#61) 
 
 ### Changed
 - fixes recording of constants that are defined by the function `define()` (#55)
+- fixes usage of `exclude-from-classmap` key of composer.json (#60)
+- fixed several docblocks 
+
 
 ## [0.2.0] - 2018-01-20
 ### Added
