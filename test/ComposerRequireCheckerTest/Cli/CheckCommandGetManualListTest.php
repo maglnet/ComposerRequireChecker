@@ -22,7 +22,7 @@ class CheckCommandGetManualListTest extends TestCase
             [$this->getInputMockForManualList(
                 ['abc', 'nope', 'abc/hi:Abc\\:src', 'abc/def/qoi:Qui\\:src/lib/ext', 'abc/def/:Qui\\:src/lib/ext']),
                 $method,
-                ['abc/def/qoi', 'abc/hi']
+                [__DIR__.'/vendor/abc/def/qoi', __DIR__.'/vendor/abc/hi']
             ],
         ];
     }
