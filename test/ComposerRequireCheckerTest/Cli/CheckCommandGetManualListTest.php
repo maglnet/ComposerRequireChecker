@@ -28,7 +28,6 @@ class CheckCommandGetManualListTest extends TestCase
     }
 
     /**
-     * @dataProvider provideBuildManualList
      * @param array $return
      * @return InputInterface
      */
@@ -48,6 +47,7 @@ class CheckCommandGetManualListTest extends TestCase
     }
 
     /**
+     * @dataProvider provideBuildManualList
      * Since the command does so much, there's no reasonable way to supply test data
      * @test
      */
