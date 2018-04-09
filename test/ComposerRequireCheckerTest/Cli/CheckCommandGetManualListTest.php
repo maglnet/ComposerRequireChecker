@@ -28,6 +28,7 @@ class CheckCommandGetManualListTest extends TestCase
     }
 
     /**
+     * @dataProvider provideBuildManualList
      * @param array $return
      * @return InputInterface
      */
