@@ -22,7 +22,7 @@ class CheckCommandGetManualListTest extends TestCase
             [$this->getInputMockForManualList(
                 ['abc', 'nope', 'abc/hi:Abc\\:src', 'abc/def/qoi:Qui\\:src/lib/ext', 'abc/def/:Qui\\:src/lib/ext']),
                 $method,
-                [__DIR__.'/vendor/abc/def/qoi', __DIR__.'/vendor/abc/hi']
+                [__DIR__ . '/vendor/abc/def/qoi', __DIR__ . '/vendor/abc/hi']
             ],
         ];
     }
@@ -31,17 +31,17 @@ class CheckCommandGetManualListTest extends TestCase
      * @param array $return
      * @return InputInterface
      */
-    private function getInputMockForManualList(array $return = [])
+    private function getInputMockForManualList(array $return = []):InputInterface
     {
         $input = $this->getMockBuilder(InputInterface::class)->getMock();
-        $hasReturn = count($return)>0;
+        $hasReturn = count($return) > 0;
         $input->expects($this->once())
             ->method('hasOption')
-            ->with('register-namespace')
+            ->with(/** @scrutinizer ignore-type */'register-namespace')
             ->willReturn($hasReturn);
-        $input->expects($hasReturn?$this->once():$this->never())
+        $input->expects($hasReturn ? $this->once() : $this->never())
             ->method('getOption')
-            ->with('register-namespace')
+            ->with(/** @scrutinizer ignore-type */'register-namespace')
             ->willReturn($return);
         return $input;
     }
@@ -55,6 +55,7 @@ class CheckCommandGetManualListTest extends TestCase
     {
         $instance = new CheckCommand();
         $result = $method->invoke($instance, $input, __FILE__);
+        $this->assertInternalType('array', $result);
         $this->assertCount(count($expected), $result);
         $this->assertCount(0, array_diff(array_keys($result), $expected));
     }

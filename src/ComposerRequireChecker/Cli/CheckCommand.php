@@ -50,7 +50,7 @@ class CheckCommand extends Command
             ->addOption(
                 'register-namespace',
                 null,
-                InputOption::VALUE_IS_ARRAY|InputOption::VALUE_OPTIONAL,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'vendor/package:namespace:path as if it was psr4'
             );
     }
@@ -157,13 +157,13 @@ class CheckCommand extends Command
      */
     private function buildManualList(InputInterface $input, $composerJson)
     {
-        if(!$input->hasOption('register-namespace')) {
+        if (!$input->hasOption('register-namespace')) {
             return [];
         }
         $packageDir = dirname($composerJson);
         $namespaces = [];
-        foreach($input->getOption('register-namespace') as $option) {
-            if(preg_match('!^([^/:]+(/[^/:]+)+):([^:]+):([^:]+)$!i', $option, $matches)) {
+        foreach ($input->getOption('register-namespace') as $option) {
+            if (preg_match('!^([^/:]+(/[^/:]+)+):([^:]+):([^:]+)$!i', $option, $matches)) {
                 $namespaces[$packageDir . '/vendor/' . $matches[1]][$matches[3]] = $matches[4];
             }
         }
