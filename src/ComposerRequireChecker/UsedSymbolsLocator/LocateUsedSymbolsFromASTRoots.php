@@ -25,7 +25,7 @@ final class LocateUsedSymbolsFromASTRoots
         $astSymbols = [];
 
         foreach ($ASTs as $astRoot) {
-            $traverser->traverse($astRoot);
+            $traverser->traverse($astRoot->getAst());
 
             $astSymbols[] = $collector->getCollectedSymbols();
         }

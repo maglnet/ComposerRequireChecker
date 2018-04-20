@@ -67,12 +67,16 @@ class CheckCommand extends Command
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
-        $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
+        list($definedVendorSymbols, $additionalFiles) = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getPackageSourceFiles($composerJson),
                 (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
             )
         ));
+        while ($additionalFiles && count($additionalFiles)) {
+            list($vendorSymbols, $additionalFiles) = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs($additionalFiles));
+            $definedVendorSymbols = array_unique(array_merge($vendorSymbols, $definedVendorSymbols));
+        }
 
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
