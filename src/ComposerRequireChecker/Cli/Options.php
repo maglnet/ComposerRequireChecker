@@ -33,16 +33,31 @@ class Options
     ];
 
 
-    public function __construct(array $options = [])
+    public function __construct(array $actions = [])
     {
-        foreach ($options as $key => $option) {
-            $methodName = 'set' . $this->getCamelCase($key);
-            if (!method_exists($this, $methodName)) {
-                throw new \InvalidArgumentException(
-                    $key . ' is not a known option - there is no method ' . $methodName
-                );
+        # For backwards compatibility, move any options without an action section to the 'set' section
+        foreach ($actions as $key => $option) {
+            if (in_array($key, ['set', 'append'], true)) {
+                continue;
             }
-            $this->$methodName($option);
+
+            if (!array_key_exists('set', $actions)) {
+                $actions['set'] = [];
+            }
+            $actions['set'][$key] = $option;
+            unset($actions[$key]);
+        }
+
+        foreach ($actions as $action => $options) {
+            foreach ($options as $key => $option) {
+                $methodName = $action . $this->getCamelCase($key);
+                if (!method_exists($this, $methodName)) {
+                    throw new \InvalidArgumentException(
+                        $key . ' is not a known option - there is no method ' . $methodName
+                    );
+                }
+                $this->$methodName($option);
+            }
         }
     }
 
@@ -71,11 +86,27 @@ class Options
     }
 
     /**
+     * @param array $symbolWhitelist
+     */
+    public function appendSymbolWhitelist(array $symbolWhitelist)
+    {
+        $this->symbolWhitelist = array_merge($this->symbolWhitelist, $symbolWhitelist);
+    }
+
+    /**
      * @param array $phpCoreExtensions
      */
     public function setPhpCoreExtensions(array $phpCoreExtensions)
     {
         $this->phpCoreExtensions = $phpCoreExtensions;
+    }
+
+    /**
+     * @param array $phpCoreExtensions
+     */
+    public function appendPhpCoreExtensions(array $phpCoreExtensions)
+    {
+        $this->phpCoreExtensions = array_merge($this->phpCoreExtensions, $phpCoreExtensions);
     }
 
     /**

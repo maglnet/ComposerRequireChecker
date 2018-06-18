@@ -22,6 +22,18 @@ class OptionsTest extends TestCase
         $this->assertSame(['something'], $options->getPhpCoreExtensions());
     }
 
+    public function testOptionsAppendPhpCoreExtensions()
+    {
+        $options = new Options([
+            'append' => [
+                'php-core-extensions' => ['something']
+            ],
+        ]);
+
+        $this->assertContains('something', $options->getPhpCoreExtensions());
+        $this->assertContains('Reflection', $options->getPhpCoreExtensions());
+    }
+
     public function testOptionsAcceptSymbolWhitelist()
     {
         $options = new Options([
@@ -29,6 +41,19 @@ class OptionsTest extends TestCase
         ]);
 
         $this->assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
+    }
+
+    public function testOptionsAppendSymbolWhitelist()
+    {
+        $options = new Options([
+            'append' => [
+                'symbol-whitelist' => ['foo', 'bar'],
+            ],
+        ]);
+
+        $this->assertContains('foo', $options->getSymbolWhitelist());
+        $this->assertContains('bar', $options->getSymbolWhitelist());
+        $this->assertContains('null', $options->getSymbolWhitelist());
     }
 
     public function testOptionsFileRepresentsDefaults()
