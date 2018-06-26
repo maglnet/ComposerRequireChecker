@@ -38,8 +38,8 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateClass()
     {
         $roots = [
-            [new Class_('MyClassA'), new Class_('MyClassB')],
-            [new Class_('MyClassC')],
+            new Class_('MyClassA'), new Class_('MyClassB'),
+            new Class_('MyClassC'),
         ];
 
         $symbols = $this->locate([$roots]);
@@ -55,8 +55,8 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateFunctions()
     {
         $roots = [
-            [new Function_('myFunctionA')],
-            [new Class_('myFunctionB')],
+            new Function_('myFunctionA'),
+            new Class_('myFunctionB'),
         ];
 
         $symbols = $this->locate([$roots]);
@@ -71,8 +71,8 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateTrait()
     {
         $roots = [
-            [new Trait_('MyTraitA'), new Trait_('MyTraitB')],
-            [new Trait_('MyTraitC')],
+            new Trait_('MyTraitA'), new Trait_('MyTraitB'),
+            new Trait_('MyTraitC'),
         ];
 
         $symbols = $this->locate([$roots]);
@@ -88,7 +88,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateAnonymous()
     {
         $roots = [
-            [new Class_(null)],
+            new Class_(null),
         ];
 
         $symbols = $this->locate([$roots]);
@@ -99,12 +99,12 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     public function testBasicLocateDefineCalls()
     {
-        $roots = [[
+        $roots = [
             new FuncCall(new Name('define'), [
                 new Arg(new String_('CONST_NAME')),
                 new Arg(new String_('CONST_VALUE')),
             ])
-        ]];
+        ];
 
         $symbols = $this->locate([$roots]);
 
@@ -115,12 +115,12 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     public function testBasicDoNotLocateNamespacedDefineCalls()
     {
-        $roots = [[
+        $roots = [
             new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
                 new Arg(new String_('NO_CONST')),
                 new Arg(new String_('NO_SOMETHING')),
             ])
-        ]];
+        ];
 
         $symbols = $this->locate([$roots]);
 

@@ -113,7 +113,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 if ($param->type instanceof Node\Name) {
                     $this->recordUsageOf($param->type);
                 }
-                if (is_string($param->type)) {
+                if (is_string($param->type) || $param->type instanceof Node\Identifier) {
                     $this->recordUsageOfByString($param->type);
                 }
             }
@@ -128,7 +128,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
             if ($node->getReturnType() instanceof Node\Name) {
                 $this->recordUsageOf($node->getReturnType());
             }
-            if (is_string($node->getReturnType())) {
+            if (is_string($node->getReturnType()) || $node->getReturnType() instanceof Node\Identifier) {
                 $this->recordUsageOfByString($node->getReturnType());
             }
         }
