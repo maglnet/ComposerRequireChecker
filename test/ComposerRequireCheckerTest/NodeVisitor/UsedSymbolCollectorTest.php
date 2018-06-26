@@ -143,7 +143,7 @@ class UsedSymbolCollectorTest extends TestCase
     public function testCatch()
     {
         $class = new Name('Foo');
-        $node = new Catch_([$class], 'e');
+        $node = new Catch_([$class], new Variable('e'));
 
         $this->visitor->enterNode($node);
 
@@ -170,7 +170,7 @@ class UsedSymbolCollectorTest extends TestCase
         $functionName = new Name('foo');
         $node = new Function_($functionName);
         $node->name = $functionName;
-        $param = new Param('bar');
+        $param = new Param(new Variable('bar'));
         $param->type = new Name('Baz');
         $node->params = [$param];
 
@@ -186,7 +186,7 @@ class UsedSymbolCollectorTest extends TestCase
         $functionName = new Name('foo');
         $node = new Function_($functionName);
         $node->name = $functionName;
-        $param = new Param('bar');
+        $param = new Param(new Variable('bar'));
         $param->type = 'Baz';
         $node->params = [$param];
 
@@ -202,7 +202,7 @@ class UsedSymbolCollectorTest extends TestCase
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
         $node->name = $functionName;
-        $param = new Param('bar');
+        $param = new Param(new Variable('bar'));
         $param->type = new Name('Baz');
         $node->params = [$param];
 
@@ -218,7 +218,7 @@ class UsedSymbolCollectorTest extends TestCase
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
         $node->name = $functionName;
-        $param = new Param('bar');
+        $param = new Param(new Variable('bar'));
         $param->type = 'Baz';
         $node->params = [$param];
 
