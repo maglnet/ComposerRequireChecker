@@ -29,10 +29,12 @@ final class LocateASTFromFiles
      *
      * @return Traversable|array[] a series of AST roots, one for each given file
      */
-    public function __invoke(Traversable $files): Traversable
+    public function __invoke(Traversable ...$files): Traversable
     {
-        foreach ($files as $file) {
-            yield $this->parser->parse(file_get_contents($file), $this->errorHandler);
+        foreach ($files as $subFiles) {
+            foreach ($subFiles as $file) {
+                yield $this->parser->parse(file_get_contents($file), $this->errorHandler);
+            }
         }
     }
 }

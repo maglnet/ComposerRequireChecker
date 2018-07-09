@@ -32,6 +32,8 @@ class Options
         "standard",
     ];
 
+    private $scanFiles = [];
+
 
     public function __construct(array $options = [])
     {
@@ -76,6 +78,22 @@ class Options
     public function setPhpCoreExtensions(array $phpCoreExtensions)
     {
         $this->phpCoreExtensions = $phpCoreExtensions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getScanFiles(): array
+    {
+        return $this->scanFiles;
+    }
+
+    /**
+     * @param array $scanFiles
+     */
+    public function setScanFiles(array $scanFiles): void
+    {
+        $this->scanFiles = $scanFiles;
     }
 
     /**

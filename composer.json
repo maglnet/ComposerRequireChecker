@@ -31,7 +31,8 @@
         "ext-json":         "*",
         "ext-phar":         "*",
         "nikic/php-parser": "~4.0",
-        "symfony/console":  "~3.0|~4.0"
+        "symfony/console":  "~3.0|~4.0",
+        "webmozart/glob":   "^4.1@dev"
     },
     "require-dev": {
         "phpunit/phpunit":    "~6.0",

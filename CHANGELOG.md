@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+- add possibility to add additional paths/files to be scanned (see [webmozart/glob](https://github.com/webmozart/glob) for valid pattern)
+  see `scan-files` key within `config.dist.json` (fixes #76)
 
 ### Changed
 
