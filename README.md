@@ -55,6 +55,17 @@ You can now adjust this file, as needed, and tell composer-require-checker to us
 bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
 ``` 
 
+### Scan Additional Files
+
+To scan files, that are not part of your autoload definition you may add glob patterns to the config file's `scan-files`
+section.
+
+The following example would also scan the file `bin/console` and all files with `.php` extension within your `bin/` folder:
+
+```
+"scan-files" : ["bin/console", "bin/*.php"]
+```
+
 ## License
 
 This package is made available under the [MIT LICENSE](LICENSE).
