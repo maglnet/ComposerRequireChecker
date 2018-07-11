@@ -32,6 +32,10 @@ class Options
         "standard",
     ];
 
+    /**
+     * @var string[] a list of glob patterns for files that should be scanned in addition
+     * @see https://github.com/webmozart/glob
+     */
     private $scanFiles = [];
 
 
@@ -81,7 +85,7 @@ class Options
     }
 
     /**
-     * @return array
+     * @return string[] a list of glob patterns for files that should be scanned in addition
      */
     public function getScanFiles(): array
     {
@@ -89,7 +93,7 @@ class Options
     }
 
     /**
-     * @param array $scanFiles
+     * @param string[] $scanFiles a list of glob patterns for files that should be scanned in addition
      */
     public function setScanFiles(array $scanFiles): void
     {
