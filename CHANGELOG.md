@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [1.0.0] - 2018-07-11
 ### Added
 
 ### Changed
+- update `nikic/php-parser` to `~4.0` (#75)
 
 ## [0.2.1] - 2018-03-20
 ### Added
@@ -67,7 +68,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.1...HEAD
+[1.0.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.1...1.0.0
 [0.2.1]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.6...0.2.0
 [0.1.6]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.5...0.1.6
