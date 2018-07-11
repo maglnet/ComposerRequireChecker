@@ -81,11 +81,12 @@ class CheckCommand extends Command
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
 
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())
-            ->__invoke(
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
+            (new ComposeGenerators())->__invoke(
                 $sourcesASTs($getPackageSourceFiles($composerJson)),
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
-            );
+            )
+        );
 
         if (!count($usedSymbols)) {
             throw new \LogicException('There were no symbols found, please check your configuration.');
