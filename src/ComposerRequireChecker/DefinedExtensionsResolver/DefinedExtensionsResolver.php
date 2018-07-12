@@ -10,7 +10,7 @@ class DefinedExtensionsResolver
 
         $extensions = [];
         foreach ($requires as $require => $version) {
-            if ($require == 'php') {
+            if ($require == 'php' || $require == 'php-64bit') {
                 $extensions = array_merge($extensions, $phpCoreExtensions);
                 continue;
             }
