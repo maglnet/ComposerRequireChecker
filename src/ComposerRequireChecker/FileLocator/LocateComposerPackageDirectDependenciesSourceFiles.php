@@ -6,7 +6,7 @@ use Generator;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
-    public function __invoke(string $composerJsonPath): Generator
+    public function __invoke(string $composerJsonPath, array $manual = []): Generator
     {
         $packageDir = dirname($composerJsonPath);
 
@@ -22,7 +22,10 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke($vendorDir . '/composer.json');
+            yield from (new LocateComposerPackageSourceFiles())->__invoke(
+                $vendorDir . '/composer.json',
+                $manual[$vendorDir] ?? []
+            );
         }
     }
 }

@@ -6,7 +6,7 @@ use Generator;
 
 final class LocateComposerPackageSourceFiles
 {
-    public function __invoke(string $composerJsonPath): Generator
+    public function __invoke(string $composerJsonPath, array $manual = []): Generator
     {
         $packageDir = dirname($composerJsonPath);
         $composerData = json_decode(file_get_contents($composerJsonPath), true);
@@ -27,6 +27,10 @@ final class LocateComposerPackageSourceFiles
         );
         yield from $this->locateFilesInPsr4Definitions(
             $this->getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir),
+            $blacklist
+        );
+        yield from $this->locateFilesInFilesInFilesDefinitions(
+            $this->getFilePaths($manual, $packageDir),
             $blacklist
         );
     }

@@ -3,6 +3,7 @@
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Application;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -24,7 +25,7 @@ class CheckCommandTest extends TestCase
 
     public function testExceptionIfComposerJsonNotFound()
     {
-        self::expectException(\InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
 
         $this->commandTester->execute([
             'composer-json' => 'this-will-not-be-found.json'

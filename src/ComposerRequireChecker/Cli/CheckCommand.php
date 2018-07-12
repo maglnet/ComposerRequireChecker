@@ -40,12 +40,18 @@ class CheckCommand extends Command
                 'the composer.json of your package, that should be checked',
                 './composer.json'
             )
-        ->addOption(
+            ->addOption(
                 'ignore-parse-errors',
                 null,
                 InputOption::VALUE_NONE,
                 'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
                 . ' errors will be thrown'
+            )
+            ->addOption(
+                'register-namespace',
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'vendor/package:namespace:path as if it was psr4'
             );
     }
 
@@ -64,13 +70,14 @@ class CheckCommand extends Command
         $options = $this->getCheckOptions($input);
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
+        $manualRegistered = $this->buildManualList($input, $composerJson);
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getPackageSourceFiles($composerJson),
-                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
+                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson, $manualRegistered)
             )
         ));
 
@@ -145,4 +152,21 @@ class CheckCommand extends Command
         return $sourcesASTs;
     }
 
+    /**
+     * @return array
+     */
+    private function buildManualList(InputInterface $input, $composerJson)
+    {
+        if (!$input->hasOption('register-namespace')) {
+            return [];
+        }
+        $packageDir = dirname($composerJson);
+        $namespaces = [];
+        foreach ($input->getOption('register-namespace') as $option) {
+            if (preg_match('!^([^/:]+(/[^/:]+)+):([^:]+):([^:]+)$!i', $option, $matches)) {
+                $namespaces[$packageDir . '/vendor/' . $matches[1]][$matches[3]] = $matches[4];
+            }
+        }
+        return $namespaces;
+    }
 }
