@@ -33,9 +33,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     {
         $symbols = $this->locate([]);
 
-        $this->assertCount(2, $symbols);
-        $this->assertCount(0, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(0, $symbols);
     }
 
     public function testBasicLocateClass()
@@ -48,13 +46,11 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $symbols = $this->locate([$roots]);
 
         $this->assertInternalType('array', $symbols);
-        $this->assertCount(2, $symbols);
-        $this->assertCount(3, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(3, $symbols);
 
-        $this->assertContains('MyClassA', $symbols[0]);
-        $this->assertContains('MyClassB', $symbols[0]);
-        $this->assertContains('MyClassC', $symbols[0]);
+        $this->assertContains('MyClassA', $symbols);
+        $this->assertContains('MyClassB', $symbols);
+        $this->assertContains('MyClassC', $symbols);
     }
 
     public function testBasicLocateFunctions()
@@ -68,11 +64,9 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $this->assertInternalType('array', $symbols);
         $this->assertCount(2, $symbols);
-        $this->assertCount(2, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
 
-        $this->assertContains('myFunctionA', $symbols[0]);
-        $this->assertContains('myFunctionB', $symbols[0]);
+        $this->assertContains('myFunctionA', $symbols);
+        $this->assertContains('myFunctionB', $symbols);
     }
 
     public function testBasicLocateTrait()
@@ -85,13 +79,11 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $symbols = $this->locate([$roots]);
 
         $this->assertInternalType('array', $symbols);
-        $this->assertCount(2, $symbols);
-        $this->assertCount(3, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(3, $symbols);
 
-        $this->assertContains('MyTraitA', $symbols[0]);
-        $this->assertContains('MyTraitB', $symbols[0]);
-        $this->assertContains('MyTraitC', $symbols[0]);
+        $this->assertContains('MyTraitA', $symbols);
+        $this->assertContains('MyTraitB', $symbols);
+        $this->assertContains('MyTraitC', $symbols);
     }
 
     public function testBasicLocateAnonymous()
@@ -103,9 +95,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $symbols = $this->locate([$roots]);
 
         $this->assertInternalType('array', $symbols);
-        $this->assertCount(2, $symbols);
-        $this->assertCount(0, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(0, $symbols);
     }
 
     public function testBasicLocateDefineCalls()
@@ -120,9 +110,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $symbols = $this->locate([$roots]);
 
         $this->assertInternalType('array', $symbols);
-        $this->assertCount(2, $symbols);
-        $this->assertCount(1, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(1, $symbols);
     }
 
     public function testBasicDoNotLocateNamespacedDefineCalls()
@@ -137,9 +125,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $symbols = $this->locate([$roots]);
 
         $this->assertInternalType('array', $symbols);
-        $this->assertCount(2, $symbols);
-        $this->assertCount(0, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(0, $symbols);
     }
 
     private function locate(array $roots): array
@@ -147,6 +133,6 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         foreach ($roots as &$ast) {
             $ast = new FileAST('', $ast);
         }
-        return ($this->locator)(new ArrayObject($roots));
+        return ($this->locator)(new ArrayObject($roots))->getSymbols();
     }
 }

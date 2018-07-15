@@ -16,7 +16,7 @@ final class LocateDefinedSymbolsFromASTRoots
      *
      * @return array [all the found symbols, includes to be processed]
      */
-    public function __invoke(Traversable $ASTs): array
+    public function __invoke(Traversable $ASTs, ?LocatedSymbolsAndIncludes $located = null): LocatedSymbolsAndIncludes
     {
         // note: dependency injection is not really feasible for these two, as they need to co-exist in parallel
         $traverser = new NodeTraverser();
@@ -33,7 +33,10 @@ final class LocateDefinedSymbolsFromASTRoots
             $astSymbols[] = $collector->getDefinedSymbols();
             $additionalFiles = array_merge($additionalFiles, $includes->getIncluded($astRoot->getFile()));
         }
+        $located = $located ?? new LocatedSymbolsAndIncludes();
 
-        return [array_values(array_unique(array_merge([], ...$astSymbols))), new ArrayIterator($additionalFiles)];
+        return $located
+            ->addSymbols($astSymbols)
+            ->setIncludes($additionalFiles);
     }
 }

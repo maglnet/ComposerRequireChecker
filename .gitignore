@@ -8,3 +8,4 @@ clover.xml
 example/test-data
 phing-latest.phar
 build/
+/nbproject/private/

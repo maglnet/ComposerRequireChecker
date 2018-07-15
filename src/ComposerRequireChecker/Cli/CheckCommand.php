@@ -67,15 +67,14 @@ class CheckCommand extends Command
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
-        list($definedVendorSymbols, $additionalFiles) = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
+        $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getPackageSourceFiles($composerJson),
                 (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
             )
         ));
-        while ($additionalFiles && count($additionalFiles)) {
-            list($vendorSymbols, $additionalFiles) = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs($additionalFiles));
-            $definedVendorSymbols = array_unique(array_merge($vendorSymbols, $definedVendorSymbols));
+        while (count($definedVendorSymbols->getIncludes())) {
+            (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs($definedVendorSymbols->getIncludes()), $definedVendorSymbols);
         }
 
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
@@ -91,7 +90,7 @@ class CheckCommand extends Command
 
         $unknownSymbols = array_diff(
             $usedSymbols,
-            $definedVendorSymbols,
+            $definedVendorSymbols->getSymbols(),
             $definedExtensionSymbols,
             $options->getSymbolWhitelist()
         );
