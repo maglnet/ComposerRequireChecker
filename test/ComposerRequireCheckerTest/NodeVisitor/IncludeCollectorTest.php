@@ -24,12 +24,12 @@ class IncludeCollectorTest extends TestCase
     public function provideGetIncluded(): iterable
     {
         yield "no includes" => [__FILE__, [], []];
-        yield "simple include" => [__FILE__, ['anywhere/here.php'], [__DIR__.'/anywhere/here.php']];
+        yield "simple include" => [__FILE__, ['anywhere/here.php'], [__DIR__ . '/anywhere/here.php']];
         yield "simple absolute include" => [__FILE__, ['/anywhere/here.php'], ['/anywhere/here.php']];
         yield "simple String_ include" => [
             __FILE__,
             [new String_('anywhere/here.php')],
-            [__DIR__.'/anywhere/here.php']
+            [__DIR__ . '/anywhere/here.php']
         ];
         yield "absolute include by DIR" => [
             __FILE__,
@@ -39,7 +39,7 @@ class IncludeCollectorTest extends TestCase
                     new String_('anywhere/here.php')
                 )
             ],
-            [__DIR__.'anywhere/here.php']
+            [__DIR__ . 'anywhere/here.php']
         ];
         yield "absolute include by FILE" => [
             __FILE__,
@@ -49,7 +49,7 @@ class IncludeCollectorTest extends TestCase
                     new String_('anywhere/here.php')
                 )
             ],
-            [__FILE__.'anywhere/here.php']
+            [__FILE__ . 'anywhere/here.php']
         ];
         yield "includes with variables" => [
             __FILE__,
@@ -60,10 +60,10 @@ class IncludeCollectorTest extends TestCase
                 )
             ],
             [
-                __DIR__.DIRECTORY_SEPARATOR.'DefinedSymbolCollectorFunctionalTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'DefinedSymbolCollectorTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'UsedSymbolCollectorFunctionalTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'UsedSymbolCollectorTest.php'
+                __DIR__ . DIRECTORY_SEPARATOR . 'DefinedSymbolCollectorFunctionalTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'DefinedSymbolCollectorTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorFunctionalTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorTest.php'
             ]
         ];
         yield "includes with constants" => [
@@ -75,10 +75,10 @@ class IncludeCollectorTest extends TestCase
                 )
             ],
             [
-                __DIR__.DIRECTORY_SEPARATOR.'DefinedSymbolCollectorFunctionalTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'DefinedSymbolCollectorTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'UsedSymbolCollectorFunctionalTest.php',
-                __DIR__.DIRECTORY_SEPARATOR.'UsedSymbolCollectorTest.php'
+                __DIR__ . DIRECTORY_SEPARATOR . 'DefinedSymbolCollectorFunctionalTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'DefinedSymbolCollectorTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorFunctionalTest.php',
+                __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorTest.php'
             ]
         ];
     }
@@ -98,7 +98,10 @@ class IncludeCollectorTest extends TestCase
         $reflector->setAccessible(true);
         $reflector->setValue($collector, $included);
         $reflector->setAccessible(false);
-        $this->assertEquals($result, $collector->getIncluded($file));
+        $collected = $collector->getIncluded($file);
+        sort($result);
+        sort($collected);
+        $this->assertEquals($result, $collected);
     }
 
     /**
@@ -133,7 +136,7 @@ class IncludeCollectorTest extends TestCase
     /**
      * @test
      * @dataProvider provideEnterNode
-     * @param \ComposerRequireCheckerTest\NodeVisitor\Node $node
+     * @param Node $node
      * @param int $count
      * @return void
      */
