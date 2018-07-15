@@ -59,7 +59,7 @@ class CheckCommandTest extends TestCase
         $printed = [];
         $collect = function ($line) use (&$printed) {
             if ($line) {
-               $printed[] = $line;
+                $printed[] = $line;
             }
         };
         $output->expects($this->any())
