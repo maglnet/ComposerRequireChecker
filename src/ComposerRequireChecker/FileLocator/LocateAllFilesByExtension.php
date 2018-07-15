@@ -28,7 +28,7 @@ final class LocateAllFilesByExtension
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
-            if ($blacklist && preg_match('{('.implode('|', $blacklist).')}', $file->getPathname())) {
+            if ($blacklist && preg_match('{(' . implode('|', $blacklist) . ')}', $file->getPathname())) {
                 continue;
             }
 

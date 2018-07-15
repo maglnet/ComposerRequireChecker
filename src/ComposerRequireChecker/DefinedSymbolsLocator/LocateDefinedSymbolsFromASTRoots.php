@@ -14,7 +14,7 @@ final class LocateDefinedSymbolsFromASTRoots
     /**
      * @param Traversable|array[] $ASTs a series of AST roots
      *
-     * @return string[] all the found symbols
+     * @return array [all the found symbols, includes to be processed]
      */
     public function __invoke(Traversable $ASTs): array
     {

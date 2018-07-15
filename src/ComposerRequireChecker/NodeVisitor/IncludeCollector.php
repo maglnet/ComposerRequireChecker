@@ -43,7 +43,7 @@ final class IncludeCollector extends NodeVisitorAbstract
         foreach ($this->included as $exp) {
             try {
                 $this->computePath($included, $this->processIncludePath($exp, $file), $file);
-            } catch(InvalidArgumentException $exception) {
+            } catch (InvalidArgumentException $exception) {
                 // not sure there's anything sensible to do here
             }
         }
@@ -59,7 +59,7 @@ final class IncludeCollector extends NodeVisitorAbstract
     private function computePath(array &$included, string $path, string $self)
     {
         if (!preg_match('#^([A-Z]:)?/#i', str_replace('\\', '/', $path))) {
-            $path = dirname($self).'/'.$path;
+            $path = dirname($self) . '/' . $path;
         }
         if (false === strpos($path, '{var}')) {
             $included[] = $path;
@@ -67,10 +67,10 @@ final class IncludeCollector extends NodeVisitorAbstract
         }
         $parts = explode('{var}', $path);
         $regex = [];
-        foreach($parts as $part) {
+        foreach ($parts as $part) {
             $regex[] = preg_quote(str_replace('\\', '/', $part), '/');
         }
-        $regex = '/^'.implode('.+', $regex).'$/';
+        $regex = '/^' . implode('.+', $regex) . '$/';
         $self = str_replace('\\', '/', $self);
         foreach (new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
@@ -97,7 +97,7 @@ final class IncludeCollector extends NodeVisitorAbstract
             return $exp;
         }
         if ($exp instanceof Concat) {
-            return $this->processIncludePath($exp->left, $file).$this->processIncludePath($exp->right, $file);
+            return $this->processIncludePath($exp->left, $file) . $this->processIncludePath($exp->right, $file);
         }
         if ($exp instanceof Dir) {
             return dirname($file);
@@ -114,7 +114,7 @@ final class IncludeCollector extends NodeVisitorAbstract
         if ($exp instanceof Variable || $exp instanceof ConstFetch) {
             return '{var}';
         }
-        throw new InvalidArgumentException('can\'t yet handle '.$exp->getType());
+        throw new InvalidArgumentException('can\'t yet handle ' . $exp->getType());
     }
 
     /**

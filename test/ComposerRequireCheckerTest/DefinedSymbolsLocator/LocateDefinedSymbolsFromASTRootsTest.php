@@ -144,7 +144,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     private function locate(array $roots): array
     {
-        foreach($roots as &$ast) {
+        foreach ($roots as &$ast) {
             $ast = new FileAST('', $ast);
         }
         return ($this->locator)(new ArrayObject($roots));
