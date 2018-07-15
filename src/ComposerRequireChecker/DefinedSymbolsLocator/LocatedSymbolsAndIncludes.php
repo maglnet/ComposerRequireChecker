@@ -2,6 +2,9 @@
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
+use ArrayIterator;
+use Traversable;
+
 class LocatedSymbolsAndIncludes
 {
     /**
@@ -28,11 +31,11 @@ class LocatedSymbolsAndIncludes
     }
 
     /**
-     * @return string[]
+     * @return Traversable|string[]
      */
-    public function getIncludes(): array
+    public function getIncludes(): Traversable
     {
-        return $this->includes;
+        return new ArrayIterator($this->includes);
     }
 
     /**
@@ -52,7 +55,7 @@ class LocatedSymbolsAndIncludes
     public function setIncludes(array $includes): LocatedSymbolsAndIncludes
     {
         $this->includes = array_diff($includes, $this->previousIncludes);
-        $this->previousIncludes = $this->arrayMergeUnique($this->previousIncludes, $includes);
+        $this->previousIncludes = $this->arrayMergeUnique($this->previousIncludes, [$includes]);
         return $this;
     }
 
@@ -63,6 +66,9 @@ class LocatedSymbolsAndIncludes
      */
     private function arrayMergeUnique(array $into, array $add): array
     {
+        if (empty($add)) {
+            return $into;
+        }
         return array_values(array_unique(array_merge($into, ...$add)));
     }
 }

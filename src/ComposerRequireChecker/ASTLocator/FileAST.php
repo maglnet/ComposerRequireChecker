@@ -2,7 +2,7 @@
 
 namespace ComposerRequireChecker\ASTLocator;
 
-use Traversable;
+use PhpParser\Node;
 
 class FileAST
 {
@@ -12,33 +12,33 @@ class FileAST
     private $file;
 
     /**
-     * @var Traversable
+     * @var array
      */
     private $ast;
 
     /**
      * @param string $file
-     * @param Traversable|array|null $ast
+     * @param array|null $ast
      *
      */
-    public function __construct(string $file, $ast)
+    public function __construct(string $file, ?array $ast)
     {
         $this->file = $file;
-        $this->ast = $ast;
+        $this->ast = $ast ?? [];
     }
 
     /**
      * @return string
      */
-    public function getFile()
+    public function getFile(): string
     {
         return $this->file;
     }
 
     /**
-     * @return Traversable|array
+     * @return Node[]
      */
-    public function getAst()
+    public function getAst(): array
     {
         return $this->ast;
     }
