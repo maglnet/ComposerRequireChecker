@@ -2,7 +2,6 @@
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
-use ArrayIterator;
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
 use ComposerRequireChecker\NodeVisitor\IncludeCollector;
 use PhpParser\NodeTraverser;
@@ -13,8 +12,9 @@ final class LocateDefinedSymbolsFromASTRoots
 {
     /**
      * @param Traversable|array[] $ASTs a series of AST roots
+     * @param LocatedSymbolsAndIncludes|null previously found data if exists
      *
-     * @return array [all the found symbols, includes to be processed]
+     * @return LocatedSymbolsAndIncludes
      */
     public function __invoke(Traversable $ASTs, ?LocatedSymbolsAndIncludes $located = null): LocatedSymbolsAndIncludes
     {
