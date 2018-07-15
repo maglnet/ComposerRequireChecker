@@ -43,8 +43,8 @@ final class IncludeCollector extends NodeVisitorAbstract
         foreach ($this->included as $exp) {
             try {
                 $this->computePath($included, $this->processIncludePath($exp, $file), $file);
-            } catch(InvalidArgumentException $x) {
-                var_dump($x->getMessage());
+            } catch(InvalidArgumentException $exception) {
+                // not sure there's anything sensible to do here
             }
         }
         return $included;
@@ -86,7 +86,7 @@ final class IncludeCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @param string|Exp $exp
+     * @param string|Expr $exp
      * @param string $file
      * @return string
      * @throws InvalidArgumentException
@@ -105,7 +105,7 @@ final class IncludeCollector extends NodeVisitorAbstract
         if ($exp instanceof File) {
             return $file;
         }
-        if ($exp instanceof ConstFetch && $exp->name === 'DIRECTORY_SEPARATOR') {
+        if ($exp instanceof ConstFetch && "$exp->name" === 'DIRECTORY_SEPARATOR') {
             return DIRECTORY_SEPARATOR;
         }
         if ($exp instanceof String_) {
