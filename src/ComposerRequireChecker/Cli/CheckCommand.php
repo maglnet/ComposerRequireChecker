@@ -88,13 +88,24 @@ class CheckCommand extends Command
             throw new \LogicException('There were no symbols found, please check your configuration.');
         }
 
-        $unknownSymbols = array_diff(
-            $usedSymbols,
-            $definedVendorSymbols->getSymbols(),
-            $definedExtensionSymbols,
-            $options->getSymbolWhitelist()
+        return $this->handleResult(
+            array_diff(
+                $usedSymbols,
+                $definedVendorSymbols->getSymbols(),
+                $definedExtensionSymbols,
+                $options->getSymbolWhitelist()
+            ),
+            $output
         );
+    }
 
+    /**
+     * @param array $unknownSymbols
+     * @param OutputInterface $output
+     * @return int
+     */
+    private function handleResult(?array $unknownSymbols, OutputInterface $output): int
+    {
         if (!$unknownSymbols) {
             $output->writeln("There were no unknown symbols found.");
             return 0;
@@ -116,6 +127,10 @@ class CheckCommand extends Command
         return ((int)(bool)$unknownSymbols);
     }
 
+    /**
+     * @param InputInterface $input
+     * @return Options
+     */
     private function getCheckOptions(InputInterface $input): Options
     {
         $fileName = $input->getOption('config-file');
