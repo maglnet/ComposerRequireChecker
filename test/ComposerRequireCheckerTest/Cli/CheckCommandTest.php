@@ -78,7 +78,7 @@ class CheckCommandTest extends TestCase
             $output
         ));
         $this->assertEquals(
-            [
+            implode("", [
                 "The following unknown symbols were found:",
                 "+--+--+",
                 "|<info> unknown symbol </info>|<info> guessed dependency </info>|",
@@ -87,8 +87,8 @@ class CheckCommandTest extends TestCase
                 "| A\\Nother\\Symbol |  |",
                 "| A_Third\\Symbol |  |",
                 "+--+--+"
-            ],
-            $printed
+            ]),
+            implode("", $printed)
         );
     }
 }
