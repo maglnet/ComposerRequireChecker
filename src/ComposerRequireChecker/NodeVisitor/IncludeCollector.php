@@ -105,9 +105,23 @@ final class IncludeCollector extends NodeVisitorAbstract
         if (is_string($exp)) {
             return $exp;
         }
+        if ($exp instanceof String_) {
+            return $exp->value;
+        }
         if ($exp instanceof Concat) {
             return $this->processIncludePath($exp->left, $file) . $this->processIncludePath($exp->right, $file);
         }
+        return $this->replaceInIncludePath($exp, $file);
+    }
+
+    /**
+     * @param Expr $exp
+     * @param string $file
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    private function replaceInIncludePath($exp, string $file)
+    {
         if ($exp instanceof Dir) {
             return dirname($file);
         }
@@ -116,9 +130,6 @@ final class IncludeCollector extends NodeVisitorAbstract
         }
         if ($exp instanceof ConstFetch && "$exp->name" === 'DIRECTORY_SEPARATOR') {
             return DIRECTORY_SEPARATOR;
-        }
-        if ($exp instanceof String_) {
-            return $exp->value;
         }
         if ($exp instanceof Variable || $exp instanceof ConstFetch) {
             return '{var}';
