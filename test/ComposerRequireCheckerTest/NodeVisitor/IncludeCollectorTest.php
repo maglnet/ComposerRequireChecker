@@ -12,6 +12,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 
@@ -80,6 +81,28 @@ class IncludeCollectorTest extends TestCase
                 __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorFunctionalTest.php',
                 __DIR__ . DIRECTORY_SEPARATOR . 'UsedSymbolCollectorTest.php'
             ]
+        ];
+        yield "includes with DIRECTORY_SEPARATOR" => [
+            __FILE__,
+            [
+                new Concat(
+                    new Dir(),
+                    new Concat(
+                        new ConstFetch(new Name('DIRECTORY_SEPARATOR')),
+                        new String_('Example.php')
+                    )
+                )
+            ],
+            [
+                __DIR__ . DIRECTORY_SEPARATOR . 'Example.php'
+            ]
+        ];
+        yield "includes with invalid node" => [
+            __FILE__,
+            [
+                new Expression(new String_(''))
+            ],
+            []
         ];
     }
 
