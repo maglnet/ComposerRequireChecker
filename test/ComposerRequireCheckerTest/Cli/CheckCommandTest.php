@@ -28,7 +28,6 @@ class CheckCommandTest extends TestCase
 
     public function testExceptionIfComposerJsonNotFound()
     {
-        $this->markTestSkipped();
         self::expectException(\InvalidArgumentException::class);
 
         $this->commandTester->execute([
@@ -38,7 +37,6 @@ class CheckCommandTest extends TestCase
 
     public function testSelfCheckShowsNoErrors()
     {
-        $this->markTestSkipped();
         $this->commandTester->execute([
             // that's our own composer.json, lets be sure our self check does not throw errors
             'composer-json' => dirname(__DIR__, 3) . '/composer.json'
@@ -59,13 +57,17 @@ class CheckCommandTest extends TestCase
         $method->setAccessible(true);
         $output = $this->getMockBuilder(OutputInterface::class)->getMock();
         $printed = [];
+        $collect = function ($line) use (&$printed) {
+            if ($line) {
+               $printed[] = $line;
+            }
+        };
         $output->expects($this->any())
             ->method('writeln')
-            ->willReturnCallback(function ($line) use (&$printed) {
-                 if ($line) {
-                    $printed[] = $line;
-                 }
-             });
+            ->willReturnCallback($collect);
+        $output->expects($this->any())
+            ->method('write')
+            ->willReturnCallback($collect);
         $output->expects($this->any())
             ->method('getFormatter')
             ->with()
