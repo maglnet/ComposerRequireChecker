@@ -29,9 +29,7 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
         $asts = [];
         $symbols = $this->locate($asts);
 
-        $this->assertCount(2, $symbols);
-        $this->assertCount(0, $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(0, $symbols);
     }
 
     public function testLocate()
@@ -40,10 +38,8 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
         $node->extends = new Name('Bar');
         $symbols = $this->locate([[$node]]);
 
-        $this->assertCount(2, $symbols);
-        $this->assertCount(1, $symbols[0]);
-        $this->assertContains('Bar', $symbols[0]);
-        $this->assertCount(0, $symbols[1]);
+        $this->assertCount(1, $symbols);
+        $this->assertContains('Bar', $symbols);
     }
 
     /**
