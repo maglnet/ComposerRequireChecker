@@ -12,7 +12,7 @@ final class LocateDefinedSymbolsFromASTRoots
 {
     /**
      * @param Traversable|array[] $ASTs a series of AST roots
-     * @param LocatedSymbolsAndIncludes|null previously found data if exists
+     * @param LocatedSymbolsAndIncludes|null $located previously found data if exists
      *
      * @return LocatedSymbolsAndIncludes
      */

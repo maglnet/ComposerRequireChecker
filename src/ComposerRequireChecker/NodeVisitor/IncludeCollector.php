@@ -65,16 +65,11 @@ final class IncludeCollector extends NodeVisitorAbstract
             $included[] = $path;
             return;
         }
-        $parts = explode('{var}', $path);
-        $regex = [];
-        foreach ($parts as $part) {
-            $regex[] = preg_quote(str_replace('\\', '/', $part), '/');
-        }
-        $regex = '/^' . implode('.+', $regex) . '$/';
+        $regex = $this->pathWithVarToRegex($path);
         $self = str_replace('\\', '/', $self);
         foreach (new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $parts[0],
+                explode('{var}', $path)[0],
                 FilesystemIterator::CURRENT_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
             )
         ) as $file) {
@@ -83,6 +78,20 @@ final class IncludeCollector extends NodeVisitorAbstract
                 $included[] = $file;
             }
         }
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    private function pathWithVarToRegex(string $path): string
+    {
+        $parts = explode('{var}', $path);
+        $regex = [];
+        foreach ($parts as $part) {
+            $regex[] = preg_quote(str_replace('\\', '/', $part), '/');
+        }
+        return '/^' . implode('.+', $regex) . '$/';
     }
 
     /**
