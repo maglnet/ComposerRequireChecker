@@ -10,12 +10,16 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     {
         $packageDir = dirname($composerJsonPath);
 
-        $vendorDirs = array_values(array_map(
-            function (string $vendorName) use ($packageDir) {
-                return $packageDir . '/vendor/' . $vendorName;
-            },
-            array_keys(json_decode(file_get_contents($composerJsonPath), true)['require'] ?? [])
-        ));
+        $composerJson = json_decode(file_get_contents($composerJsonPath), true);
+        $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
+        $vendorDirs = array_values(
+            array_map(
+                function (string $vendorName) use ($packageDir, $configVendorDir) {
+                    return $packageDir . '/' . $configVendorDir . '/' . $vendorName;
+                },
+                array_keys($composerJson['require'] ?? [])
+            )
+        );
 
         foreach ($vendorDirs as $vendorDir) {
             if (!file_exists($vendorDir . '/composer.json')) {
