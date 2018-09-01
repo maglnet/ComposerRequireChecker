@@ -79,6 +79,31 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->assertCount(0, $files);
     }
 
+    public function testVendorConfigSettingIsBeingUsed()
+    {
+        vfsStream::create([
+            'composer.json' => '{"require":{"foo/bar": "^1.0"},"config":{"vendor-dir":"alternate-vendor"}}',
+            'alternate-vendor' => [
+                'foo' => [
+                    'bar' => [
+                        'composer.json' => '{"autoload":{"psr-4":{"":"src"}}}',
+                        'src' => [
+                            'MyClass.php' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $files = $this->locate($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(1, $files);
+
+        $expectedFile = $this->root->getChild('alternate-vendor/foo/bar/src/MyClass.php')->url();
+        $actualFile = str_replace('\\', '/', reset($files));
+        $this->assertSame($expectedFile, $actualFile);
+    }
+
     /**
      * @return string[]
      */
