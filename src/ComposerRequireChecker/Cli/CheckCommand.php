@@ -9,6 +9,7 @@ use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensi
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
@@ -64,11 +65,13 @@ class CheckCommand extends Command
         $options = $this->getCheckOptions($input);
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
+        $getAdditionalSourceFiles = new LocateFilesByGlobPattern();
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
+                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
                 $getPackageSourceFiles($composerJson),
                 (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
             )
@@ -78,8 +81,12 @@ class CheckCommand extends Command
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
 
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())
-            ->__invoke($sourcesASTs($getPackageSourceFiles($composerJson)));
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
+            (new ComposeGenerators())->__invoke(
+                $sourcesASTs($getPackageSourceFiles($composerJson)),
+                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
+            )
+        );
 
         if (!count($usedSymbols)) {
             throw new \LogicException('There were no symbols found, please check your configuration.');

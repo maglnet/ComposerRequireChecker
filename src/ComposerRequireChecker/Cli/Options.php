@@ -32,6 +32,12 @@ class Options
         "standard",
     ];
 
+    /**
+     * @var string[] a list of glob patterns for files that should be scanned in addition
+     * @see https://github.com/webmozart/glob
+     */
+    private $scanFiles = [];
+
 
     public function __construct(array $options = [])
     {
@@ -76,6 +82,22 @@ class Options
     public function setPhpCoreExtensions(array $phpCoreExtensions)
     {
         $this->phpCoreExtensions = $phpCoreExtensions;
+    }
+
+    /**
+     * @return string[] a list of glob patterns for files that should be scanned in addition
+     */
+    public function getScanFiles(): array
+    {
+        return $this->scanFiles;
+    }
+
+    /**
+     * @param string[] $scanFiles a list of glob patterns for files that should be scanned in addition
+     */
+    public function setScanFiles(array $scanFiles): void
+    {
+        $this->scanFiles = $scanFiles;
     }
 
     /**
