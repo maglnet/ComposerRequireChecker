@@ -46,6 +46,18 @@ class DefinedExtensionsResolverTest extends TestCase
         $this->assertSame('*', reset($extensions));
     }
 
+    public function testCoreExtensionsIn64Bit()
+    {
+        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
+            ->setContent('{"require":{"php-64bit":"^7.0"}}')
+            ->url();
+
+        $extensions = ($this->resolver)($composerJson, ['ext-foo' => '*']);
+
+        $this->assertCount(1, $extensions);
+        $this->assertSame('*', reset($extensions));
+    }
+
     public function testExtensionsAreReturned()
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)
