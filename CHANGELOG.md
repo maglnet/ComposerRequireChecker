@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - add possibility to add additional paths/files to be scanned (see [webmozart/glob](https://github.com/webmozart/glob) for valid pattern)
-  see `scan-files` key within `config.dist.json` (fixes #76)
+  see `scan-files` key within `config.dist.json` (fixes #76, #77)
+- dynamically detects vendor dir from `composer.json` `vendor-dir` setting (#85)
+- core extensions get recognised for `php-64bit` (#80)
 
 ### Changed
+- only using stable dependencies now (#86)
 
 ## [1.0.0] - 2018-07-11
 ### Added
