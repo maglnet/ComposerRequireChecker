@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [1.1.0] - 2018-09-03
 ### Added
 - add possibility to add additional paths/files to be scanned (see [webmozart/glob](https://github.com/webmozart/glob) for valid pattern)
   see `scan-files` key within `config.dist.json` (fixes #76, #77)
@@ -78,7 +78,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/1.0.0...HEAD
+[unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/1.1.0...HEAD
+[1.1.0]: https://github.com/maglnet/ComposerRequireChecker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.1...1.0.0
 [0.2.1]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.1.6...0.2.0
