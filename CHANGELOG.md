@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [unreleased]
+### Added
+
+### Changed
+
 ## [1.1.0] - 2018-09-03
 ### Added
 - add possibility to add additional paths/files to be scanned (see [webmozart/glob](https://github.com/webmozart/glob) for valid pattern)
