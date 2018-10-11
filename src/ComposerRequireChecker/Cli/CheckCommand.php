@@ -7,6 +7,7 @@ use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use ComposerRequireChecker\DependencyGuesser\GuessFromComposerAutoloader;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
@@ -108,6 +109,7 @@ class CheckCommand extends Command
         $table = new Table($output);
         $table->setHeaders(['unknown symbol', 'guessed dependency']);
         $guesser = new DependencyGuesser();
+        $guesser->addGuesser(new GuessFromComposerAutoloader($composerJson));
         foreach ($unknownSymbols as $unknownSymbol) {
             $guessedDependencies = [];
             foreach ($guesser($unknownSymbol) as $guessedDependency) {

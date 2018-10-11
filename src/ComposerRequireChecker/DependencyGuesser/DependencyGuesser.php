@@ -15,6 +15,11 @@ class DependencyGuesser
         $this->guessers[] = new GuessFromLoadedExtensions();
     }
 
+    public function addGuesser(GuesserInterface $guesser): void
+    {
+        $this->guessers[] = $guesser;
+    }
+
     public function __invoke($symbolName): \Generator
     {
         foreach ($this->guessers as $guesser) {
