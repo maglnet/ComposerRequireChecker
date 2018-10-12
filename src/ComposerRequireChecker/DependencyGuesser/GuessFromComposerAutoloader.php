@@ -18,7 +18,7 @@ class GuessFromComposerAutoloader implements GuesserInterface
     public function __construct(string $composerJsonPath)
     {
         $composerJson = json_decode(file_get_contents($composerJsonPath), true);
-        $this->configVendorDir = dirname($composerJsonPath) . '/' . ($composerJson['config']['vendor-dir'] ?? 'vendor');
+        $this->configVendorDir = $this->normalizePath(dirname($composerJsonPath) . '/' . ($composerJson['config']['vendor-dir'] ?? 'vendor'));
         $this->composerAutoloader = include $this->configVendorDir . '/autoload.php';
     }
 
@@ -26,10 +26,15 @@ class GuessFromComposerAutoloader implements GuesserInterface
     {
         $fullFileName = $this->composerAutoloader->findFile(ltrim($symbolName, '\\/ '));
         if ($fullFileName) {
-            $fileName = ltrim(substr(realpath($fullFileName), strlen($this->configVendorDir)), '\\/');
+            $fileName = $this->normalizePath(ltrim(substr(realpath($fullFileName), strlen($this->configVendorDir)), '\\/'));
             $packageName = preg_replace('/^([^\/]+\/[^\/]+).*/', '$1', $fileName);
             yield $packageName;
         }
+    }
+
+    private function normalizePath(string $path): string
+    {
+        return str_replace('\\', '/', $path);
     }
 
 }
