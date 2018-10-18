@@ -41,12 +41,16 @@ class CheckCommandTest extends TestCase
 
         $this->assertSame(0, $this->commandTester->getStatusCode());
         $this->assertContains('no unknown symbols found', $this->commandTester->getDisplay());
+
+        // verbose output should not be shown
+        $this->assertNotRegExp('/Collecting defined (vendor|extension) symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertNotRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
     }
 
     public function testVerboseSelfCheckShowsCounts()
     {
         $this->commandTester->execute([
-            // that's our own composer.json, lets be sure our self check does not throw errors
+            // that's our own composer.json
             'composer-json' => dirname(__DIR__, 3) . '/composer.json',
         ], [
             'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
