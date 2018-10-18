@@ -29,6 +29,7 @@ install:
 
 script:
     - vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text
+    - vendor/bin/phpstan analyse -l 5 src
     - composer-require-checker
 
 after_script:

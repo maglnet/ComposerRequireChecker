@@ -78,10 +78,9 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 || $node instanceof Node\Expr\New_
                 || $node instanceof Node\Expr\Instanceof_
             )
-            && ($nodeClass = $node->class)
-            && $nodeClass instanceof Node\Name
+            && $node->class instanceof Node\Name
         ) {
-            $this->recordUsageOf($nodeClass);
+            $this->recordUsageOf($node->class);
         }
     }
 
@@ -97,10 +96,9 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordFunctionCallUsage(Node $node)
     {
         if ($node instanceof Node\Expr\FuncCall
-            && ($nodeName = $node->name)
-            && $nodeName instanceof Node\Name
+            && $node->name instanceof Node\Name
         ) {
-            $this->recordUsageOf($nodeName);
+            $this->recordUsageOf($node->name);
         }
     }
 
