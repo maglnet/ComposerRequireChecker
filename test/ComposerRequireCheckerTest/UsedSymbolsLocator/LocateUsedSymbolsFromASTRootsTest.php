@@ -3,6 +3,7 @@
 namespace ComposerRequireCheckerTest\UsedSymbolsLocator;
 
 use ArrayObject;
+use ComposerRequireChecker\ASTLocator\FileAST;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -46,6 +47,9 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
      */
     private function locate(array $asts): array
     {
+        foreach ($asts as &$ast) {
+            $ast = new FileAST('', $ast);
+        }
         return ($this->locator)(new ArrayObject($asts));
     }
 }

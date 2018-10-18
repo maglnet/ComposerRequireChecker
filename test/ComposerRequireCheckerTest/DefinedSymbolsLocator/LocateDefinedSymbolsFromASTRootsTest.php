@@ -3,6 +3,7 @@
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ArrayObject;
+use ComposerRequireChecker\ASTLocator\FileAST;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -110,7 +111,6 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $this->assertInternalType('array', $symbols);
         $this->assertCount(1, $symbols);
-
     }
 
     public function testBasicDoNotLocateNamespacedDefineCalls()
@@ -126,11 +126,13 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $this->assertInternalType('array', $symbols);
         $this->assertCount(0, $symbols);
-
     }
 
     private function locate(array $roots): array
     {
-        return ($this->locator)(new ArrayObject($roots));
+        foreach ($roots as &$ast) {
+            $ast = new FileAST('', $ast);
+        }
+        return ($this->locator)(new ArrayObject($roots))->getSymbols();
     }
 }
