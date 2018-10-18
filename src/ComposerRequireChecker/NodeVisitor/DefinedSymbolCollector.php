@@ -95,7 +95,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             }
 
             if ($node->args[0]->value instanceof Node\Scalar\String_) {
-                $this->recordDefinitionOfStringSymbol((string)$node->args[0]->value->value);
+                $this->recordDefinitionOfStringSymbol($node->args[0]->value->value);
             }
         }
     }
