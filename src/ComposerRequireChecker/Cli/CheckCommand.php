@@ -42,7 +42,7 @@ class CheckCommand extends Command
                 'the composer.json of your package, that should be checked',
                 './composer.json'
             )
-        ->addOption(
+            ->addOption(
                 'ignore-parse-errors',
                 null,
                 InputOption::VALUE_NONE,
@@ -70,6 +70,7 @@ class CheckCommand extends Command
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
+        $this->verbose("Collecting defined vendor symbols... ", $output);
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
@@ -77,22 +78,28 @@ class CheckCommand extends Command
                 (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
             )
         ));
+        $this->verbose("found " . count($definedVendorSymbols) . " symbols.", $output, true);
 
+        $this->verbose("Collecting defined extension symbols... ", $output);
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
         );
+        $this->verbose("found " . count($definedExtensionSymbols) . " symbols.", $output, true);
 
+        $this->verbose("Collecting used symbols... ", $output);
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
             (new ComposeGenerators())->__invoke(
                 $sourcesASTs($getPackageSourceFiles($composerJson)),
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
             )
         );
+        $this->verbose("found " . count($usedSymbols) . " symbols.", $output, true);
 
         if (!count($usedSymbols)) {
             throw new \LogicException('There were no symbols found, please check your configuration.');
         }
 
+        $this->verbose("Checking for unknown symbols... ", $output, true);
         $unknownSymbols = array_diff(
             $usedSymbols,
             $definedVendorSymbols,
@@ -153,4 +160,18 @@ class CheckCommand extends Command
         return $sourcesASTs;
     }
 
+
+    /**
+     * @param string $string the message that should be printed
+     * @param OutputInterface $output the output to log to
+     * @param bool $newLine if a new line will be started afterwards
+     */
+    private function verbose(string $string, OutputInterface $output, bool $newLine = false): void
+    {
+        if (!$output->isVerbose()) {
+            return;
+        }
+
+        $output->write($string, $newLine);
+    }
 }

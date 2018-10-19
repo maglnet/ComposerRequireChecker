@@ -6,7 +6,7 @@ class DependencyGuesser
 {
 
     /**
-     * @var
+     * @var GuesserInterface[]
      */
     private $guessers = [];
 
