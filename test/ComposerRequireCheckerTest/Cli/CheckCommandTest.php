@@ -3,6 +3,7 @@
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Application;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -59,5 +60,26 @@ class CheckCommandTest extends TestCase
         $this->assertRegExp('/Collecting defined vendor symbols... found \d+ symbols./', $this->commandTester->getDisplay());
         $this->assertRegExp('/Collecting defined extension symbols... found \d+ symbols./', $this->commandTester->getDisplay());
         $this->assertRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+    }
+
+    public function testWithAdditionalSourceFiles()
+    {
+        $root = vfsStream::setup();
+        vfsStream::create([
+            'config.json' => <<<JSON
+{
+    "scan-files": ["src/ComposerRequireChecker/Cli/CheckCommand.php"]
+}
+JSON
+            ,
+        ]);
+
+        $this->commandTester->execute([
+            // that's our own composer.json
+            'composer-json' => dirname(__DIR__, 3) . '/composer.json',
+            '--config-file' => $root->getChild('config.json')->url(),
+        ]);
+
+        $this->assertRegExp('/There were no unknown symbols found./', $this->commandTester->getDisplay());
     }
 }
