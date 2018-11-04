@@ -86,12 +86,12 @@ class CheckCommand extends Command
         $this->verbose("found " . count($definedExtensionSymbols) . " symbols.", $output, true);
 
         $this->verbose("Collecting used symbols... ", $output);
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
-                $sourcesASTs($getPackageSourceFiles($composerJson)),
+                $getPackageSourceFiles($composerJson),
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
             )
-        );
+        ));
         $this->verbose("found " . count($usedSymbols) . " symbols.", $output, true);
 
         if (!count($usedSymbols)) {
