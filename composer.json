@@ -3,7 +3,7 @@
     "description":       "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
     "type":              "library",
     "license":           "MIT",
-    "homepage":          "https://github.com/Ocramius/ComposerRequireChecker",
+    "homepage":          "https://github.com/maglnet/ComposerRequireChecker",
     "keywords":          [
         "composer",
         "dependency",
