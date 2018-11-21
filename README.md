@@ -9,6 +9,14 @@ This will prevent you from using "soft" dependencies that are not defined within
 [![Dependency Status](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea/badge.svg?style=flat)](https://www.versioneye.com/user/projects/565df3b9b6f5ff00380001ea)
 [![Code Coverage](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/?branch=master)
 
+## What's it about?
+
+Your code most certainly uses external dependencies. And if it's only extending PHPUnits `TestCase`. And to make sure that your code knows where to find that `TestCase`-class you for sure called `composer require --dev phpunit/phpunit`. That means your dependency is a hard dependency. 
+
+But what if you did a `composer require phpunit/dbunit`? As that package requires phpunit/phpunit as well all your dependencies would still work, wouldn't they? But only out of sheer luck (and in this far fetched example because it's the way it's designed). But from your `composer.json` one wouldn't immediately know that you'd use PHPUnits `TestCase`-class. That's what a "soft dependency" is. And you should avoid those as they might blow. Imagine the person maintaining the library that also includes the package that you depend on suddenly using a completely different library. Suddenly your code would break after a `composer update` for no apparent reason. Just because you didn't include the dependency as a "first level" dependency in the first place.
+
+This CLI-Tool parses your code and your composer.json-file to see whether your code contains such "soft dependencies" that might break your code.
+
 ## Installation / Usage
 
 Composer require checker is not supposed to be installed as part of your project dependencies.
