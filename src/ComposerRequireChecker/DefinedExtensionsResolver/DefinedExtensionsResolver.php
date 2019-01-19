@@ -15,6 +15,7 @@ class DefinedExtensionsResolver
                 continue;
             }
             if (strpos($require, 'ext-') === 0) {
+                $require = str_replace(' ', '-', $require);
                 $extensions = array_merge($extensions, [substr($require, 4)]);
             }
         }
