@@ -55,7 +55,8 @@ class LocateDefinedSymbolsFromExtensionsTest extends TestCase
     public function testPackageNameInterpolation()
     {
         $symbols = $this->locator->__invoke(['zend-opcache']);
-        $this->assertTrue(in_array('opcache_reset', $symbols));
+        $symbols2 = $this->locator->__invoke(['Zend Opcache']);
+        $this->assertEquals($symbols, $symbols2);
     }
 
     public function testCanHandleMultipleExtensions()
