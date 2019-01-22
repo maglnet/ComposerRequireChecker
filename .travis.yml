@@ -18,13 +18,14 @@ matrix:
         - php: nightly
 
 before_install:
+    - export COMPOSER_GLOBAL_HOME_DIR=`composer config -g home`
     - composer self-update
-    - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ~/.composer/composer.json
+    - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ${COMPOSER_GLOBAL_HOME_DIR}/composer.json
 
 install:
     - composer update $COMPOSER_FLAGS --no-interaction --no-progress -vvv
     - composer global require maglnet/composer-require-checker:@dev
-    - export PATH=$PATH:~/.composer/vendor/bin
+    - export PATH=$PATH:${COMPOSER_GLOBAL_HOME_DIR}/vendor/bin
     - composer info -D | sort
 
 script:
