@@ -2,6 +2,8 @@
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
+use ComposerRequireChecker\Cli\Options;
+
 class DependencyGuesser
 {
 
@@ -10,9 +12,9 @@ class DependencyGuesser
      */
     private $guessers = [];
 
-    public function __construct(?array $options)
+    public function __construct(?Options $options)
     {
-        $this->guessers[] = new GuessFromLoadedExtensions($options['php_core_extensions'] ?? null);
+        $this->guessers[] = new GuessFromLoadedExtensions($options);
     }
 
     public function __invoke($symbolName): \Generator
