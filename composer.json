@@ -26,7 +26,7 @@
         }
     ],
     "require": {
-        "php":              "^7.1",
+        "php":              "^7.1|^8.0",
         "ext-json":         "*",
         "ext-phar":         "*",
         "nikic/php-parser": "^4.0",
