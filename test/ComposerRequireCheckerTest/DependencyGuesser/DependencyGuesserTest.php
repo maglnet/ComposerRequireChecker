@@ -15,7 +15,7 @@ class DependencyGuesserTest extends TestCase
 
     public function setUp()
     {
-        $this->guesser = new DependencyGuesser();
+        $this->guesser = new DependencyGuesser(null);
     }
 
     public function testGuessExtJson()
@@ -32,5 +32,13 @@ class DependencyGuesserTest extends TestCase
     {
         $result = $this->guesser->__invoke('an_hopefully_unique_unknown_symbol');
         $this->assertFalse($result->valid());
+    }
+
+    public function testCoreExtensionsResolvesToPHP()
+    {
+        $this->guesser = new DependencyGuesser(['php_core_extensions' => ['SPL']]);
+        $result = $this->guesser->__invoke('RecursiveDirectoryIterator');
+        $this->assertNotEmpty($result);
+        $this->assertContains('php', $result);
     }
 }

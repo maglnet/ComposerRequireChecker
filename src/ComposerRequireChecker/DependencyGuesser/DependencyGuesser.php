@@ -10,9 +10,9 @@ class DependencyGuesser
      */
     private $guessers = [];
 
-    public function __construct()
+    public function __construct(?array $options)
     {
-        $this->guessers[] = new GuessFromLoadedExtensions();
+        $this->guessers[] = new GuessFromLoadedExtensions($options['php_core_extensions'] ?? null);
     }
 
     public function __invoke($symbolName): \Generator

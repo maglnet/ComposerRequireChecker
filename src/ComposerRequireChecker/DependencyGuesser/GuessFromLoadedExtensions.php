@@ -8,9 +8,15 @@ class GuessFromLoadedExtensions implements GuesserInterface
 {
     private $loadedExtensions;
 
-    public function __construct()
+    /**
+     * @var array|null
+     */
+    private $coreExtensions;
+
+    public function __construct(?array $coreExtensions)
     {
         $this->loadedExtensions = get_loaded_extensions();
+        $this->coreExtensions = $coreExtensions;
     }
 
     public function __invoke(string $symbolName): \Generator
@@ -19,6 +25,11 @@ class GuessFromLoadedExtensions implements GuesserInterface
         foreach ($this->loadedExtensions as $extensionName) {
             $extensionSymbols = $definedSymbolsFromExtensions([$extensionName]);
             if (in_array($symbolName, $extensionSymbols)) {
+                if ($this->coreExtensions && in_array($extensionName, $this->coreExtensions)) {
+                    yield "php";
+                    continue;
+                }
+
                 yield 'ext-' . $extensionName;
             }
         }
