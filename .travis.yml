@@ -13,6 +13,7 @@ matrix:
             - COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
             - COVERAGE=1
         - php: 7.2
+        - php: 7.3
         - php: nightly
     allow_failures:
         - php: nightly
