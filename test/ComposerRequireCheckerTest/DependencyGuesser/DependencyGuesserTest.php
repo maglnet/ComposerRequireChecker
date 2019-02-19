@@ -37,7 +37,7 @@ class DependencyGuesserTest extends TestCase
 
     public function testCoreExtensionsResolvesToPHP()
     {
-        $options = new Options(['php-core-extensions' => ['SPL']]);
+        $options = new Options(['php-core-extensions' => ['SPL', 'something-else']]);
         $this->guesser = new DependencyGuesser($options);
         $result = $this->guesser->__invoke('RecursiveDirectoryIterator');
         $this->assertNotEmpty($result);
