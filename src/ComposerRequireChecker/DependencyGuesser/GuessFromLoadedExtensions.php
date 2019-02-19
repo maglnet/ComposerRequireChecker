@@ -17,7 +17,7 @@ class GuessFromLoadedExtensions implements GuesserInterface
     public function __construct(?Options $options)
     {
         $this->loadedExtensions = get_loaded_extensions();
-        if($options instanceof Options) {
+        if ($options instanceof Options) {
             $this->coreExtensions = $options->getPhpCoreExtensions();
         }
     }
@@ -30,7 +30,6 @@ class GuessFromLoadedExtensions implements GuesserInterface
             if (in_array($symbolName, $extensionSymbols)) {
                 if ($this->coreExtensions && in_array($extensionName, $this->coreExtensions)) {
                     yield "php";
-                    continue;
                 }
 
                 yield 'ext-' . $extensionName;
