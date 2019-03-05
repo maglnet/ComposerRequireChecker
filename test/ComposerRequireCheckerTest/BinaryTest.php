@@ -34,6 +34,6 @@ class BinaryTest extends TestCase
         $path = __DIR__ . "/../fixtures/validJson.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertContains("please check your configuration", implode("\n", $output));
+        $this->assertContains("dependencies have not been installed", implode("\n", $output));
     }
 }
