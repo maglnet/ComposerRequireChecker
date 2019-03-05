@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [unreleased]
 ### Added
+- guess dependencies from composer's autoloader
 - add symbol counts to check command for verbose output
 
 ### Changed

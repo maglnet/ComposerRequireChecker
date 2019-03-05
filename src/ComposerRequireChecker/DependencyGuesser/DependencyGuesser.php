@@ -10,9 +10,12 @@ class DependencyGuesser
      */
     private $guessers = [];
 
-    public function __construct()
+    public function __construct(GuesserInterface ...$guessers)
     {
         $this->guessers[] = new GuessFromLoadedExtensions();
+        foreach ($guessers as $guesser) {
+            $this->guessers[] = $guesser;
+        }
     }
 
     public function __invoke($symbolName): \Generator
