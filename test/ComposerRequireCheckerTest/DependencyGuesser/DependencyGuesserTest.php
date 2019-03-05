@@ -16,7 +16,7 @@ class DependencyGuesserTest extends TestCase
 
     public function setUp()
     {
-        $this->guesser = new DependencyGuesser(null);
+        $this->guesser = new DependencyGuesser();
     }
 
     public function testGuessExtJson()

@@ -12,7 +12,7 @@ class DependencyGuesser
      */
     private $guessers = [];
 
-    public function __construct(?Options $options)
+    public function __construct(?Options $options = null)
     {
         $this->guessers[] = new GuessFromLoadedExtensions($options);
     }

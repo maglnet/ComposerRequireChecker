@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [unreleased]
 ### Added
 - add symbol counts to check command for verbose output
+- suggest `php` as extension if it's a core extension
 
 ### Changed
 

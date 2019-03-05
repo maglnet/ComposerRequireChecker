@@ -61,7 +61,7 @@ class Options
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getPhpCoreExtensions(): array
     {
