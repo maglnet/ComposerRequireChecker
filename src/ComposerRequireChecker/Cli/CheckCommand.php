@@ -114,7 +114,7 @@ class CheckCommand extends Command
         $output->writeln("The following unknown symbols were found:");
         $table = new Table($output);
         $table->setHeaders(['unknown symbol', 'guessed dependency']);
-        $guesser = new DependencyGuesser();
+        $guesser = new DependencyGuesser($options);
         foreach ($unknownSymbols as $unknownSymbol) {
             $guessedDependencies = [];
             foreach ($guesser($unknownSymbol) as $guessedDependency) {

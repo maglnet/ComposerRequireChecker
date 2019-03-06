@@ -2,6 +2,7 @@
 
 namespace ComposerRequireCheckerTest\DependencyGuesser;
 
+use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use PHPUnit\Framework\TestCase;
 
@@ -32,5 +33,14 @@ class DependencyGuesserTest extends TestCase
     {
         $result = $this->guesser->__invoke('an_hopefully_unique_unknown_symbol');
         $this->assertFalse($result->valid());
+    }
+
+    public function testCoreExtensionsResolvesToPHP()
+    {
+        $options = new Options(['php-core-extensions' => ['SPL', 'something-else']]);
+        $this->guesser = new DependencyGuesser($options);
+        $result = $this->guesser->__invoke('RecursiveDirectoryIterator');
+        $this->assertNotEmpty($result);
+        $this->assertContains('php', $result);
     }
 }
