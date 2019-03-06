@@ -21,6 +21,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function dirname;
 
 class CheckCommand extends Command
 {
@@ -61,6 +62,7 @@ class CheckCommand extends Command
             throw new \InvalidArgumentException('file not found: [' . $input->getArgument('composer-json') . ']');
         }
         $this->checkJsonFile($composerJson);
+        $composerData = (new JsonLoader($composerJson))->getData();
 
         $options = $this->getCheckOptions($input);
 
@@ -73,7 +75,7 @@ class CheckCommand extends Command
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
-                $getPackageSourceFiles($composerJson),
+                $getPackageSourceFiles($composerData, dirname($composerJson)),
                 (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
             )
         ));
@@ -88,7 +90,7 @@ class CheckCommand extends Command
         $this->verbose("Collecting used symbols... ", $output);
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
-                $getPackageSourceFiles($composerJson),
+                $getPackageSourceFiles($composerData, dirname($composerJson)),
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
             )
         ));

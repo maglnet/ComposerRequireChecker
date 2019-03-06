@@ -6,11 +6,14 @@ use Generator;
 
 final class LocateComposerPackageSourceFiles
 {
-    public function __invoke(string $composerJsonPath): Generator
+    /**
+     * @param mixed[] $composerData The contents of composer.json for a package
+     * @param string $packageDir The path to package
+     *
+     * @return Generator
+     */
+    public function __invoke(array $composerData, string $packageDir): Generator
     {
-        $packageDir = dirname($composerJsonPath);
-        $composerData = json_decode(file_get_contents($composerJsonPath), true);
-
         $blacklist = $composerData['autoload']['exclude-from-classmap'] ?? null;
 
         yield from $this->locateFilesInClassmapDefinitions(
