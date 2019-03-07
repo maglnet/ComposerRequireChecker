@@ -3,6 +3,7 @@
 namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\JsonLoader;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
@@ -228,8 +229,9 @@ class LocateComposerPackageSourceFilesTest extends TestCase
      */
     private function files(string $composerJson): array
     {
+        $composerData = (new JsonLoader($composerJson))->getData();
         $files = [];
-        $filesGenerator = ($this->locator)($composerJson);
+        $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
             $files[] = $file;
         }

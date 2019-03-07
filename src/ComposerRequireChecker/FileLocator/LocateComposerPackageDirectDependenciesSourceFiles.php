@@ -2,6 +2,7 @@
 
 namespace ComposerRequireChecker\FileLocator;
 
+use ComposerRequireChecker\JsonLoader;
 use Generator;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
@@ -26,7 +27,9 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke($vendorDir . '/composer.json');
+            $composerData = (new JsonLoader($vendorDir . '/composer.json'))->getData();
+
+            yield from (new LocateComposerPackageSourceFiles())->__invoke($composerData, $vendorDir);
         }
     }
 }
