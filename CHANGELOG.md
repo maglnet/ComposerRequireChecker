@@ -4,12 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [2.0.0] - 2019-03-19
 ### Added
-- add symbol counts to check command for verbose output
-- suggest `php` as extension if it's a core extension
+- add symbol counts to check command for verbose output - #90
+- suggest `php` as extension if it's a core extension - #103
+- ensure binary returns correct exit code - #89 #98 #107
+- normalize extension names - #99 #100
 
 ### Changed
+- use `installed.json` instead of `composer.json`
+
 
 ## [1.1.0] - 2018-09-03
 ### Added
