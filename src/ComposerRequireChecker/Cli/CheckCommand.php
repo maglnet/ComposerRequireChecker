@@ -61,8 +61,7 @@ class CheckCommand extends Command
         if (false === $composerJson) {
             throw new \InvalidArgumentException('file not found: [' . $input->getArgument('composer-json') . ']');
         }
-        $this->checkJsonFile($composerJson);
-        $composerData = (new JsonLoader($composerJson))->getData();
+        $composerData = $this->getComposerData($composerJson);
 
         $options = $this->getCheckOptions($input);
 
@@ -142,12 +141,11 @@ class CheckCommand extends Command
      * @param string $jsonFile
      * @throws \ComposerRequireChecker\Exception\InvalidJsonException
      * @throws \ComposerRequireChecker\Exception\NotReadableException
-     * @internal param string $composerJson the path to composer.json
      */
-    private function checkJsonFile(string $jsonFile)
+    private function getComposerData(string $jsonFile): array
     {
         // JsonLoader throws an exception if it cannot load the file
-        new JsonLoader($jsonFile);
+        return (new JsonLoader($jsonFile))->getData();
     }
 
     /**
