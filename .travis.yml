@@ -18,7 +18,6 @@ matrix:
 
 before_install:
     - export COMPOSER_GLOBAL_HOME_DIR=`composer config -g home`
-    - composer self-update
     - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ${COMPOSER_GLOBAL_HOME_DIR}/composer.json
 
 install:
