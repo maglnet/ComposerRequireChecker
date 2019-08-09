@@ -1,6 +1,10 @@
 imports:
     - php
 
+filter:
+    excluded_paths:
+        - 'test/fixtures'
+
 tools:
     external_code_coverage:
         timeout: 600
