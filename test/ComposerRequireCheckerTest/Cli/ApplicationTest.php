@@ -14,12 +14,12 @@ class ApplicationTest extends TestCase
      */
     private $application;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->application = new Application();
     }
 
-    public function testCheckCommandExists()
+    public function testCheckCommandExists(): void
     {
         $this->assertTrue($this->application->has('check'));
         $this->assertInstanceOf(Command::class, $this->application->get('check'));

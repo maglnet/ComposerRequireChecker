@@ -30,14 +30,14 @@ class UsedSymbolCollectorTest extends TestCase
     /** @var UsedSymbolCollector */
     private $visitor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->visitor = new UsedSymbolCollector();
     }
 
-    public function testExtendingClass()
+    public function testExtendingClass(): void
     {
         $node = new Class_('Foo');
         $node->extends = new Name('Bar');
@@ -49,7 +49,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testExtendingInterface()
+    public function testExtendingInterface(): void
     {
         $node = new Interface_('Foo');
         $node->extends = [new Name('Bar'), new Name('Baz')];
@@ -62,7 +62,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testImplements()
+    public function testImplements(): void
     {
         $node = new Class_('Foo');
         $node->implements = [new Name('Bar'), new Name('Baz')];
@@ -75,7 +75,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testStaticCall()
+    public function testStaticCall(): void
     {
         $class = new Name('Foo');
         $node = new StaticCall($class, 'foo');
@@ -88,7 +88,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testStaticPropertyFetch()
+    public function testStaticPropertyFetch(): void
     {
         $class = new Name('Foo');
         $node = new StaticPropertyFetch($class, 'foo');
@@ -101,7 +101,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testClassConstantFetch()
+    public function testClassConstantFetch(): void
     {
         $class = new Name('Foo');
         $node = new ClassConstFetch($class, 'FOO');
@@ -114,7 +114,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testNew()
+    public function testNew(): void
     {
         $class = new Name('Foo');
         $node = new New_($class);
@@ -127,7 +127,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testInstanceof()
+    public function testInstanceof(): void
     {
         $class = new Name('Foo');
         $node = new Instanceof_(new Variable('foo'), $class);
@@ -140,7 +140,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testCatch()
+    public function testCatch(): void
     {
         $class = new Name('Foo');
         $node = new Catch_([$class], new Variable('e'));
@@ -152,7 +152,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testFunctionCallUsage()
+    public function testFunctionCallUsage(): void
     {
         $functionName = new Name('foo');
         $node = new FuncCall($functionName);
@@ -165,7 +165,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('foo', $symbols);
     }
 
-    public function testFunctionParameterType()
+    public function testFunctionParameterType(): void
     {
         $functionName = new Name('foo');
         $node = new Function_($functionName);
@@ -181,7 +181,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testFunctionParameterTypeAsString()
+    public function testFunctionParameterTypeAsString(): void
     {
         $functionName = new Name('foo');
         $node = new Function_($functionName);
@@ -197,7 +197,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testMethodParameterType()
+    public function testMethodParameterType(): void
     {
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
@@ -213,7 +213,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testMethodParameterTypeAsString()
+    public function testMethodParameterTypeAsString(): void
     {
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
@@ -229,7 +229,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testFunctionReturnType()
+    public function testFunctionReturnType(): void
     {
         $functionName = new Name('foo');
         $node = new Function_($functionName);
@@ -242,7 +242,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testFunctionReturnTypeAsString()
+    public function testFunctionReturnTypeAsString(): void
     {
         $functionName = new Name('foo');
         $node = new Function_($functionName);
@@ -255,7 +255,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testMethodReturnType()
+    public function testMethodReturnType(): void
     {
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
@@ -268,7 +268,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testMethodReturnTypeAsString()
+    public function testMethodReturnTypeAsString(): void
     {
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
@@ -281,7 +281,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testConstantFetch()
+    public function testConstantFetch(): void
     {
         $exceptionClass = new Name('FooException');
         $node = new ConstFetch($exceptionClass);
@@ -294,7 +294,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('FooException', $symbols);
     }
 
-    public function testTraits()
+    public function testTraits(): void
     {
         $node = new TraitUse([new Name('Foo')]);
 
@@ -305,7 +305,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testTraitUseVisibilityAdaptation()
+    public function testTraitUseVisibilityAdaptation(): void
     {
         $traitUseAdaption = new Alias(null, 'testMethod', Class_::MODIFIER_PUBLIC, null);
         $traitUse = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
@@ -317,7 +317,7 @@ class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Foo', $symbols);
     }
 
-    public function testBeforeTraverseResetsRecordedSymbols()
+    public function testBeforeTraverseResetsRecordedSymbols(): void
     {
         $node = new Class_('Foo');
         $node->extends = new Name('Bar');

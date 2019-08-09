@@ -17,7 +17,7 @@ class DefinedExtensionsResolverTest extends TestCase
     /** @var vfsStreamDirectory */
     private $root;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +25,7 @@ class DefinedExtensionsResolverTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testNoExtensions()
+    public function testNoExtensions(): void
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)->setContent('{}')->url();
 
@@ -34,7 +34,7 @@ class DefinedExtensionsResolverTest extends TestCase
         $this->assertCount(0, $extensions);
     }
 
-    public function testCoreExtensions()
+    public function testCoreExtensions(): void
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)
             ->setContent('{"require":{"php":"^7.0"}}')
@@ -46,7 +46,7 @@ class DefinedExtensionsResolverTest extends TestCase
         $this->assertSame('*', reset($extensions));
     }
 
-    public function testCoreExtensionsIn64Bit()
+    public function testCoreExtensionsIn64Bit(): void
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)
             ->setContent('{"require":{"php-64bit":"^7.0"}}')
@@ -58,7 +58,7 @@ class DefinedExtensionsResolverTest extends TestCase
         $this->assertSame('*', reset($extensions));
     }
 
-    public function testExtensionsAreReturned()
+    public function testExtensionsAreReturned(): void
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)
             ->setContent('{"require":{"ext-zip":"*","ext-curl":"*"}}')

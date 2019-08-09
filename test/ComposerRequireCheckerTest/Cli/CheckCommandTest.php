@@ -16,7 +16,7 @@ class CheckCommandTest extends TestCase
      */
     private $commandTester;
 
-    public function setUp()
+    public function setUp(): void
     {
         $application = new Application();
         $command = $application->get('check');
@@ -24,7 +24,7 @@ class CheckCommandTest extends TestCase
         $this->commandTester = new CommandTester($command);
     }
 
-    public function testExceptionIfComposerJsonNotFound()
+    public function testExceptionIfComposerJsonNotFound(): void
     {
         self::expectException(\InvalidArgumentException::class);
 
@@ -33,7 +33,7 @@ class CheckCommandTest extends TestCase
         ]);
     }
 
-    public function testSelfCheckShowsNoErrors()
+    public function testSelfCheckShowsNoErrors(): void
     {
         $this->commandTester->execute([
             // that's our own composer.json, lets be sure our self check does not throw errors
@@ -48,7 +48,7 @@ class CheckCommandTest extends TestCase
         $this->assertNotRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
     }
 
-    public function testVerboseSelfCheckShowsCounts()
+    public function testVerboseSelfCheckShowsCounts(): void
     {
         $this->commandTester->execute([
             // that's our own composer.json
@@ -62,7 +62,7 @@ class CheckCommandTest extends TestCase
         $this->assertRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
     }
 
-    public function testWithAdditionalSourceFiles()
+    public function testWithAdditionalSourceFiles(): void
     {
         $root = vfsStream::setup();
         vfsStream::create([

@@ -18,7 +18,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
     /** @var vfsStreamDirectory */
     private $root;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,7 +26,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testFromClassmap()
+    public function testFromClassmap(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}',
@@ -43,7 +43,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
     }
 
-    public function testFromFiles()
+    public function testFromFiles(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"files": ["foo.php"]}}',
@@ -56,7 +56,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('foo.php')->url(), $files);
     }
 
-    public function testFromPsr0()
+    public function testFromPsr0(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-0": ["src"]}}',
@@ -72,7 +72,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertCount(1, $files);
     }
 
-    public function testFromPsr4()
+    public function testFromPsr4(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": "src"}}}',
@@ -86,7 +86,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertCount(1, $files);
     }
 
-    public function testFromPsr0WithMultipleDirectories()
+    public function testFromPsr0WithMultipleDirectories(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-0": {"MyNamespace\\\\": ["src", "lib"]}}}',
@@ -101,7 +101,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('lib/MyNamespace/MyClassB.php')->url(), $files);
     }
 
-    public function testFromPsr4WithMultipleDirectories()
+    public function testFromPsr4WithMultipleDirectories(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src", "lib"]}}}',
@@ -116,7 +116,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
     }
 
-    public function testFromPsr4WithNestedDirectory()
+    public function testFromPsr4WithNestedDirectory(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src/MyNamespace"]}}}',
@@ -131,7 +131,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
     }
 
-    public function testFromPsr4WithNestedDirectoryAlternativeDirectorySeparator()
+    public function testFromPsr4WithNestedDirectoryAlternativeDirectorySeparator(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src\\\\MyNamespace"]}}}',
@@ -149,7 +149,7 @@ class LocateComposerPackageSourceFilesTest extends TestCase
     /**
      * @dataProvider provideExcludePattern
      */
-    public function testFromPsr4WithExcludeFromClassmap(array $excludedPattern, array $expectedFiles)
+    public function testFromPsr4WithExcludeFromClassmap(array $excludedPattern, array $expectedFiles): void
     {
         $excludedPatternJson = json_encode($excludedPattern);
 

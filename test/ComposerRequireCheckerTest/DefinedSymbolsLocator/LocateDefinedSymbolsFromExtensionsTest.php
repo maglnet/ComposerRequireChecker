@@ -16,50 +16,50 @@ class LocateDefinedSymbolsFromExtensionsTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->locator = new LocateDefinedSymbolsFromExtensions();
     }
 
-    public function testThrowsExceptionForUnknownExtension()
+    public function testThrowsExceptionForUnknownExtension(): void
     {
         $this->expectException('ComposerRequireChecker\Exception\UnknownExtensionException');
         $this->locator->__invoke(['unknown_extension_name']);
     }
 
-    public function testReturnsFilledArray()
+    public function testReturnsFilledArray(): void
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertGreaterThan(1, count($symbols));
         $this->assertInternalType('array', $symbols);
     }
 
-    public function testSymbolsContainConstants()
+    public function testSymbolsContainConstants(): void
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertTrue(in_array('PHP_VERSION', $symbols));
     }
 
-    public function testSymbolsContainFunctions()
+    public function testSymbolsContainFunctions(): void
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertTrue(in_array('strlen', $symbols));
     }
 
-    public function testSymbolsContainClasses()
+    public function testSymbolsContainClasses(): void
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertTrue(in_array('stdClass', $symbols));
     }
 
-    public function testPackageNameInterpolation()
+    public function testPackageNameInterpolation(): void
     {
         $symbols = $this->locator->__invoke(['zend-opcache']);
         $symbols2 = $this->locator->__invoke(['Zend Opcache']);
         $this->assertEquals($symbols, $symbols2);
     }
 
-    public function testCanHandleMultipleExtensions()
+    public function testCanHandleMultipleExtensions(): void
     {
         $coreSymbols = $this->locator->__invoke(['Core']);
         $standardSymbols = $this->locator->__invoke(['standard']);
