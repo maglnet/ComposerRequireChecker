@@ -22,7 +22,7 @@ class LocateASTFromFilesTest extends TestCase
     /** @var vfsStreamDirectory */
     private $root;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +30,7 @@ class LocateASTFromFilesTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testLocate()
+    public function testLocate(): void
     {
         $files = [
             $this->createFile('MyClassA', '<?php class MyClassA {}'),
@@ -42,7 +42,7 @@ class LocateASTFromFilesTest extends TestCase
         $this->assertCount(2, $roots);
     }
 
-    public function testFailOnParseError()
+    public function testFailOnParseError(): void
     {
         $this->expectException(Error::class);
         $files = [
@@ -52,7 +52,7 @@ class LocateASTFromFilesTest extends TestCase
         $this->locate($files);
     }
 
-    public function testDoNotFailOnParseErrorWithErrorHandler()
+    public function testDoNotFailOnParseErrorWithErrorHandler(): void
     {
         $collectingErrorHandler = new Collecting();
         $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), $collectingErrorHandler);

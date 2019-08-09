@@ -16,14 +16,14 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
     /** @var LocateUsedSymbolsFromASTRoots */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateUsedSymbolsFromASTRoots();
     }
 
-    public function testNoAsts()
+    public function testNoAsts(): void
     {
         $asts = [];
         $symbols = $this->locate($asts);
@@ -31,7 +31,7 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
         $this->assertCount(0, $symbols);
     }
 
-    public function testLocate()
+    public function testLocate(): void
     {
         $node = new Class_('Foo');
         $node->extends = new Name('Bar');

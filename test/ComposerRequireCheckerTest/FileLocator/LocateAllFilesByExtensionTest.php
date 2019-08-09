@@ -18,7 +18,7 @@ class LocateAllFilesByExtensionTest extends TestCase
     /** @var vfsStreamDirectory */
     private $root;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -26,14 +26,14 @@ class LocateAllFilesByExtensionTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testLocateFromNoDirectories()
+    public function testLocateFromNoDirectories(): void
     {
         $files = $this->locate([], '.php', null);
 
         $this->assertCount(0, $files);
     }
 
-    public function testLocateFromASingleDirectory()
+    public function testLocateFromASingleDirectory(): void
     {
         $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         $files = [];

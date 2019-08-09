@@ -35,7 +35,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collector = new UsedSymbolCollector();
         $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
@@ -45,7 +45,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverser->addVisitor($this->collector);
     }
 
-    public function testWillCollectSymbolsUsedInThisFile()
+    public function testWillCollectSymbolsUsedInThisFile(): void
     {
         $this->traverseClassAST(self::class);
 
@@ -62,12 +62,13 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'PhpParser\NodeVisitor\NameResolver',
                 'string',
                 'array',
+                'void',
             ],
             $this->collector->getCollectedSymbols()
         );
     }
 
-    public function testWillCollectFunctionDefinitionTypes()
+    public function testWillCollectFunctionDefinitionTypes(): void
     {
         $this->traverseStringAST('<?php function foo(My\ParameterType $bar, array $fooBar) {}');
 
@@ -80,7 +81,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectMethodDefinitionTypes()
+    public function testWillCollectMethodDefinitionTypes(): void
     {
         $this->traverseStringAST('<?php class Foo { function foo(My\ParameterType $bar, array $fooBar) {}}');
 
@@ -93,7 +94,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectFunctionReturnTypes()
+    public function testWillCollectFunctionReturnTypes(): void
     {
         $this->traverseStringAST('<?php function foo($bar) : My\ReturnType {}');
 
@@ -105,7 +106,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectMethodReturnTypes()
+    public function testWillCollectMethodReturnTypes(): void
     {
         $this->traverseStringAST('<?php class Foo { function foo($bar) : My\ReturnType {}}');
 
@@ -117,7 +118,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectSimpleFunctionReturnTypes()
+    public function testWillCollectSimpleFunctionReturnTypes(): void
     {
         $this->traverseStringAST('<?php function foo($bar) : int {}');
 
@@ -129,7 +130,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWontCollectAnyUsageTypes()
+    public function testWontCollectAnyUsageTypes(): void
     {
         $this->traverseStringAST('<?php function foo($bar) {}');
 
@@ -139,7 +140,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testUseTraitAdaptionAlias()
+    public function testUseTraitAdaptionAlias(): void
     {
         $this->traverseStringAST('<?php namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
 
@@ -165,7 +166,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private static function assertSameCollectedSymbols(array $expected, array $actual)
+    private static function assertSameCollectedSymbols(array $expected, array $actual): void
     {
         self::assertSame(array_diff($expected, $actual), array_diff($actual, $expected));
     }

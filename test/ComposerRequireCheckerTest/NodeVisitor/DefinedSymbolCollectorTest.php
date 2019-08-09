@@ -35,7 +35,7 @@ class DefinedSymbolCollectorTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
@@ -45,14 +45,14 @@ class DefinedSymbolCollectorTest extends TestCase
         $this->traverser->addVisitor($this->collector);
     }
 
-    public function testExceptionWhenNoNamespaceDefined()
+    public function testExceptionWhenNoNamespaceDefined(): void
     {
         $this->expectException(\UnexpectedValueException::class);
         $node = new Class_('gedöns');
         $this->collector->enterNode($node);
     }
 
-    public function testRecordDefinedConstDefinition()
+    public function testRecordDefinedConstDefinition(): void
     {
         $node = new FuncCall(new Name('define'), [
             new Arg(new String_('CONST_A')),
@@ -63,7 +63,7 @@ class DefinedSymbolCollectorTest extends TestCase
         $this->assertContains('CONST_A', $this->collector->getDefinedSymbols());
     }
 
-    public function testDontRecordNamespacedDefinedConstDefinition()
+    public function testDontRecordNamespacedDefinedConstDefinition(): void
     {
         $node = new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
             new Arg(new String_('NO_CONST')),

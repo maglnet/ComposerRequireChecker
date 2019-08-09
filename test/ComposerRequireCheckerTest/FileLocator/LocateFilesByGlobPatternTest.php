@@ -21,13 +21,13 @@ class LocateFilesByGlobPatternTest extends TestCase
      */
     private $root;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();
         $this->root = vfsStream::setup();
     }
 
-    public function testSimpleGlobPattern()
+    public function testSimpleGlobPattern(): void
     {
         vfsStream::create([
             'bin' => [
@@ -41,7 +41,7 @@ class LocateFilesByGlobPatternTest extends TestCase
         self::assertContains($this->root->getChild('bin/console')->url(), $files);
     }
 
-    public function testGlobPattern()
+    public function testGlobPattern(): void
     {
         vfsStream::create([
             'bin' => [

@@ -21,21 +21,21 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     /** @var LocateDefinedSymbolsFromASTRoots */
     private $locator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateDefinedSymbolsFromASTRoots();
     }
 
-    public function testNoRoots()
+    public function testNoRoots(): void
     {
         $symbols = $this->locate([]);
 
         $this->assertCount(0, $symbols);
     }
 
-    public function testBasicLocateClass()
+    public function testBasicLocateClass(): void
     {
         $roots = [
             new Class_('MyClassA'), new Class_('MyClassB'),
@@ -52,7 +52,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertContains('MyClassC', $symbols);
     }
 
-    public function testBasicLocateFunctions()
+    public function testBasicLocateFunctions(): void
     {
         $roots = [
             new Function_('myFunctionA'),
@@ -68,7 +68,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertContains('myFunctionB', $symbols);
     }
 
-    public function testBasicLocateTrait()
+    public function testBasicLocateTrait(): void
     {
         $roots = [
             new Trait_('MyTraitA'), new Trait_('MyTraitB'),
@@ -85,7 +85,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertContains('MyTraitC', $symbols);
     }
 
-    public function testBasicLocateAnonymous()
+    public function testBasicLocateAnonymous(): void
     {
         $roots = [
             new Class_(null),
@@ -97,7 +97,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertCount(0, $symbols);
     }
 
-    public function testBasicLocateDefineCalls()
+    public function testBasicLocateDefineCalls(): void
     {
         $roots = [
             new FuncCall(new Name('define'), [
@@ -113,7 +113,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     }
 
-    public function testBasicDoNotLocateNamespacedDefineCalls()
+    public function testBasicDoNotLocateNamespacedDefineCalls(): void
     {
         $roots = [
             new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [

@@ -35,7 +35,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
         $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
@@ -45,7 +45,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         $this->traverser->addVisitor($this->collector);
     }
 
-    public function testWillCollectSymbolsDefinedInThisFile()
+    public function testWillCollectSymbolsDefinedInThisFile(): void
     {
         $this->traverseClassAST(self::class);
 
@@ -55,7 +55,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectFunctionDefinition()
+    public function testWillCollectFunctionDefinition(): void
     {
         $this->traverseStringAST('function foo() {}');
 
@@ -65,7 +65,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectNamespacedFunctionDefinition()
+    public function testWillCollectNamespacedFunctionDefinition(): void
     {
         $this->traverseStringAST('namespace Foo; function foo() {}');
 
@@ -75,7 +75,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectConstDefinition()
+    public function testWillCollectConstDefinition(): void
     {
         $this->traverseStringAST('const foo = "bar", baz = "tab";');
 
@@ -85,7 +85,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectNamespacedConstDefinition()
+    public function testWillCollectNamespacedConstDefinition(): void
     {
         $this->traverseStringAST('namespace Foo; const foo = "bar", baz = "tab";');
 
@@ -95,7 +95,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillCollectDefinedConstDefinition()
+    public function testWillCollectDefinedConstDefinition(): void
     {
         $this->traverseStringAST('define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");');
 
@@ -105,7 +105,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testWillNotCollectNamespacedDefineCalls()
+    public function testWillNotCollectNamespacedDefineCalls(): void
     {
         $this->traverseStringAST('namespace Foo { function define($bar, $baz) {return;} define("NOT_A_CONST", "NOT_SOMETHING"); }');
 
@@ -115,7 +115,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    public function testTraitAdaptionDefinition()
+    public function testTraitAdaptionDefinition(): void
     {
         $this->traverseStringAST('namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
 
@@ -140,7 +140,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private static function assertSameCollectedSymbols(array $expected, array $actual)
+    private static function assertSameCollectedSymbols(array $expected, array $actual): void
     {
         self::assertSame(array_diff($expected, $actual), array_diff($actual, $expected));
     }

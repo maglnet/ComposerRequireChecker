@@ -15,13 +15,13 @@ class BinaryTest extends TestCase
         $this->bin = __DIR__ . "/../../bin/composer-require-checker";
     }
 
-    public function testSuccess()
+    public function testSuccess(): void
     {
         exec($this->bin, $output, $return);
         $this->assertSame(0, $return);
     }
 
-    public function testUnknownSymbols()
+    public function testUnknownSymbols(): void
     {
         $path = __DIR__ . "/../fixtures/unknownSymbols/composer.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
@@ -29,7 +29,7 @@ class BinaryTest extends TestCase
         $this->assertContains("The following unknown symbols were found", implode("\n", $output));
     }
 
-    public function testInvalidConfiguration()
+    public function testInvalidConfiguration(): void
     {
         $path = __DIR__ . "/../fixtures/validJson.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);

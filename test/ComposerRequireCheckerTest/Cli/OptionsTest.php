@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
-    public function testOptionsAcceptPhpCoreExtensions()
+    public function testOptionsAcceptPhpCoreExtensions(): void
     {
         $options = new Options([
             'php-core-extensions' => ['something']
@@ -22,7 +22,7 @@ class OptionsTest extends TestCase
         $this->assertSame(['something'], $options->getPhpCoreExtensions());
     }
 
-    public function testOptionsAcceptSymbolWhitelist()
+    public function testOptionsAcceptSymbolWhitelist(): void
     {
         $options = new Options([
             'symbol-whitelist' => ['foo', 'bar']
@@ -31,7 +31,7 @@ class OptionsTest extends TestCase
         $this->assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
     }
 
-    public function testOptionsFileRepresentsDefaults()
+    public function testOptionsFileRepresentsDefaults(): void
     {
         $options = new Options();
 
@@ -44,7 +44,7 @@ class OptionsTest extends TestCase
         $this->assertEquals($options, $optionsFromFile);
     }
 
-    public function testThrowsExceptionForUnknownOptions()
+    public function testThrowsExceptionForUnknownOptions(): void
     {
         $this->expectException('InvalidArgumentException');
         $options = new Options([

@@ -17,7 +17,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
     /** @var vfsStreamDirectory */
     private $root;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +25,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->root = vfsStream::setup();
     }
 
-    public function testNoDependencies()
+    public function testNoDependencies(): void
     {
         vfsStream::create([
             'composer.json' => '{}',
@@ -41,7 +41,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->assertCount(0, $files);
     }
 
-    public function testSingleDependency()
+    public function testSingleDependency(): void
     {
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
@@ -68,7 +68,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->assertSame($expectedFile, $actualFile);
     }
 
-    public function testVendorDirsWithoutComposerFilesAreIgnored()
+    public function testVendorDirsWithoutComposerFilesAreIgnored(): void
     {
         vfsStream::create([
             'composer.json' => '{"require": {"foo/bar": "^1.0"}}',
@@ -91,7 +91,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->assertCount(0, $files);
     }
 
-    public function testVendorConfigSettingIsBeingUsed()
+    public function testVendorConfigSettingIsBeingUsed(): void
     {
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"},"config":{"vendor-dir":"alternate-vendor"}}',
@@ -118,7 +118,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
         $this->assertSame($expectedFile, $actualFile);
     }
 
-    public function testInstalledJsonUsedAsFallback()
+    public function testInstalledJsonUsedAsFallback(): void
     {
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
@@ -152,7 +152,7 @@ class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
     /**
      * https://github.com/composer/composer/pull/7999
      */
-    public function testOldInstalledJsonUsedAsFallback()
+    public function testOldInstalledJsonUsedAsFallback(): void
     {
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',

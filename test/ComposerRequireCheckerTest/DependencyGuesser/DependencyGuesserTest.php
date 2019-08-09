@@ -14,12 +14,12 @@ class DependencyGuesserTest extends TestCase
      */
     private $guesser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->guesser = new DependencyGuesser();
     }
 
-    public function testGuessExtJson()
+    public function testGuessExtJson(): void
     {
         if (!extension_loaded('json')) {
             $this->markTestSkipped('extension json is not available');
@@ -29,13 +29,13 @@ class DependencyGuesserTest extends TestCase
         $this->assertContains('ext-json', $result);
     }
 
-    public function testDoesNotSuggestAnything()
+    public function testDoesNotSuggestAnything(): void
     {
         $result = $this->guesser->__invoke('an_hopefully_unique_unknown_symbol');
         $this->assertFalse($result->valid());
     }
 
-    public function testCoreExtensionsResolvesToPHP()
+    public function testCoreExtensionsResolvesToPHP(): void
     {
         $options = new Options(['php-core-extensions' => ['SPL', 'something-else']]);
         $this->guesser = new DependencyGuesser($options);
