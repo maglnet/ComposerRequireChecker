@@ -1,10 +1,8 @@
 {
-    "name":              "maglnet/composer-require-checker",
-    "description":       "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
-    "type":              "library",
-    "license":           "MIT",
-    "homepage":          "https://github.com/maglnet/ComposerRequireChecker",
-    "keywords":          [
+    "name": "maglnet/composer-require-checker",
+    "type": "library",
+    "description": "CLI tool to analyze composer dependencies and verify that no unknown symbols are used in the sources of a package",
+    "keywords": [
         "composer",
         "dependency",
         "cli",
@@ -13,37 +11,41 @@
         "imports",
         "require"
     ],
+    "homepage": "https://github.com/maglnet/ComposerRequireChecker",
+    "license": "MIT",
     "authors": [
         {
-            "name":     "Marco Pivetta",
-            "email":    "ocramius@gmail.com",
+            "name": "Marco Pivetta",
+            "email": "ocramius@gmail.com",
             "homepage": "http://ocramius.github.io/"
         },
         {
-            "name":     "Matthias Glaub",
-            "email":    "magl@magl.net",
+            "name": "Matthias Glaub",
+            "email": "magl@magl.net",
             "homepage": "http://magl.net"
         }
     ],
     "require": {
-        "php":              "^7.1",
-        "ext-json":         "*",
-        "ext-phar":         "*",
+        "php": "^7.1",
+        "ext-json": "*",
+        "ext-phar": "*",
         "nikic/php-parser": "^4.0",
-        "symfony/console":  "^3.4.17 | ^4.1.6",
-        "webmozart/glob":   "^4.1"
+        "symfony/console": "^3.4.17 || ^4.1.6",
+        "webmozart/glob": "^4.1"
     },
     "require-dev": {
-        "phpunit/phpunit":    "^6.0",
         "mikey179/vfsstream": "^1.6",
-        "phpstan/phpstan": "^0.10.3"
+        "phpstan/phpstan": "^0.10.3",
+        "phpunit/phpunit": "^6.0"
     },
     "config": {
         "optimize-autoloader": true
     },
-    "bin": [
-        "bin/composer-require-checker"
-    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.1-dev"
+        }
+    },
     "autoload": {
         "psr-4": {
             "ComposerRequireChecker\\": "src/ComposerRequireChecker"
@@ -54,9 +56,7 @@
             "ComposerRequireCheckerTest\\": "test/ComposerRequireCheckerTest"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.1-dev"
-        }
-    }
+    "bin": [
+        "bin/composer-require-checker"
+    ]
 }
