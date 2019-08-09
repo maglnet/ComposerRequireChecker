@@ -62,6 +62,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'PhpParser\NodeVisitor\NameResolver',
                 'string',
                 'array',
+                'void',
             ],
             $this->collector->getCollectedSymbols()
         );
