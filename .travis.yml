@@ -27,7 +27,7 @@ install:
     - composer info -D | sort
 
 script:
-    - vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text
+    - if [ $COVERAGE = "1" ]; then vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text; else vendor/bin/phpunit; fi
     - vendor/bin/phpstan analyse -l 5 src
     - composer-require-checker
 
