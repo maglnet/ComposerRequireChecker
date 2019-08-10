@@ -10,7 +10,7 @@ class BinaryTest extends TestCase
     /** @var string */
     private $bin;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->bin = __DIR__ . "/../../bin/composer-require-checker";
     }

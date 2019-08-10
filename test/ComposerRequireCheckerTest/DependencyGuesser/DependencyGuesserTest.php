@@ -14,7 +14,7 @@ class DependencyGuesserTest extends TestCase
      */
     private $guesser;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->guesser = new DependencyGuesser();
     }
