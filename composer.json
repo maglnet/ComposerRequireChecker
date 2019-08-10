@@ -39,7 +39,8 @@
         "phpunit/phpunit": "^6.0"
     },
     "config": {
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
