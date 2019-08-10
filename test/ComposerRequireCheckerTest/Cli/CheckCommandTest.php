@@ -16,7 +16,7 @@ class CheckCommandTest extends TestCase
      */
     private $commandTester;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $application = new Application();
         $command = $application->get('check');

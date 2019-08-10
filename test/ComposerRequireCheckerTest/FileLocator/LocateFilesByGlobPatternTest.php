@@ -21,7 +21,7 @@ class LocateFilesByGlobPatternTest extends TestCase
      */
     private $root;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();
         $this->root = vfsStream::setup();
