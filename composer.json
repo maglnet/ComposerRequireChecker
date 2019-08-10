@@ -36,7 +36,7 @@
     "require-dev": {
         "mikey179/vfsstream": "^1.6",
         "phpstan/phpstan": "^0.10.3",
-        "phpunit/phpunit": "^6.0"
+        "phpunit/phpunit": "^8.3.3"
     },
     "config": {
         "optimize-autoloader": true,
