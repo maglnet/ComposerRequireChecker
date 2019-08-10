@@ -30,6 +30,10 @@ final class LocateUsedSymbolsFromASTRoots
             $astSymbols[] = $collector->getCollectedSymbols();
         }
 
-        return array_values(array_unique(array_merge([], ...$astSymbols)));
+        $usedSymbols = array_unique(array_merge([], ...$astSymbols));
+
+        natcasesort($usedSymbols);
+
+        return array_values($usedSymbols);
     }
 }

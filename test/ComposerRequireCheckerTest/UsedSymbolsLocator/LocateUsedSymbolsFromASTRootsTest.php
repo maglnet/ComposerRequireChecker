@@ -6,6 +6,7 @@ use ArrayObject;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,6 +40,29 @@ class LocateUsedSymbolsFromASTRootsTest extends TestCase
 
         $this->assertCount(1, $symbols);
         $this->assertContains('Bar', $symbols);
+    }
+
+    public function testInvokeReturnsSymbolsSorted(): void
+    {
+        $expectedSymbols = [
+            'Doctrine\Common\Collections\ArrayCollection',
+            'FILTER_VALIDATE_URL',
+            'filter_var',
+            'Foo\Bar\Baz',
+            'libxml_clear_errors',
+        ];
+
+        $parserFactory = new ParserFactory();
+
+        $parser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+
+        $ast = $parser->parse(file_get_contents(__DIR__ . '/../../fixtures/unknownSymbols/src/OtherThing.php'));
+
+        $symbols = $this->locate([
+            $ast,
+        ]);
+
+        $this->assertSame($expectedSymbols, $symbols);
     }
 
     /**
