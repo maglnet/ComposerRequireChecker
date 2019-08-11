@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\NodeVisitor\UsedSymbolCollector
  */
-class UsedSymbolCollectorTest extends TestCase
+final class UsedSymbolCollectorTest extends TestCase
 {
     /** @var UsedSymbolCollector */
     private $visitor;

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots
  */
-class LocateUsedSymbolsFromASTRootsTest extends TestCase
+final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
     /** @var LocateUsedSymbolsFromASTRoots */
     private $locator;

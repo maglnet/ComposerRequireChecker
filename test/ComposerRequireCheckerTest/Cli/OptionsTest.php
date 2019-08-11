@@ -11,7 +11,7 @@ namespace ComposerRequireCheckerTest\Cli;
 use ComposerRequireChecker\Cli\Options;
 use PHPUnit\Framework\TestCase;
 
-class OptionsTest extends TestCase
+final class OptionsTest extends TestCase
 {
     public function testOptionsAcceptPhpCoreExtensions(): void
     {

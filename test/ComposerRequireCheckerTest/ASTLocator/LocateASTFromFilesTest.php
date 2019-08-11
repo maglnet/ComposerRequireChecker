@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles
  */
-class LocateASTFromFilesTest extends TestCase
+final class LocateASTFromFilesTest extends TestCase
 {
     /** @var LocateASTFromFiles */
     private $locator;

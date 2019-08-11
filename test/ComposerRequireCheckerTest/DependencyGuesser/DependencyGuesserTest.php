@@ -6,7 +6,7 @@ use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use PHPUnit\Framework\TestCase;
 
-class DependencyGuesserTest extends TestCase
+final class DependencyGuesserTest extends TestCase
 {
 
     /**

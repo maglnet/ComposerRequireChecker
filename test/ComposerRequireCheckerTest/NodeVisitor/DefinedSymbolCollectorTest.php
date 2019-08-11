@@ -15,7 +15,7 @@ use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 
-class DefinedSymbolCollectorTest extends TestCase
+final class DefinedSymbolCollectorTest extends TestCase
 {
     /**
      * @var DefinedSymbolCollector

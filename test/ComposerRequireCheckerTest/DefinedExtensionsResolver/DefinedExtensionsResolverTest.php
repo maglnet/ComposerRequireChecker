@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver
  */
-class DefinedExtensionsResolverTest extends TestCase
+final class DefinedExtensionsResolverTest extends TestCase
 {
     /** @var DefinedExtensionsResolver */
     private $resolver;

@@ -5,7 +5,7 @@ namespace ComposerRequireCheckerTest;
 use function implode;
 use PHPUnit\Framework\TestCase;
 
-class BinaryTest extends TestCase
+final class BinaryTest extends TestCase
 {
     /** @var string */
     private $bin;
