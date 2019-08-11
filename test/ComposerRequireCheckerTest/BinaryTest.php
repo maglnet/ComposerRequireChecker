@@ -26,7 +26,7 @@ class BinaryTest extends TestCase
         $path = __DIR__ . "/../fixtures/unknownSymbols/composer.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertContains("The following unknown symbols were found", implode("\n", $output));
+        $this->assertStringContainsString("The following unknown symbols were found", implode("\n", $output));
     }
 
     public function testInvalidConfiguration(): void
@@ -34,6 +34,6 @@ class BinaryTest extends TestCase
         $path = __DIR__ . "/../fixtures/validJson.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertContains("dependencies have not been installed", implode("\n", $output));
+        $this->assertStringContainsString("dependencies have not been installed", implode("\n", $output));
     }
 }

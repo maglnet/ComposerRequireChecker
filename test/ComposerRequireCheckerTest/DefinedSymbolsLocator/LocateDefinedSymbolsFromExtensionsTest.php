@@ -31,7 +31,7 @@ class LocateDefinedSymbolsFromExtensionsTest extends TestCase
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertGreaterThan(1, count($symbols));
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
     }
 
     public function testSymbolsContainConstants(): void

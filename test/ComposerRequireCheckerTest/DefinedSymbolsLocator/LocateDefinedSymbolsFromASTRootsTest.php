@@ -44,7 +44,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(3, $symbols);
 
         $this->assertContains('MyClassA', $symbols);
@@ -61,7 +61,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(2, $symbols);
 
         $this->assertContains('myFunctionA', $symbols);
@@ -77,7 +77,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(3, $symbols);
 
         $this->assertContains('MyTraitA', $symbols);
@@ -93,7 +93,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(0, $symbols);
     }
 
@@ -108,7 +108,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(1, $symbols);
 
     }
@@ -124,7 +124,7 @@ class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertInternalType('array', $symbols);
+        $this->assertIsArray($symbols);
         $this->assertCount(0, $symbols);
 
     }
