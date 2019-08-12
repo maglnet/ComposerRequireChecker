@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: matthias
- * Date: 01.12.15
- * Time: 22:10
- */
 
 namespace ComposerRequireCheckerTest\Cli;
 
