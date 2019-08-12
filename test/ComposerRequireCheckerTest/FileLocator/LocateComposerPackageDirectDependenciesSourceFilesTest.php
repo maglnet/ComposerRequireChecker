@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles
  */
-class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
+final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
     /** @var LocateComposerPackageDirectDependenciesSourceFiles */
     private $locator;

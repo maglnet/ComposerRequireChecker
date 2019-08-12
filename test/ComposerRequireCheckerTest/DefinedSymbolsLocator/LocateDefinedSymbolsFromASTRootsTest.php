@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots
  */
-class LocateDefinedSymbolsFromASTRootsTest extends TestCase
+final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
     /** @var LocateDefinedSymbolsFromASTRoots */
     private $locator;

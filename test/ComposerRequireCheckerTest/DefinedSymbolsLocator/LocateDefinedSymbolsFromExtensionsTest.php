@@ -5,7 +5,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use PHPUnit\Framework\TestCase;
 
-class LocateDefinedSymbolsFromExtensionsTest extends TestCase
+final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 {
 
     /**

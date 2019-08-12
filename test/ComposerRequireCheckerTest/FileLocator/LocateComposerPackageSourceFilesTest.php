@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
  */
-class LocateComposerPackageSourceFilesTest extends TestCase
+final class LocateComposerPackageSourceFilesTest extends TestCase
 {
     /** @var LocateComposerPackageSourceFiles */
     private $locator;

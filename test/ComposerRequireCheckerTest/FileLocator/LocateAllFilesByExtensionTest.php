@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateAllFilesByExtension
  */
-class LocateAllFilesByExtensionTest extends TestCase
+final class LocateAllFilesByExtensionTest extends TestCase
 {
     /** @var LocateAllFilesByExtension */
     private $locator;

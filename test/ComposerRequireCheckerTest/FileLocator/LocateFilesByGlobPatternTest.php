@@ -8,7 +8,7 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
-class LocateFilesByGlobPatternTest extends TestCase
+final class LocateFilesByGlobPatternTest extends TestCase
 {
 
     /**

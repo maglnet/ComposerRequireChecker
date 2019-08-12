@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \ComposerRequireChecker\JsonLoader
  */
-class JsonLoaderTest extends TestCase
+final class JsonLoaderTest extends TestCase
 {
     public function testHasErrorWithWrongPath(): void
     {
