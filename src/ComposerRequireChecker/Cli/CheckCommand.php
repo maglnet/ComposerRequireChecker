@@ -4,10 +4,9 @@ namespace ComposerRequireChecker\Cli;
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
-use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
-use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
+use ComposerRequireChecker\Exception\DependenciesNotInstalledException;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
@@ -15,6 +14,13 @@ use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
+use Roave\BetterReflection\BetterReflection;
+use Roave\BetterReflection\Reflector\ClassReflector;
+use Roave\BetterReflection\Reflector\ConstantReflector;
+use Roave\BetterReflection\Reflector\Exception\IdentifierNotFound;
+use Roave\BetterReflection\Reflector\FunctionReflector;
+use Roave\BetterReflection\SourceLocator\Type\Composer\Factory\Exception\MissingComposerJson;
+use Roave\BetterReflection\SourceLocator\Type\Composer\Factory\MakeLocatorForComposerJsonAndInstalledJson;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,22 +76,6 @@ class CheckCommand extends Command
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
-        $this->verbose("Collecting defined vendor symbols... ", $output);
-        $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
-            (new ComposeGenerators())->__invoke(
-                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
-                $getPackageSourceFiles($composerData, dirname($composerJson)),
-                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
-            )
-        ));
-        $this->verbose("found " . count($definedVendorSymbols) . " symbols.", $output, true);
-
-        $this->verbose("Collecting defined extension symbols... ", $output);
-        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
-            (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
-        );
-        $this->verbose("found " . count($definedExtensionSymbols) . " symbols.", $output, true);
-
         $this->verbose("Collecting used symbols... ", $output);
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
@@ -95,17 +85,62 @@ class CheckCommand extends Command
         ));
         $this->verbose("found " . count($usedSymbols) . " symbols.", $output, true);
 
-        if (!count($usedSymbols)) {
-            throw new \LogicException('There were no symbols found, please check your configuration.');
+
+        $this->verbose("Collecting defined extension symbols... ", $output);
+        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
+            (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions())
+        );
+        $this->verbose("found " . count($definedExtensionSymbols) . " symbols.", $output, true);
+
+        try {
+            $locator = new MakeLocatorForComposerJsonAndInstalledJson();
+            $astLocator = (new BetterReflection())->astLocator();
+            $composerLocator = $locator(dirname($composerJson), $astLocator);
+            $classReflector = new ClassReflector($composerLocator);
+            $functionReflector = new FunctionReflector($composerLocator, $classReflector);
+            $constantReflector = new ConstantReflector($composerLocator, $classReflector);
+        } catch (MissingComposerJson $missingComposerJson) {
+            $message = 'The composer dependencies have not been installed, run composer install/update first';
+            throw new DependenciesNotInstalledException($message);
         }
 
-        $this->verbose("Checking for unknown symbols... ", $output, true);
-        $unknownSymbols = array_diff(
-            $usedSymbols,
-            $definedVendorSymbols,
-            $definedExtensionSymbols,
-            $options->getSymbolWhitelist()
-        );
+        $whiteList = $options->getSymbolWhitelist();
+        $unknownSymbols = [];
+        foreach ($usedSymbols as $usedSymbol) {
+            if (in_array($usedSymbol, $whiteList)) {
+                continue;
+            }
+
+            if (in_array($usedSymbol, $definedExtensionSymbols)) {
+                continue;
+            }
+
+            try {
+                $classReflector->reflect($usedSymbol);
+
+                continue;
+            } catch (IdentifierNotFound $ignore) {
+                // void
+            }
+
+            try {
+                $functionReflector->reflect($usedSymbol);
+
+                continue;
+            } catch (IdentifierNotFound $ignore) {
+                // void
+            }
+
+            try {
+                $constantReflector->reflect($usedSymbol);
+
+                continue;
+            } catch (IdentifierNotFound $ignore) {
+                // void
+            }
+
+            $unknownSymbols[] = $usedSymbol;
+        }
 
         if (!$unknownSymbols) {
             $output->writeln("There were no unknown symbols found.");
