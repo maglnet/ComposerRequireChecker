@@ -4,7 +4,7 @@ version: 1
 
 update_configs:
   - default_assignees:
-      - "maglnet "
+      - "maglnet"
     default_reviewers:
       - "maglnet"
     directory: "/"
