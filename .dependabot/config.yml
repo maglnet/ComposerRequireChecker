@@ -1,0 +1,13 @@
+# https://dependabot.com/docs/config-file/
+
+version: 1
+
+update_configs:
+  - default_assignees:
+      - "maglnet "
+    default_reviewers:
+      - "maglnet"
+    directory: "/"
+    package_manager: "php:composer"
+    update_schedule: "live"
+    version_requirement_updates: "increase_versions"
