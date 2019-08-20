@@ -2,6 +2,7 @@
 
 namespace ComposerRequireChecker\Cli;
 
+use Composer\Autoload\ClassLoader;
 use Symfony\Component\Console\Application as AbstractApplication;
 
 class Application extends AbstractApplication
