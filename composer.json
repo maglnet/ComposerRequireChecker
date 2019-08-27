@@ -30,7 +30,7 @@
         "ext-json": "*",
         "ext-phar": "*",
         "nikic/php-parser": "^4.2",
-        "symfony/console": "^4.3.3",
+        "symfony/console": "^4.3.4",
         "webmozart/glob": "^4.1"
     },
     "require-dev": {
