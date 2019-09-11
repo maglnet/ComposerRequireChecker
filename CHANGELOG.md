@@ -40,6 +40,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Enhancement: Normalize composer.json - #122 
 - Don't load composer.json file twice - #116
 
+- drop support for PHP 7.1 - #127
+- fixes wrong config file path when running within phar file - #140
 
 ## [2.0.0] - 2019-03-19
 ### Added

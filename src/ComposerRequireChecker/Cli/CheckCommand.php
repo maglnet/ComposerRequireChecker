@@ -13,6 +13,7 @@ use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use Phar;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
@@ -134,6 +135,15 @@ class CheckCommand extends Command
         if (!$fileName) {
             return new Options();
         }
+
+        if (Phar::running() !== '') {
+            $fileName = realpath($fileName);
+            if (false === $fileName) {
+                throw new \InvalidArgumentException('config-file not found: [' . $input->getOption('config-file') . ']');
+            }
+
+        }
+
         return new Options((new JsonLoader($fileName))->getData());
     }
 
