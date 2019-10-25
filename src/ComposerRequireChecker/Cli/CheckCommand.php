@@ -131,20 +131,20 @@ class CheckCommand extends Command
 
     private function getCheckOptions(InputInterface $input): Options
     {
-        $fileName = $input->getOption('config-file');
-        if (!$fileName) {
+        $realFileName = $inputFileName = $input->getOption('config-file');
+        if (!$inputFileName) {
             return new Options();
         }
 
         if (Phar::running() !== '') {
-            $fileName = realpath($fileName);
-            if (false === $fileName) {
-                throw new \InvalidArgumentException('config-file not found: [' . $input->getOption('config-file') . ']');
+            $realFileName = realpath($inputFileName);
+            if (false === $realFileName) {
+                throw new \InvalidArgumentException('config-file not found: [' . $inputFileName . ']');
             }
 
         }
 
-        return new Options((new JsonLoader($fileName))->getData());
+        return new Options((new JsonLoader($realFileName))->getData());
     }
 
     /**
