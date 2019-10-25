@@ -14,7 +14,7 @@ final class LocateASTFromFiles
     private $parser;
 
     /**
-     * @var ErrorHandler
+     * @var ErrorHandler|null
      */
     private $errorHandler;
 
@@ -32,7 +32,11 @@ final class LocateASTFromFiles
     public function __invoke(Traversable $files): Traversable
     {
         foreach ($files as $file) {
-            yield $this->parser->parse(file_get_contents($file), $this->errorHandler);
+            $fileContent = file_get_contents($file);
+            if ($fileContent === false) {
+                throw new \InvalidArgumentException('could not load file [' . $file . ']');
+            }
+            yield $this->parser->parse($fileContent, $this->errorHandler);
         }
     }
 }
