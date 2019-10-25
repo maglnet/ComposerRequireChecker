@@ -53,13 +53,15 @@ class CheckCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!$output->isQuiet()) {
+        if (!$output->isQuiet() && $this->getApplication() !== null) {
             $output->writeln($this->getApplication()->getLongVersion());
         }
 
-        $composerJson = realpath($input->getArgument('composer-json'));
+        /** @var string $composerJsonArgument */
+        $composerJsonArgument = $input->getArgument('composer-json');
+        $composerJson = realpath((string) $composerJsonArgument);
         if (false === $composerJson) {
-            throw new \InvalidArgumentException('file not found: [' . $input->getArgument('composer-json') . ']');
+            throw new \InvalidArgumentException('file not found: [' . $composerJsonArgument . ']');
         }
         $composerData = $this->getComposerData($composerJson);
 
@@ -131,7 +133,7 @@ class CheckCommand extends Command
     private function getCheckOptions(InputInterface $input): Options
     {
         $fileName = $input->getOption('config-file');
-        if (!$fileName) {
+        if (!$fileName || !is_string($fileName)) {
             return new Options();
         }
         return new Options((new JsonLoader($fileName))->getData());
