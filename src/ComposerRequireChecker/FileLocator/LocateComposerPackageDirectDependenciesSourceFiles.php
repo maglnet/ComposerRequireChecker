@@ -15,8 +15,11 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     public function __invoke(string $composerJsonPath): Generator
     {
         $packageDir = dirname($composerJsonPath);
-
-        $composerJson = json_decode(file_get_contents($composerJsonPath), true);
+        $composerJsonContent = file_get_contents($composerJsonPath);
+        if ($composerJsonContent === false) {
+            throw new \InvalidArgumentException('could not load file [' . $composerJsonPath . ']');
+        }
+        $composerJson = json_decode($composerJsonContent, true);
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
         $vendorDirs = [];
         foreach ($composerJson['require'] ?? [] as $vendorName => $vendorRequiredVersion) {

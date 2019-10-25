@@ -47,6 +47,7 @@ final class LocateAllFilesByExtension
         }
 
         foreach ($blacklistPaths as &$path) {
+            /** @var string $path */
             $path = preg_replace('{/+}', '/', preg_quote(trim(strtr($path, '\\', '/'), '/')));
             $path = str_replace('\\*\\*', '.+?', $path);
             $path = str_replace('\\*', '[^/]+?', $path);
