@@ -64,21 +64,21 @@ final class CheckCommandTest extends TestCase
 
     public function testWithAdditionalSourceFiles(): void
     {
-        $root = vfsStream::setup();
-        vfsStream::create([
-            'config.json' => <<<JSON
+        $tempConfigFile = tempnam(sys_get_temp_dir(), 'composer-require-checker');
+        file_put_contents($tempConfigFile, <<<JSON
 {
     "scan-files": ["src/ComposerRequireChecker/Cli/CheckCommand.php"]
 }
 JSON
-            ,
-        ]);
+        );
 
         $this->commandTester->execute([
             // that's our own composer.json
             'composer-json' => dirname(__DIR__, 3) . '/composer.json',
-            '--config-file' => $root->getChild('config.json')->url(),
+            '--config-file' => $tempConfigFile,
         ]);
+
+        unlink($tempConfigFile);
 
         $this->assertRegExp('/There were no unknown symbols found./', $this->commandTester->getDisplay());
     }
