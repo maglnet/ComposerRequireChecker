@@ -9,5 +9,5 @@ update_configs:
       - "maglnet"
     directory: "/"
     package_manager: "php:composer"
-    update_schedule: "live"
+    update_schedule: "monthly"
     version_requirement_updates: "increase_versions"
