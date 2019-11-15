@@ -35,6 +35,7 @@
         "webmozart/glob": "^4.1"
     },
     "require-dev": {
+        "ext-zend-opcache": "*",
         "mikey179/vfsstream": "^1.6",
         "phpstan/phpstan": "^0.11.19",
         "phpunit/phpunit": "^8.4.3"
