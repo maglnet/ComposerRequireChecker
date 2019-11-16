@@ -233,6 +233,9 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $files = [];
         $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
+            if (\DIRECTORY_SEPARATOR !== "/") {
+                $file = \strtr($file, \DIRECTORY_SEPARATOR, '/');
+            }
             $files[] = $file;
         }
         return $files;
