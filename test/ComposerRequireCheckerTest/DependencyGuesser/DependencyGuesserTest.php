@@ -4,7 +4,10 @@ namespace ComposerRequireCheckerTest\DependencyGuesser;
 
 use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use ComposerRequireChecker\DependencyGuesser\GuesserInterface;
+use PhpParser\Node\Expr\ArrayItem;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\ArrayInput;
 
 final class DependencyGuesserTest extends TestCase
 {
@@ -42,5 +45,18 @@ final class DependencyGuesserTest extends TestCase
         $result = $this->guesser->__invoke('RecursiveDirectoryIterator');
         $this->assertNotEmpty($result);
         $this->assertContains('php', $result);
+    }
+
+    public function testUseAddedGuesser(): void
+    {
+        $additionalGuesser = $this->createStub(GuesserInterface::class);
+        $additionalGuesser->method('__invoke')
+            ->willReturnCallback(function (): \Generator {
+                yield 'additional-guesser-result';
+            });
+        $this->guesser->addGuesser($additionalGuesser);
+        $result = $this->guesser->__invoke('some_symbol');
+        $this->assertNotEmpty($result);
+        $this->assertContains('additional-guesser-result', $result);
     }
 }
