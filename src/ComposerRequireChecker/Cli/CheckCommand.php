@@ -48,6 +48,12 @@ class CheckCommand extends Command
                 InputOption::VALUE_NONE,
                 'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
                 . ' errors will be thrown'
+            )
+            ->addOption(
+                'dev',
+                null,
+                InputOption::VALUE_NONE,
+                'check that the development sources (i.e. tests) have not indirect dependencies'
             );
     }
 
@@ -63,6 +69,8 @@ class CheckCommand extends Command
         }
         $composerData = $this->getComposerData($composerJson);
 
+        $checkDevSources = (bool)$input->getOption('dev');
+
         $options = $this->getCheckOptions($input);
 
         $getPackageSourceFiles = new LocateComposerPackageSourceFiles();
@@ -70,12 +78,18 @@ class CheckCommand extends Command
 
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
+        $additionalLocators = $checkDevSources ? [
+            $getPackageSourceFiles($composerData, dirname($composerJson), 'autoload-dev'),
+            (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson, 'require-dev')
+        ] : [];
+
         $this->verbose("Collecting defined vendor symbols... ", $output);
         $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
-                $getPackageSourceFiles($composerData, dirname($composerJson)),
-                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
+                $getPackageSourceFiles($composerData, dirname($composerJson), 'autoload'),
+                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson, 'require'),
+                ...$additionalLocators
             )
         ));
         $this->verbose("found " . count($definedVendorSymbols) . " symbols.", $output, true);
@@ -89,7 +103,7 @@ class CheckCommand extends Command
         $this->verbose("Collecting used symbols... ", $output);
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs(
             (new ComposeGenerators())->__invoke(
-                $getPackageSourceFiles($composerData, dirname($composerJson)),
+                $getPackageSourceFiles($composerData, dirname($composerJson), $checkDevSources ? 'autoload-dev' : 'autoload'),
                 $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
             )
         ));

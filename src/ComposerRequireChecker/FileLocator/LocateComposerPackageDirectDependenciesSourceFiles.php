@@ -6,22 +6,25 @@ use ComposerRequireChecker\Exception\DependenciesNotInstalledException;
 use ComposerRequireChecker\Exception\NotReadableException;
 use ComposerRequireChecker\JsonLoader;
 use Generator;
+use Webmozart\Assert\Assert;
 use function array_key_exists;
 use function file_get_contents;
 use function json_decode;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
-    public function __invoke(string $composerJsonPath): Generator
+    public function __invoke(string $composerJsonPath, string $requireKey): Generator
     {
+        Assert::oneOf($requireKey, ['require', 'require-dev']);
+
         $packageDir = dirname($composerJsonPath);
 
         $composerJson = json_decode(file_get_contents($composerJsonPath), true);
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
         $vendorDirs = [];
-        foreach ($composerJson['require'] ?? [] as $vendorName => $vendorRequiredVersion) {
+        foreach ($composerJson[$requireKey] ?? [] as $vendorName => $vendorRequiredVersion) {
             $vendorDirs[$vendorName] = $packageDir . '/' . $configVendorDir . '/' . $vendorName;
-        };
+        }
 
         $installedPackages = $this->getInstalledPackages($packageDir . '/' . $configVendorDir);
 
@@ -30,7 +33,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke($installedPackages[$vendorName], $vendorDir);
+            yield from (new LocateComposerPackageSourceFiles())->__invoke($installedPackages[$vendorName], $vendorDir, 'autoload');
         }
     }
 

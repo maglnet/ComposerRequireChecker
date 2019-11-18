@@ -32,6 +32,7 @@
         "nikic/php-parser": "^4.3",
         "ocramius/package-versions": "^1.4.2",
         "symfony/console": "^4.4.0",
+        "webmozart/assert": "^1.6",
         "webmozart/glob": "^4.1"
     },
     "require-dev": {
