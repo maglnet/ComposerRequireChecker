@@ -82,4 +82,19 @@ JSON
 
         $this->assertRegExp('/There were no unknown symbols found./', $this->commandTester->getDisplay());
     }
+
+    public function testSourceFileThatUsesDevDependency(): void
+    {
+        $root = vfsStream::setup();
+        vfsStream::create(['config.json' => '{"scan-files":["test/ComposerRequireCheckerTest/Cli/CheckCommandTest.php"]}']);
+
+        $exitCode = $this->commandTester->execute([
+            // that's our own composer.json
+            'composer-json' => dirname(__DIR__, 3) . '/composer.json',
+            '--config-file' => $root->getChild('config.json')->url(),
+        ]);
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertRegExp('/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
+    }
 }
