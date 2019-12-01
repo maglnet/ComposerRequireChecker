@@ -30,7 +30,7 @@
         "ext-json": "*",
         "ext-phar": "*",
         "nikic/php-parser": "^4.2",
-        "ocramius/package-versions": "^1.4.0",
+        "ocramius/package-versions": "^1.4.2",
         "symfony/console": "^4.3.6",
         "webmozart/glob": "^4.1"
     },
