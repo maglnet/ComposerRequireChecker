@@ -24,11 +24,11 @@ final class LocateAllFilesByExtension
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
-        $blacklist = $this->prepareBlacklistPatterns($blacklist);
+        $blacklistMatcher = '{('.implode('|', $this->prepareBlacklistPatterns($blacklist)).')}';
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
-            if ($blacklist && preg_match('{('.implode('|', $blacklist).')}', $file->getPathname())) {
+            if ($blacklist && preg_match($blacklistMatcher, $file->getPathname())) {
                 continue;
             }
 
@@ -40,16 +40,18 @@ final class LocateAllFilesByExtension
         }
     }
 
-    private function prepareBlacklistPatterns(?array $blacklistPaths)
+    private function prepareBlacklistPatterns(?array $blacklistPaths): array
     {
         if ($blacklistPaths === null) {
-            return $blacklistPaths;
+            return [];
         }
 
+        $dirSep = \preg_quote(DIRECTORY_SEPARATOR, '{}');
+
         foreach ($blacklistPaths as &$path) {
-            $path = preg_replace('{/+}', '/', preg_quote(trim(strtr($path, '\\', '/'), '/')));
+            $path = preg_replace('{' . $dirSep . '+}', DIRECTORY_SEPARATOR, \preg_quote(trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR), '{}'));
             $path = str_replace('\\*\\*', '.+?', $path);
-            $path = str_replace('\\*', '[^/]+?', $path);
+            $path = str_replace('\\*', '[^' . $dirSep . ']+?', $path);
         }
 
         return $blacklistPaths;

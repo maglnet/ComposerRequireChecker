@@ -3,33 +3,39 @@
 namespace ComposerRequireChecker\FileLocator;
 
 use Generator;
+use Webmozart\Assert\Assert;
 
 final class LocateComposerPackageSourceFiles
 {
     /**
      * @param mixed[] $composerData The contents of composer.json for a package
      * @param string $packageDir The path to package
+     * @param string $autoloadKey The key of autoload section from composer.json
      *
      * @return Generator
      */
-    public function __invoke(array $composerData, string $packageDir): Generator
+    public function __invoke(array $composerData, string $packageDir, string $autoloadKey): Generator
     {
-        $blacklist = $composerData['autoload']['exclude-from-classmap'] ?? null;
+        Assert::oneOf($autoloadKey, ['autoload', 'autoload-dev']);
+
+        $autoloadData = $composerData[$autoloadKey] ?? [];
+
+        $blacklist = $autoloadData['exclude-from-classmap'] ?? null;
 
         yield from $this->locateFilesInClassmapDefinitions(
-            $this->getFilePaths($composerData['autoload']['classmap'] ?? [], $packageDir),
+            $this->getFilePaths($autoloadData['classmap'] ?? [], $packageDir),
             $blacklist
         );
         yield from $this->locateFilesInFilesInFilesDefinitions(
-            $this->getFilePaths($composerData['autoload']['files'] ?? [], $packageDir),
+            $this->getFilePaths($autoloadData['files'] ?? [], $packageDir),
             $blacklist
         );
         yield from $this->locateFilesInPsr0Definitions(
-            $this->getFilePaths($composerData['autoload']['psr-0'] ?? [], $packageDir),
+            $this->getFilePaths($autoloadData['psr-0'] ?? [], $packageDir),
             $blacklist
         );
         yield from $this->locateFilesInPsr4Definitions(
-            $this->getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir),
+            $this->getFilePaths($autoloadData['psr-4'] ?? [], $packageDir),
             $blacklist
         );
     }

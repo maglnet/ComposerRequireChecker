@@ -36,7 +36,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(0, $files);
     }
@@ -59,7 +59,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(1, $files);
 
@@ -86,7 +86,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(0, $files);
     }
@@ -109,7 +109,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(1, $files);
 
@@ -136,7 +136,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(1, $files);
 
@@ -170,7 +170,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
 
         $this->assertCount(1, $files);
 
@@ -182,11 +182,90 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
     }
 
+    public function testWithoutDevDependencies(): void
+    {
+        vfsStream::create([
+            'composer.json' => '{"require":{"foo/bar": "^1.0"},"require-dev":{"foo/baz": "^1.0"}}',
+            'vendor' => [
+                'composer' => [
+                    'installed.json' =>
+                        '{"packages":[' .
+                            '{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}},' .
+                            '{"name": "foo/baz", "autoload":{"psr-4":{"":"src"}}}' .
+                        ']}',
+                ],
+                'foo' => [
+                    'bar' => [
+                        'src' => [
+                            'MyClass.php' => '',
+                        ],
+                    ],
+                    'baz' => [
+                        'src' => [
+                            'BazClass.php' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require');
+
+        $this->assertCount(1, $files);
+
+        $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
+        $actualFile = str_replace('\\', '/', reset($files));
+        $this->assertSame($expectedFile, $actualFile);
+    }
+
+    public function testWithDevDependencies(): void
+    {
+        vfsStream::create([
+            'composer.json' => '{"require":{"foo/bar": "^1.0"},"require-dev":{"foo/baz": "^1.0"}}',
+            'vendor' => [
+                'composer' => [
+                    'installed.json' => <<<'INSTALLEDJSON'
+{
+    "packages": [
+        {"name": "foo/bar", "autoload": {"psr-4":{"":"src"}}},
+        {"name": "foo/baz", "autoload": {"psr-4":{"":"src"}}}
+    ]
+}
+INSTALLEDJSON
+                ],
+                'foo' => [
+                    'bar' => [
+                        'src' => [
+                            'MyClass.php' => '',
+                        ],
+                    ],
+                    'baz' => [
+                        'src' => [
+                            'BazClass.php' => '',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $files = $this->locate($this->root->getChild('composer.json')->url(), 'require-dev');
+
+        $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('vendor/foo/baz/src/BazClass.php')->url(), $files);
+    }
+
     /**
+     * @param string $composerJson
+     * @param string $requireKey
      * @return string[]
      */
-    private function locate(string $composerJson): array
+    private function locate(string $composerJson, string $requireKey): array
     {
-        return iterator_to_array(($this->locator)($composerJson));
+        $files = [];
+        $generator = ($this->locator)($composerJson, $requireKey);
+        foreach ($generator as $file) {
+            $files[] = str_replace(DIRECTORY_SEPARATOR, '/', $file);
+        }
+        return $files;
     }
 }

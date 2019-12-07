@@ -51,6 +51,18 @@ If this is already done, run it like this:
 composer-require-checker check /path/to/your/project/composer.json
 ```
 
+### Check development code and dependencies (optional)
+
+By default, Composer require checker only checks the source code listed in the `autoload` section of `composer.json`
+against the dependencies listed in the `require` section. This checks that there are no indirect dependencies in the
+*production* code.
+
+To check the *development* code, use the `--dev` option. This will scan the source code from the `autoload-dev` section and will search for symbols in dependencies from both the `require` and `require-dev`
+section.
+
+Please note these two checks are really different: a successful `--dev` check does not guarantee there are no
+no indirect dependencies in the *production* code. You probably want to do both.
+
 ## Configuration
 
 Composer require checker is configured to whitelist some symbols per default. Have a look at the

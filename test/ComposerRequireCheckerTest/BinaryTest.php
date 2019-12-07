@@ -12,7 +12,11 @@ final class BinaryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bin = __DIR__ . "/../../bin/composer-require-checker";
+        if (strpos(\PHP_OS, "WIN") === 0) {
+            $this->bin = __DIR__ . "\\..\\..\\bin\\composer-require-checker.bat";
+        } else {
+            $this->bin = __DIR__ . "/../../bin/composer-require-checker";
+        }
     }
 
     public function testSuccess(): void
