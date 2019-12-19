@@ -31,13 +31,13 @@
         "ext-phar": "*",
         "nikic/php-parser": "^4.3",
         "ocramius/package-versions": "^1.4.2",
-        "symfony/console": "^4.4.0",
+        "symfony/console": "^5.0",
         "webmozart/glob": "^4.1"
     },
     "require-dev": {
         "ext-zend-opcache": "*",
         "mikey179/vfsstream": "^1.6",
-        "phpstan/phpstan": "^0.11.19",
+        "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^8.4.3"
     },
     "config": {

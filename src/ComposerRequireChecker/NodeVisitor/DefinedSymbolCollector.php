@@ -45,6 +45,8 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         $this->recordFunctionDefinition($node);
         $this->recordConstDefinition($node);
         $this->recordDefinedConstDefinition($node);
+
+        return $node;
     }
 
     private function recordClassDefinition(Node $node)
