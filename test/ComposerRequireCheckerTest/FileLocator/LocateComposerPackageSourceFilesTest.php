@@ -70,6 +70,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $files = $this->files($this->root->getChild('composer.json')->url());
 
         $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('src/MyNamespace/MyClass.php')->url(), $files);
     }
 
     public function testFromPsr4(): void
@@ -84,6 +85,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $files = $this->files($this->root->getChild('composer.json')->url());
 
         $this->assertCount(1, $files);
+        $this->assertContains($this->root->getChild('src/MyClass.php')->url(), $files);
     }
 
     public function testFromPsr0WithMultipleDirectories(): void
@@ -160,12 +162,12 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
                 'ATest.php' => '<?php namespace MyNamespace; class ATest {}',
             ],
             'foo' => [
-                'Tests' => [
+                'Bar' => [
                     'BTest.php' => '<?php namespace MyNamespace; class BTest {}',
                 ],
                 'src' => [
                     'ClassB.php' => '<?php namespace MyNamespace; class ClassB {}',
-                    'Tests' => [
+                    'Bar' => [
                         'CTest.php' => '<?php namespace MyNamespace; class CTest {}',
                     ],
                 ],
@@ -191,23 +193,22 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
                 [
                     'ClassA.php',
                     'tests/ATest.php',
-                    'foo/Tests/BTest.php',
+                    'foo/Bar/BTest.php',
                     'foo/src/ClassB.php',
-                    'foo/src/Tests/CTest.php',
-
+                    'foo/src/Bar/CTest.php',
                 ],
             ],
             'Exclude single directory by pattern' => [
                 ['/tests/'],
                 [
                     'ClassA.php',
-                    'foo/Tests/BTest.php',
+                    'foo/Bar/BTest.php',
                     'foo/src/ClassB.php',
-                    'foo/src/Tests/CTest.php',
+                    'foo/src/Bar/CTest.php',
                 ],
             ],
             'Exclude all subdirectories by pattern' => [
-                ['**/Tests/'],
+                ['**/Bar/'],
                 [
                     'ClassA.php',
                     'tests/ATest.php',
@@ -215,7 +216,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
                 ],
             ],
             'Combine multiple patterns' => [
-                ['/tests/', '**/Tests/'],
+                ['/tests/', '**/Bar/'],
                 [
                     'ClassA.php',
                     'foo/src/ClassB.php',
@@ -233,7 +234,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $files = [];
         $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
-            $files[] = $file;
+            $files[] = str_replace('\\', '/', $file);
         }
         return $files;
     }
