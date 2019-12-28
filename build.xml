@@ -79,12 +79,6 @@
             <arg value="-o"/>
             <arg line="-d ${phar-dir}"/>
         </composer>
-
-        <!--delete documentation and test files from dependencies-->
-        <delete dir="${phar-dir}/vendor/symfony/console/Tests"/>
-        <delete dir="${phar-dir}/vendor/nikic/php-parser/doc"/>
-        <delete dir="${phar-dir}/vendor/nikic/php-parser/test"/>
-        <delete dir="${phar-dir}/vendor/nikic/php-parser/test_old"/>
     </target>
 
 
