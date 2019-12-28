@@ -4,12 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased]
+## [2.1.0] - 2019-12-28
 ### Added
+
+- Add support of Symfony Console 5. - #174
+- Test on PHP 7.4 - #164
 
 ### Changed
 
-- drop support for PHP 7.1 - #127
+- updated a lot of dependencies within the phar file
+- Require ext-zend-opcache for development. - #161 #160
+- Invalid version reported when installed without .git - #109 
+- Correctly report tool version in cli - #146
+- Fix: Configure path to PHPUnit result cache file - #131 
+- Enhancement: Clean up .gitignore - #132 
+- Fix: Badges - #133 
+- Fix: Remove file headers - #129 
+- Enhancement: Mark test classes as final - #130 
+- Enhancement: Update phpunit/phpunit - #126 
+- Enhancement: Sort unknown symbols - #117 
+- Fix: Drop support for PHP 7.1 - #127 
+- Enhancement: Collect coverage only when actually desired - #121 
+- Fix: Reduce visibility of setUp() - #123 
+- Enhancement: Keep packages sorted in composer.json - #124 
+- Enhancement: Reference phpunit.xsd as installed with composer - #125 
+- Enhancement: Add void return type declarations to test methods - #118 
+- Fix: Do not update composer itself twice - #119 
+- Fix: Exclude test fixtures from scrutiny of Scrutinizer - #120 
+- Enhancement: Normalize composer.json - #122 
+- Don't load composer.json file twice - #116
+
 
 ## [2.0.0] - 2019-03-19
 ### Added
@@ -96,7 +120,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.0] - 2015-12-02
 
 
-[unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/2.0.0...HEAD
+[2.1.0]: https://github.com/maglnet/ComposerRequireChecker/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/maglnet/ComposerRequireChecker/compare/1.1.0...2.0.0
 [1.1.0]: https://github.com/maglnet/ComposerRequireChecker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/maglnet/ComposerRequireChecker/compare/0.2.1...1.0.0
