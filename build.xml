@@ -32,87 +32,45 @@
         <exec command="${php-executable} bin/composer-require-checker.php" passthru="true" checkreturn="true"/>
     </target>
 
-
-    <!-- ============================================  -->
-    <!-- Target: phar-clean                            -->
-    <!-- ============================================  -->
-    <target name="phar-clean">
-        <echo msg="removing phar build directory"/>
-        <delete dir="${phar-dir}"/>
-    </target>
-
-
-    <!-- ============================================  -->
-    <!-- Target: phar-prepare                          -->
-    <!-- ============================================  -->
-    <target name="phar-prepare" depends="prepare">
-        <echo msg="creating phar build directory"/>
-        <mkdir dir="${phar-dir}"/>
-    </target>
-
-
-    <!-- ============================================  -->
-    <!-- Target: phar-copy-source                      -->
-    <!-- ============================================  -->
-    <target name="phar-copy-source" depends="prepare">
-        <!--copy needed source files to phar build directory-->
-        <copy todir="${phar-dir}">
-            <fileset dir="./">
-                <include name="src/**/*.php"/>
-                <include name="bin/*"/>
-            </fileset>
-
-            <filelist dir="." files="LICENSE"/>
-            <filelist dir="." files="composer.json"/>
-            <filelist dir="." files="composer.lock"/>
-        </copy>
-    </target>
-
-
     <!-- ============================================  -->
     <!-- Target: phar-prepare-dependencies             -->
     <!-- ============================================  -->
-    <target name="phar-prepare-dependencies" depends="phar-copy-source">
+    <target name="phar-prepare-dependencies">
         <!--install dependencies without development requirements-->
         <composer command="install">
             <arg value="--no-dev"/>
             <arg value="-o"/>
-            <arg line="-d ${phar-dir}"/>
         </composer>
+    </target>
+
+    <!-- ============================================  -->
+    <!-- Target: prepare-dev-dependencies              -->
+    <!-- ============================================  -->
+    <target name="prepare-dev-dependencies">
+        <!--install dependencies with development requirements-->
+        <composer command="install"/>
     </target>
 
 
     <!-- ============================================  -->
     <!-- Target: phar-build                            -->
     <!-- ============================================  -->
-    <target name="phar-build" depends="run-test,phar-copy-source">
-        <!--find out the version / tag-->
-        <echo message="getting version string from git... "/>
-        <exec command="git describe --tags --dirty=-dev --always" outputProperty="version-string"
-              returnProperty="git-version-error"/>
-        <if>
-            <not>
-                <equals arg1="${git-version-error}" arg2="0"/>
-            </not>
-            <then>
-                <echo message="no tag found, setting version to 'development'"/>
-                <property name="version-string" value="development" override="true"/>
-            </then>
-        </if>
-        <echo message="Version is now: ${version-string}"/>
-
+    <target name="phar-build" depends="run-test">
         <!--create the package-->
-        <php expression="file_put_contents('${phar-dir}/clistub.php', '#!/usr/bin/env php' . PHP_EOL . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
-        <pharpackage basedir="${phar-dir}"
+        <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . PHP_EOL . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
+        <pharpackage basedir="./"
                      destfile="${build-dir}/${phing.project.name}.phar"
-                     stub="${phar-dir}/clistub.php"
+                     stub="bin/clistub.php"
                      compression="gzip">
-            <fileset dir="${phar-dir}">
-                <include name="**/**"/>
+            <fileset dir="./">
+                <include name="src/**/*.php"/>
+                <include name="bin/*"/>
+                <include name="vendor/**"/>
+                <include name="LICENSE"/>
+                <include name="composer.json"/>
+                <include name="composer.lock"/>
             </fileset>
-            <metadata>
-                <element name="version" value="${version-string}"/>
-            </metadata>
+
         </pharpackage>
     </target>
 
@@ -139,6 +97,6 @@
     <!-- Target: phar-build-release                    -->
     <!-- ============================================  -->
     <target name="phar-build-release"
-            depends="phar-clean, phar-prepare, phar-copy-source, phar-prepare-dependencies, phar-build, phar-sign"/>
+            depends="prepare-dev-dependencies, run-test, phar-prepare-dependencies, phar-build, phar-sign"/>
 
 </project>
