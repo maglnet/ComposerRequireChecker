@@ -28,7 +28,7 @@ final class LocateAllFilesByExtension
 
         /* @var $file \SplFileInfo */
         foreach ($files as $file) {
-            if ($blacklist && preg_match($blacklistMatcher, $file->getPathname())) {
+            if ($blacklist && preg_match($blacklistMatcher, $this->normalizeFilepath($file->getPathname()))) {
                 continue;
             }
 
@@ -55,5 +55,9 @@ final class LocateAllFilesByExtension
         }
 
         return $blacklistPaths;
+    }
+    
+    private function normalizeFilepath(string $filepath) {
+        return str_replace('\\', '/', $filepath);
     }
 }
