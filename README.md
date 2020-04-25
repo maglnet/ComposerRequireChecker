@@ -73,6 +73,29 @@ The following example would also scan the file `bin/console` and all files with 
 "scan-files" : ["bin/console", "bin/*.php"]
 ```
 
+## Usage
+
+Composer require checker runs on an existing directory structure. It does not change your code, and does not even install your composer dependencies. That is a task that is entirely up to you, allowing you to change/improve things after a scan to see if it fixes the issue.
+
+So the usual workflow would be
+
+1. Clone your repo
+2. `composer install` your dependencies
+3. `composer-require-checker check` your code
+
+### Dealing with custom installer plugins
+
+Composer require checker only fetches it's knowledge of where files are from your project's `composer.json`. It does not use Composer itself to understand custom directory structures.
+
+If your project requires to use any install plugins to put files in directories that are not `vendor/` or defined via the `vendor-dir` config setting in `composer.json`, composer require checker will fail to detect the required code correctly.
+
+As a workaround, you can install your dependencies without plugins just for the scan:
+
+1. Clone your repo
+2. `composer install --no-plugins` will put all code into the `vendor` folder
+3. `composer-require-checker check` your code
+4. `composer install` dependencies once again in the correct location
+
 ## License
 
 This package is made available under the [MIT LICENSE](LICENSE).
