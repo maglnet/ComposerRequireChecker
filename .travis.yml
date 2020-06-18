@@ -19,7 +19,7 @@ matrix:
 before_install:
     - export COMPOSER_GLOBAL_HOME_DIR=`composer config -g home`
     - sed s\@TRAVIS_BUILD_DIR@$TRAVIS_BUILD_DIR@g test/travis-composer.json > ${COMPOSER_GLOBAL_HOME_DIR}/composer.json
-    - curl -LO https://www.phing.info/get/phing-latest.phar
+    - curl -LO https://www.phing.info/get/phing-2.16.3.phar
 
 install:
     - composer update $COMPOSER_FLAGS --no-interaction --no-progress -vvv
@@ -32,7 +32,7 @@ script:
     - if [ $COVERAGE = "1" ]; then vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text --prepend=xdebug-filter.php; else vendor/bin/phpunit; fi
     - vendor/bin/phpstan analyse -l 5 src
     - composer-require-checker
-    - php -d phar.readonly=0 phing-latest.phar phar-build
+    - php -d phar.readonly=0 phing-2.16.3.phar phar-build
 
 after_script:
     - if [ $COVERAGE = "1" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
