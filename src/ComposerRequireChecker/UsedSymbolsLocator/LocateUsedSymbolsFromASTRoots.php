@@ -3,6 +3,7 @@
 namespace ComposerRequireChecker\UsedSymbolsLocator;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Traversable;
@@ -10,7 +11,7 @@ use Traversable;
 final class LocateUsedSymbolsFromASTRoots
 {
     /**
-     * @param Traversable $ASTs a series of AST roots
+     * @param Traversable<int, array<Node|null>|mixed> $ASTs a series of AST roots
      *
      * @return string[] all the found symbols
      */

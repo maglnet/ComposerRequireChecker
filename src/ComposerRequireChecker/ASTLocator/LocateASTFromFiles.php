@@ -3,6 +3,7 @@
 namespace ComposerRequireChecker\ASTLocator;
 
 use PhpParser\ErrorHandler;
+use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Traversable;
 
@@ -25,7 +26,9 @@ final class LocateASTFromFiles
     }
 
     /**
-     * @return Traversable a series of AST roots, one for each given file
+     * @param Traversable<string> $files
+     *
+     * @return Traversable<int, array<Stmt|null>|mixed> a series of AST roots, one for each given file
      */
     public function __invoke(Traversable $files): Traversable
     {
