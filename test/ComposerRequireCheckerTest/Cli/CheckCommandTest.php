@@ -33,6 +33,31 @@ final class CheckCommandTest extends TestCase
         ]);
     }
 
+    public function testExceptionIfNoSymbolsFound(): void
+    {
+        self::expectException(\LogicException::class);
+
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noSymbols/composer.json'
+        ]);
+    }
+
+    public function testUnknownSymbolsFound(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json'
+        ]);
+
+        $this->assertSame(1, $this->commandTester->getStatusCode());
+        $this->assertStringContainsString('The following unknown symbols were found:', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('Example\Library\Dependency', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('FILTER_VALIDATE_URL', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('filter_var', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('Foo\Bar\Baz', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('libxml_clear_errors', $this->commandTester->getDisplay());
+    }
+
     public function testSelfCheckShowsNoErrors(): void
     {
         $this->commandTester->execute([

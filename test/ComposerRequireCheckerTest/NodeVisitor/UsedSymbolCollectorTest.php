@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
+use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -315,6 +316,20 @@ final class UsedSymbolCollectorTest extends TestCase
         $symbols = $this->visitor->getCollectedSymbols();
         $this->assertCount(1, $symbols);
         $this->assertContains('Foo', $symbols);
+    }
+
+    public function testTraitUsePrecedenceAdaptation(): void
+    {
+        $traitUseAdaption = new Precedence(new Name('Bar'), 'testMethod', [new Name('Baz')]);
+        $traitUse = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
+
+        $this->visitor->enterNode($traitUse);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(3, $symbols);
+        $this->assertContains('Foo', $symbols);
+        $this->assertContains('Bar', $symbols);
+        $this->assertContains('Baz', $symbols);
     }
 
     public function testBeforeTraverseResetsRecordedSymbols(): void
