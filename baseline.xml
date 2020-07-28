@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="3.12.2@7c7ebd068f8acaba211d4a2c707c4ba90874fa26">
+  <file src="src/ComposerRequireChecker/NodeVisitor/DefinedSymbolCollector.php">
+    <NoInterfaceProperties occurrences="1">
+      <code>$node-&gt;namespacedName</code>
+    </NoInterfaceProperties>
+  </file>
+</files>
