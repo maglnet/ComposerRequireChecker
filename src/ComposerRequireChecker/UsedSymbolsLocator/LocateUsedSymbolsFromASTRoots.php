@@ -11,7 +11,7 @@ use Traversable;
 final class LocateUsedSymbolsFromASTRoots
 {
     /**
-     * @param Traversable<int, array<Node|null>|mixed> $ASTs a series of AST roots
+     * @param Traversable<int, array<Node>> $ASTs a series of AST roots
      *
      * @return string[] all the found symbols
      */
