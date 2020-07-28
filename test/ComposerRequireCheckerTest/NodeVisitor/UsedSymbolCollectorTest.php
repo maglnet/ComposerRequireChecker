@@ -242,37 +242,11 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
-    public function testFunctionReturnTypeAsString(): void
-    {
-        $functionName = new Name('foo');
-        $node = new Function_($functionName);
-        $node->returnType = 'Bar';
-
-        $this->visitor->enterNode($node);
-
-        $symbols = $this->visitor->getCollectedSymbols();
-        $this->assertCount(1, $symbols);
-        $this->assertContains('Bar', $symbols);
-    }
-
     public function testMethodReturnType(): void
     {
         $functionName = new Name('foo');
         $node = new ClassMethod($functionName);
         $node->returnType = new Name('Bar');
-
-        $this->visitor->enterNode($node);
-
-        $symbols = $this->visitor->getCollectedSymbols();
-        $this->assertCount(1, $symbols);
-        $this->assertContains('Bar', $symbols);
-    }
-
-    public function testMethodReturnTypeAsString(): void
-    {
-        $functionName = new Name('foo');
-        $node = new ClassMethod($functionName);
-        $node->returnType = 'Bar';
 
         $this->visitor->enterNode($node);
 
