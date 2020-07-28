@@ -30,6 +30,7 @@ script:
     - if [ $COVERAGE = "1" ]; then vendor/bin/phpunit --dump-xdebug-filter=xdebug-filter.php; fi
     - if [ $COVERAGE = "1" ]; then vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text --prepend=xdebug-filter.php; else vendor/bin/phpunit; fi
     - vendor/bin/phpstan analyse -l 5 src
+    - vendor/bin/psalm
     - composer-require-checker
 
 after_script:
