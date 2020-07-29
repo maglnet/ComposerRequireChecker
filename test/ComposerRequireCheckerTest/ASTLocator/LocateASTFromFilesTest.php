@@ -11,6 +11,7 @@ use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles
@@ -64,6 +65,24 @@ final class LocateASTFromFilesTest extends TestCase
         $this->assertCount(1, $roots); // one file should be parsed (partially)
         $this->assertTrue($collectingErrorHandler->hasErrors());
         $this->assertCount(1, $collectingErrorHandler->getErrors()); //should have one parse error
+    }
+
+    public function testFailOnParseErrorWithNullReturn(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $parserMock = $this->createMock(Php7::class);
+        $parserMock->method('parse')->willReturn(null);
+
+        $this->locator = new LocateASTFromFiles($parserMock, null);
+        $files = [
+            $this->createFile(
+                'MyBadCode',
+                'this content is not relevant because the parser is mocked and always returns null'
+            ),
+        ];
+
+        $this->locate($files);
     }
 
     private function createFile(string $path, string $content = null): string

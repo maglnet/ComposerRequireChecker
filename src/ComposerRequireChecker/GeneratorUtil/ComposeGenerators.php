@@ -2,11 +2,18 @@
 
 namespace ComposerRequireChecker\GeneratorUtil;
 
-use Generator;
+use Traversable;
 
 final class ComposeGenerators
 {
-    public function __invoke(Generator ...$generators): Generator
+    /**
+     * @template TKey
+     * @template TValue
+     *
+     * @param Traversable<TKey, TValue> ...$generators
+     * @return Traversable<int, TValue>
+     */
+    public function __invoke(Traversable ...$generators): Traversable
     {
         foreach ($generators as $generator) {
             yield from $generator;

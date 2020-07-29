@@ -38,7 +38,8 @@
         "ext-zend-opcache": "*",
         "mikey179/vfsstream": "^1.6",
         "phpstan/phpstan": "^0.12",
-        "phpunit/phpunit": "^8.5.8"
+        "phpunit/phpunit": "^8.5.8",
+        "vimeo/psalm": "^3.12.2"
     },
     "config": {
         "optimize-autoloader": true,

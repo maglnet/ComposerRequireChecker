@@ -123,11 +123,13 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\Function_
             || $node instanceof Node\Stmt\ClassMethod
         ) {
-            if ($node->getReturnType() instanceof Node\Name) {
-                $this->recordUsageOf($node->getReturnType());
+            $returnType = $node->getReturnType();
+
+            if ($returnType instanceof Node\Name) {
+                $this->recordUsageOf($returnType);
             }
-            if (is_string($node->getReturnType()) || $node->getReturnType() instanceof Node\Identifier) {
-                $this->recordUsageOfByString($node->getReturnType());
+            if ($returnType instanceof Node\Identifier) {
+                $this->recordUsageOfByString($returnType->toString());
             }
         }
     }
