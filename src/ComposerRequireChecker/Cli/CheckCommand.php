@@ -14,6 +14,7 @@ use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
+use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -155,8 +156,8 @@ class CheckCommand extends Command
     private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
     {
         $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
-        $sourcesASTs = new LocateASTFromFiles((new ParserFactory())->create(ParserFactory::PREFER_PHP7), $errorHandler);
-        return $sourcesASTs;
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, new Lexer());
+        return new LocateASTFromFiles($parser, $errorHandler);
     }
 
 
