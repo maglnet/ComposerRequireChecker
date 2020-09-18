@@ -14,7 +14,7 @@ class LocateFilesByGlobPattern
      * @return Traversable<string> the files found by the given glob patterns
      * @see https://github.com/webmozart/glob
      */
-    public function __invoke(array $globPatterns = [], string $rootDir): Traversable
+    public function __invoke(array $globPatterns, string $rootDir): Traversable
     {
         foreach ($globPatterns as $globPattern) {
             yield from Glob::glob(rtrim($rootDir, '/') . '/' . $globPattern);
