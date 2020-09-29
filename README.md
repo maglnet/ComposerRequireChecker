@@ -10,11 +10,16 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 ## What's it about?
 
-Your code most certainly uses external dependencies. And if it's only extending PHPUnits `TestCase`. And to make sure that your code knows where to find that `TestCase`-class you for sure called `composer require --dev phpunit/phpunit`. That means your dependency is a hard dependency. 
+Most likely your code relies on external dependencies; these can be *hard* or *soft*.
 
-But what if you did a `composer require phpunit/dbunit`? As that package requires phpunit/phpunit as well all your dependencies would still work, wouldn't they? But only out of sheer luck (and in this far fetched example because it's the way it's designed). But from your `composer.json` one wouldn't immediately know that you'd use PHPUnits `TestCase`-class. That's what a "soft dependency" is. And you should avoid those as they might blow. Imagine the person maintaining the library that also includes the package that you depend on suddenly using a completely different library. Suddenly your code would break after a `composer update` for no apparent reason. Just because you didn't include the dependency as a "first level" dependency in the first place.
+As an example, imagine you are extending the `TestCase` class from *PHPUnit*, in your project. You probalby called `composer require --dev phpunit/phpunit` to add the library under `require-dev` in `composer.json`, so to ensure that your code knows where to find that `TestCase` class. This means that your dependency is a *"hard dependency"*.
 
-This CLI-Tool parses your code and your composer.json-file to see whether your code contains such "soft dependencies" that might break your code.
+But what if you did a `composer require phpunit/dbunit` instead? Since *DBUnit* also [requires *phpunit/phpunit* in its `composer.json`](https://github.com/sebastianbergmann/dbunit/blob/master/composer.json), all your dependencies would still work, wouldn't they? Well, they might; but only out of sheer luck (as in this far fetched example).
+
+*DBunit*'s dependency on *PHPUnit* `TestCase` class is not immediately obvious, when looking at your `composer.json`. The dependency might be hidden as `suggest`ed in another dependency. That's what a *"soft dependency"* is. And you should avoid them, as they might blow up.
+Imagine the maintainer of *DBUnit* (that currently includes *PHPUnit*, with the `TestCase` class) switching to a completely different library than *PHPUnit*. Suddenly your code would break after a `composer update`, for no apparent reason. *PHPUnit* was removed by the update as obsolete, together with its `TestCase` class that you can't extended anymore in your project. Hence you'll get a fatal `Uncaught Error: Class 'TestCase' not found` error. This, just because you didn't include it as a hard *"first level dependency"*.
+
+This *CLI* parses your code and your `composer.json` to check whether your code contains such *"soft dependencies"* that might break your code.
 
 ## Installation / Usage
 
@@ -56,7 +61,7 @@ composer-require-checker check /path/to/your/project/composer.json
 Composer require checker is configured to whitelist some symbols per default. Have a look at the
 [config file example](data/config.dist.json) to see which configuration options are available.
 
-You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration.
+You can now adjust this file, as needed, and tell composer-require-checker to use it for its configuration.
 
 ```sh
 bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
@@ -85,7 +90,7 @@ So the usual workflow would be
 
 ### Dealing with custom installer plugins
 
-Composer require checker only fetches it's knowledge of where files are from your project's `composer.json`. It does not use Composer itself to understand custom directory structures.
+Composer require checker only fetches its knowledge of where files are from your project's `composer.json`. It does not use Composer itself to understand custom directory structures.
 
 If your project requires to use any install plugins to put files in directories that are not `vendor/` or defined via the `vendor-dir` config setting in `composer.json`, composer require checker will fail to detect the required code correctly.
 
