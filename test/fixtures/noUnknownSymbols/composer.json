@@ -1,0 +1,11 @@
+{
+    "name": "example/library",
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\Library\\": "src/"
+        }
+    }
+}
