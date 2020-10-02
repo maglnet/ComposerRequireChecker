@@ -32,6 +32,15 @@ final class CheckCommandTest extends TestCase
         $this->commandTester = new CommandTester($command);
     }
 
+    public function testExceptionIfComposerJsonIsNotAString(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+
+        $this->commandTester->execute([
+            'composer-json' => ['this-is-a-array-as-input']
+        ]);
+    }
+
     public function testExceptionIfComposerJsonNotFound(): void
     {
         self::expectException(InvalidArgumentException::class);
