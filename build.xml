@@ -55,7 +55,7 @@
     <!-- ============================================  -->
     <!-- Target: phar-build                            -->
     <!-- ============================================  -->
-    <target name="phar-build" depends="run-test">
+    <target name="phar-create" depends="run-test">
         <!--create the package-->
         <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . PHP_EOL . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
         <pharpackage basedir="./"
@@ -93,10 +93,35 @@
         </exec>
     </target>
 
+    <target name="phar-test">
+        <exec executable="php" checkreturn="true" passthru="true">
+            <arg path="${build-dir}/${phing.project.name}.phar" />
+        </exec>
+
+        <exec executable="php" checkreturn="true" passthru="true">
+            <arg path="${build-dir}/${phing.project.name}.phar" />
+            <arg value="check" />
+            <arg value="--config-file" />
+            <arg value="data/config.dist.json" />
+        </exec>
+
+        <exec executable="php" checkreturn="true" passthru="true">
+            <arg path="${build-dir}/${phing.project.name}.phar" />
+            <arg value="check" />
+            <arg value="composer.json" />
+        </exec>
+    </target>
+
     <!-- ============================================  -->
     <!-- Target: phar-build-release                    -->
     <!-- ============================================  -->
     <target name="phar-build-release"
-            depends="prepare-dev-dependencies, run-test, phar-prepare-dependencies, phar-build, phar-sign"/>
+            depends="phar-build, phar-sign"/>
+
+    <!-- ============================================  -->
+    <!-- Target: phar-build                            -->
+    <!-- ============================================  -->
+    <target name="phar-build"
+            depends="prepare-dev-dependencies, run-test, phar-prepare-dependencies, phar-create, phar-test"/>
 
 </project>

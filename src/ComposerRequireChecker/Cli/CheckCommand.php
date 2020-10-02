@@ -13,6 +13,7 @@ use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use Phar;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
@@ -131,11 +132,17 @@ class CheckCommand extends Command
 
     private function getCheckOptions(InputInterface $input): Options
     {
-        $fileName = $input->getOption('config-file');
-        if (!$fileName) {
+        $inputFileName = $input->getOption('config-file');
+        if (!$inputFileName) {
             return new Options();
         }
-        return new Options((new JsonLoader($fileName))->getData());
+
+        $realFileName = realpath($inputFileName);
+        if (false === $realFileName) {
+            throw new \InvalidArgumentException('config-file not found: [' . $inputFileName . ']');
+        }
+
+        return new Options((new JsonLoader($realFileName))->getData());
     }
 
     /**
