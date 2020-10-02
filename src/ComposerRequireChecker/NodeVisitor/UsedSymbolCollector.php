@@ -140,12 +140,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
             if ($param->type instanceof Node\Identifier) {
                 $this->recordUsageOfByString($param->type->toString());
             }
-
-            if (! is_string($param->type)) {
-                continue;
-            }
-
-            $this->recordUsageOfByString($param->type);
         }
     }
 

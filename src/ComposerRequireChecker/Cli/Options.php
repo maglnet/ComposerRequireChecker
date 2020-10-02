@@ -115,11 +115,6 @@ class Options
         $this->scanFiles = $scanFiles;
     }
 
-    /**
-     * @param string $string some-string
-     *
-     * @return string someString
-     */
     private function getCamelCase(string $string): string
     {
         return ucfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
