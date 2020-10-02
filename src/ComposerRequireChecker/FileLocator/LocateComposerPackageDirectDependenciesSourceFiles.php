@@ -10,8 +10,10 @@ use ComposerRequireChecker\JsonLoader;
 use Generator;
 
 use function array_key_exists;
+use function assert;
 use function dirname;
 use function file_get_contents;
+use function is_string;
 use function json_decode;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
@@ -22,8 +24,14 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $composerJson    = json_decode(file_get_contents($composerJsonPath), true);
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
-        $vendorDirs      = [];
+        assert(is_string($configVendorDir));
+        $vendorDirs = [];
+
+        /**
+         * @var mixed $vendorRequiredVersion
+         */
         foreach ($composerJson['require'] ?? [] as $vendorName => $vendorRequiredVersion) {
+            assert(is_string($vendorName));
             $vendorDirs[$vendorName] = $packageDir . '/' . $configVendorDir . '/' . $vendorName;
         }
 
@@ -57,7 +65,12 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $installedPackages = [];
 
+        /** @var array<array{name: string}> $packages */
         $packages = $installedData['packages'] ?? $installedData;
+
+        /**
+         * @var array{name: string} $vendorJson
+         */
         foreach ($packages as $vendorJson) {
             $vendorName                     = $vendorJson['name'];
             $installedPackages[$vendorName] = $vendorJson;

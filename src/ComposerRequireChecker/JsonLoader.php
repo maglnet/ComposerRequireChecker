@@ -20,7 +20,7 @@ use const JSON_THROW_ON_ERROR;
 class JsonLoader
 {
     /**
-     * @return   array<array-key, mixed>
+     * @return array<array-key, mixed>
      *
      * @throws InvalidJson
      * @throws NotReadable

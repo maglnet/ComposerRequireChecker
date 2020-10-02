@@ -24,6 +24,7 @@ final class LocateComposerPackageSourceFiles
      */
     public function __invoke(array $composerData, string $packageDir): Generator
     {
+        /** @var array<string>|null $blacklist */
         $blacklist = $composerData['autoload']['exclude-from-classmap'] ?? null;
 
         yield from $this->locateFilesInClassmapDefinitions(

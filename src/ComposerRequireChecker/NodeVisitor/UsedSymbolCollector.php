@@ -13,7 +13,7 @@ use function array_map;
 
 final class UsedSymbolCollector extends NodeVisitorAbstract
 {
-    /** @var mixed[] */
+    /** @var array<string, string> */
     private array $collectedSymbols = [];
 
     public function __construct()
@@ -21,7 +21,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCollectedSymbols(): array
     {

@@ -14,7 +14,7 @@ use function sprintf;
 
 final class DefinedSymbolCollector extends NodeVisitorAbstract
 {
-    /** @var mixed[] */
+    /** @var array<string, string> */
     private array $definedSymbols = [];
 
     public function __construct()
@@ -32,7 +32,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getDefinedSymbols(): array
     {
