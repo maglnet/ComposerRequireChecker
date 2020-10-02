@@ -1,2 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="3.16@d03e5ef057d6adc656c0ff7e166c50b73b4f48f3"/>
+<files psalm-version="3.16@d03e5ef057d6adc656c0ff7e166c50b73b4f48f3">
+  <file src="src/ComposerRequireChecker/Cli/Application.php">
+    <DeprecatedClass occurrences="1">
+      <code>Versions::getVersion('maglnet/composer-require-checker')</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/ComposerRequireChecker/NodeVisitor/DefinedSymbolCollector.php">
+    <NoInterfaceProperties occurrences="1">
+      <code>$node-&gt;namespacedName</code>
+    </NoInterfaceProperties>
+  </file>
+</files>
