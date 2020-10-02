@@ -34,10 +34,10 @@ final class CheckCommandTest extends TestCase
 
     public function testExceptionIfComposerJsonIsNotAString(): void
     {
-        self::expectException(\InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
 
         $this->commandTester->execute([
-            'composer-json' => ['this-is-a-array-as-input']
+            'composer-json' => ['this-is-a-array-as-input'],
         ]);
     }
 
