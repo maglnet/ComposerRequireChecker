@@ -18,6 +18,6 @@ class Application extends AbstractApplication
 
         $check = new CheckCommand();
         $this->add($check);
-        $this->setDefaultCommand($check->getName());
+        $this->setDefaultCommand(CheckCommand::NAME);
     }
 }
