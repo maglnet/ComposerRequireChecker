@@ -10,7 +10,6 @@ use PhpParser\NodeVisitorAbstract;
 use function array_filter;
 use function array_keys;
 use function array_map;
-use function is_string;
 
 final class UsedSymbolCollector extends NodeVisitorAbstract
 {
@@ -137,9 +136,11 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 $this->recordUsageOf($param->type);
             }
 
-            if ($param->type instanceof Node\Identifier) {
-                $this->recordUsageOfByString($param->type->toString());
+            if (! ($param->type instanceof Node\Identifier)) {
+                continue;
             }
+
+            $this->recordUsageOfByString($param->type->toString());
         }
     }
 

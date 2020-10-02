@@ -183,22 +183,6 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
-    public function testFunctionParameterTypeAsString(): void
-    {
-        $functionName = new Name('foo');
-        $node         = new Function_($functionName);
-        $node->name   = $functionName;
-        $param        = new Param(new Variable('bar'));
-        $param->type  = 'Baz';
-        $node->params = [$param];
-
-        $this->visitor->enterNode($node);
-
-        $symbols = $this->visitor->getCollectedSymbols();
-        $this->assertCount(1, $symbols);
-        $this->assertContains('Baz', $symbols);
-    }
-
     public function testMethodParameterType(): void
     {
         $functionName = new Name('foo');
@@ -206,22 +190,6 @@ final class UsedSymbolCollectorTest extends TestCase
         $node->name   = $functionName;
         $param        = new Param(new Variable('bar'));
         $param->type  = new Name('Baz');
-        $node->params = [$param];
-
-        $this->visitor->enterNode($node);
-
-        $symbols = $this->visitor->getCollectedSymbols();
-        $this->assertCount(1, $symbols);
-        $this->assertContains('Baz', $symbols);
-    }
-
-    public function testMethodParameterTypeAsString(): void
-    {
-        $functionName = new Name('foo');
-        $node         = new ClassMethod($functionName);
-        $node->name   = $functionName;
-        $param        = new Param(new Variable('bar'));
-        $param->type  = 'Baz';
         $node->params = [$param];
 
         $this->visitor->enterNode($node);
