@@ -28,7 +28,7 @@ final class JsonLoaderTest extends TestCase
         JsonLoader::getData($path);
     }
 
-    public function testHasDataWithValidFileButNoArrayConteent(): void
+    public function testHasDataWithValidFileButNoArrayContent(): void
     {
         $path = __DIR__ . '/../fixtures/validJsonNotAnArray.json';
         $this->expectException(InvalidJsonException::class);
