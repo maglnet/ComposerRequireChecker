@@ -2,7 +2,6 @@
 /build/
 /vendor/
 /clover.xml
-/composer.lock
 /composer.phar
 /phing-latest.phar
 /phpdox.xml
