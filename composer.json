@@ -40,7 +40,7 @@
         "mikey179/vfsstream": "^1.6.8",
         "phpstan/phpstan": "^0.12.54",
         "phpunit/phpunit": "^9.4.3",
-        "vimeo/psalm": "^3.16.0"
+        "vimeo/psalm": "^3.18.2"
     },
     "config": {
         "optimize-autoloader": true,
