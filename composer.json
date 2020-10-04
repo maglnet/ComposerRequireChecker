@@ -32,7 +32,8 @@
         "nikic/php-parser": "^4.10.2",
         "ocramius/package-versions": "^1.9.0",
         "symfony/console": "^5.1.8",
-        "webmozart/glob": "^4.1.0"
+        "webmozart/glob": "^4.1.0",
+        "webmozart/assert": "^1.9.1"
     },
     "require-dev": {
         "ext-zend-opcache": "*",
