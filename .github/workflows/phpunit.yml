@@ -12,7 +12,7 @@ jobs:
     phpunit:
         name: "PHPUnit tests"
 
-        runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             matrix:

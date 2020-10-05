@@ -12,7 +12,7 @@ jobs:
     static-analysis-require-checker:
         name: "Static Analysis by Require-Checker"
 
-        runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             matrix:

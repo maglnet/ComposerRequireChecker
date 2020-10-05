@@ -12,7 +12,7 @@ jobs:
     static-analysis-phpstan:
         name: "Static Analysis by PHPStan"
 
-        runs-on: ${{ matrix.os }}
+        runs-on: ${{ matrix.operating-system }}
 
         strategy:
             matrix:
