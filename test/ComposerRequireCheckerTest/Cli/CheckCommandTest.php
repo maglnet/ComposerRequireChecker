@@ -75,8 +75,8 @@ final class CheckCommandTest extends TestCase
         $this->assertStringContainsString('no unknown symbols found', $this->commandTester->getDisplay());
 
         // verbose output should not be shown
-        $this->assertNotRegExp('/Collecting defined (vendor|extension) symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertNotRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertDoesNotMatchRegularExpression('/Collecting defined (vendor|extension) symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertDoesNotMatchRegularExpression('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
     }
 
     public function testVerboseSelfCheckShowsCounts(): void
@@ -88,9 +88,9 @@ final class CheckCommandTest extends TestCase
             'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
         ]);
 
-        $this->assertRegExp('/Collecting defined vendor symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertRegExp('/Collecting defined extension symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertRegExp('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/Collecting defined vendor symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/Collecting defined extension symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
     }
 
     public function testWithAdditionalSourceFiles(): void
@@ -111,7 +111,7 @@ JSON
             '--config-file' => $root->getChild('config.json')->url(),
         ]);
 
-        $this->assertRegExp('/There were no unknown symbols found./', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/There were no unknown symbols found./', $this->commandTester->getDisplay());
     }
 
     public function testSourceFileThatUsesDevDependency(): void
@@ -126,7 +126,7 @@ JSON
         ]);
 
         $this->assertNotEquals(0, $exitCode);
-        $this->assertRegExp('/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
     }
 
     public function testNoUnknownSymbolsFound(): void
