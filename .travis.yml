@@ -6,12 +6,10 @@ git:
 matrix:
     fast_finish: true
     include:
-        - php: 7.2
-          env:
-            - COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
-            - COVERAGE=1
-        - php: 7.3
         - php: 7.4
+          env:
+              - COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+              - COVERAGE=1
         - php: nightly
     allow_failures:
         - php: nightly

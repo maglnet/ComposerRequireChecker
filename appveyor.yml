@@ -6,10 +6,8 @@ environment:
   COMPOSER_NO_INTERACTION: "1"
   ANSICON: '121x90 (121x90)'
   matrix:
-    - PHP_VERSION: '7.2'
-      COMPOSER_FLAGS: '--prefer-stable --prefer-lowest'
-    - PHP_VERSION: '7.3'
     - PHP_VERSION: '7.4'
+      COMPOSER_FLAGS: '--prefer-stable --prefer-lowest'
 
 matrix:
   fast_finish: true
