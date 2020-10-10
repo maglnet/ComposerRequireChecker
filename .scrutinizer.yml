@@ -1,3 +1,8 @@
+build:
+    environment:
+        php:
+            version: '7.4'
+
 imports:
     - php
 

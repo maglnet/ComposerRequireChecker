@@ -26,19 +26,19 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "7.4.*",
         "ext-json": "*",
         "ext-phar": "*",
-        "nikic/php-parser": "^4.7",
-        "ocramius/package-versions": "^1.4.2",
-        "symfony/console": "^5.1",
-        "webmozart/glob": "^4.1"
+        "nikic/php-parser": "^4.10.2",
+        "ocramius/package-versions": "^1.9.0",
+        "symfony/console": "^5.1.7",
+        "webmozart/glob": "^4.1.0"
     },
     "require-dev": {
         "ext-zend-opcache": "*",
-        "mikey179/vfsstream": "^1.6",
-        "phpstan/phpstan": "^0.12",
-        "phpunit/phpunit": "^8.5.8",
+        "mikey179/vfsstream": "^1.6.8",
+        "phpstan/phpstan": "^0.12.48",
+        "phpunit/phpunit": "^9.4.0",
         "vimeo/psalm": "^3.12.2"
     },
     "config": {
