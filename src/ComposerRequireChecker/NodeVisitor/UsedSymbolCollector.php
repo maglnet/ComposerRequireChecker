@@ -73,11 +73,10 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     private function recordClassExpressionUsage(Node $node)
     {
         if (($node instanceof Node\Expr\StaticCall
-                || $node instanceof Node\Expr\StaticPropertyFetch
-                || $node instanceof Node\Expr\ClassConstFetch
-                || $node instanceof Node\Expr\New_
-                || $node instanceof Node\Expr\Instanceof_
-            )
+            || $node instanceof Node\Expr\StaticPropertyFetch
+            || $node instanceof Node\Expr\ClassConstFetch
+            || $node instanceof Node\Expr\New_
+            || $node instanceof Node\Expr\Instanceof_)
             && $node->class instanceof Node\Name
         ) {
             $this->recordUsageOf($node->class);

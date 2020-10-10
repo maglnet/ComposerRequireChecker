@@ -6,7 +6,7 @@ interface GuesserInterface
 {
 
     /**
-     * @param string $symbolName
+     * @param  string $symbolName
      * @return \Generator
      */
     public function __invoke(string $symbolName): \Generator;

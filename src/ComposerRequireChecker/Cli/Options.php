@@ -101,7 +101,7 @@ class Options
     }
 
     /**
-     * @param string $string some-string
+     * @param  string $string some-string
      * @return string someString
      */
     private function getCamelCase(string $string): string

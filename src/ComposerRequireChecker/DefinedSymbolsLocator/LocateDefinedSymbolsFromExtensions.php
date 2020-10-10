@@ -11,12 +11,12 @@ class LocateDefinedSymbolsFromExtensions
      *        which means that composer.json must have 'ext-zend-opcache' instead of the correct / exact package name
      *        which is 'ext-Zend Opcache'. So the ALTERNATIVES allows us to look up the correct name, case sensitive
      *        without the '-'.
-     * @see https://github.com/maglnet/ComposerRequireChecker/issues/99
+     * @see   https://github.com/maglnet/ComposerRequireChecker/issues/99
      */
     private const ALTERNATIVES = ['zend-opcache' => 'Zend Opcache'];
 
     /**
-     * @param string[] $extensionNames
+     * @param  string[] $extensionNames
      * @return string[]
      * @throws UnknownExtensionException if the extension cannot be found
      */

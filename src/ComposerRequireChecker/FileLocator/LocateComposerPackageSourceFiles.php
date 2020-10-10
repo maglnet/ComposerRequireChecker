@@ -8,7 +8,7 @@ final class LocateComposerPackageSourceFiles
 {
     /**
      * @param mixed[] $composerData The contents of composer.json for a package
-     * @param string $packageDir The path to package
+     * @param string  $packageDir   The path to package
      *
      * @return Generator
      */
@@ -43,12 +43,14 @@ final class LocateComposerPackageSourceFiles
             },
             []
         );
-        return array_values(array_map(
-            function (string $sourceDir) use ($packageDir) {
-                return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
-            },
-            $flattened
-        ));
+        return array_values(
+            array_map(
+                function (string $sourceDir) use ($packageDir) {
+                    return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
+                },
+                $flattened
+            )
+        );
     }
 
     private function normalizePath(string $path): string

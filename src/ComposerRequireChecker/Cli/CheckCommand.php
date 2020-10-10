@@ -72,13 +72,15 @@ class CheckCommand extends Command
         $sourcesASTs = $this->getASTFromFilesLocator($input);
 
         $this->verbose("Collecting defined vendor symbols... ", $output);
-        $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke($sourcesASTs(
-            (new ComposeGenerators())->__invoke(
-                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
-                $getPackageSourceFiles($composerData, dirname($composerJson)),
-                (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
+        $definedVendorSymbols = (new LocateDefinedSymbolsFromASTRoots())->__invoke(
+            $sourcesASTs(
+                (new ComposeGenerators())->__invoke(
+                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                    $getPackageSourceFiles($composerData, dirname($composerJson)),
+                    (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
+                )
             )
-        ));
+        );
         $this->verbose("found " . count($definedVendorSymbols) . " symbols.", $output, true);
 
         $this->verbose("Collecting defined extension symbols... ", $output);
@@ -88,12 +90,14 @@ class CheckCommand extends Command
         $this->verbose("found " . count($definedExtensionSymbols) . " symbols.", $output, true);
 
         $this->verbose("Collecting used symbols... ", $output);
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke($sourcesASTs(
-            (new ComposeGenerators())->__invoke(
-                $getPackageSourceFiles($composerData, dirname($composerJson)),
-                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
+            $sourcesASTs(
+                (new ComposeGenerators())->__invoke(
+                    $getPackageSourceFiles($composerData, dirname($composerJson)),
+                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
+                )
             )
-        ));
+        );
         $this->verbose("found " . count($usedSymbols) . " symbols.", $output, true);
 
         if (!count($usedSymbols)) {
@@ -139,7 +143,7 @@ class CheckCommand extends Command
     }
 
     /**
-     * @param string $jsonFile
+     * @param  string $jsonFile
      * @throws \ComposerRequireChecker\Exception\InvalidJsonException
      * @throws \ComposerRequireChecker\Exception\NotReadableException
      */
@@ -150,7 +154,7 @@ class CheckCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
+     * @param  InputInterface $input
      * @return LocateASTFromFiles
      */
     private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
@@ -162,9 +166,9 @@ class CheckCommand extends Command
 
 
     /**
-     * @param string $string the message that should be printed
-     * @param OutputInterface $output the output to log to
-     * @param bool $newLine if a new line will be started afterwards
+     * @param string          $string  the message that should be printed
+     * @param OutputInterface $output  the output to log to
+     * @param bool            $newLine if a new line will be started afterwards
      */
     private function verbose(string $string, OutputInterface $output, bool $newLine = false): void
     {

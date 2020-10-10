@@ -110,12 +110,14 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     private function recordDefinitionOf(Node $node)
     {
         if (!isset($node->namespacedName)) {
-            throw new \UnexpectedValueException(sprintf(
-                'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
-                . 'did you pass it through a name resolver visitor?',
-                get_class($node),
-                $node->getLine()
-            ));
+            throw new \UnexpectedValueException(
+                sprintf(
+                    'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
+                    . 'did you pass it through a name resolver visitor?',
+                    get_class($node),
+                    $node->getLine()
+                )
+            );
         }
 
         $this->recordDefinitionOfStringSymbol((string)$node->namespacedName);
