@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\DefinedExtensionsResolver;
 
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
@@ -7,22 +9,22 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
+use function reset;
+
 /**
  * @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver
  */
 final class DefinedExtensionsResolverTest extends TestCase
 {
-    /** @var DefinedExtensionsResolver */
-    private $resolver;
-    /** @var vfsStreamDirectory */
-    private $root;
+    private DefinedExtensionsResolver $resolver;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->resolver = new DefinedExtensionsResolver();
-        $this->root = vfsStream::setup();
+        $this->root     = vfsStream::setup();
     }
 
     public function testNoExtensions(): void

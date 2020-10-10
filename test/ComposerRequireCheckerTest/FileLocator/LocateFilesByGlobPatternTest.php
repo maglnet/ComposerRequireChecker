@@ -1,7 +1,8 @@
 <?php
 
-namespace ComposerRequireCheckerTest\FileLocator;
+declare(strict_types=1);
 
+namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use org\bovigo\vfs\vfsStream;
@@ -10,21 +11,14 @@ use PHPUnit\Framework\TestCase;
 
 final class LocateFilesByGlobPatternTest extends TestCase
 {
+    private LocateFilesByGlobPattern $locator;
 
-    /**
-     * @var LocateFilesByGlobPattern
-     */
-    private $locator;
-
-    /**
-     * @var vfsStreamDirectory
-     */
-    private $root;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
     }
 
     public function testSimpleGlobPattern(): void
@@ -62,12 +56,12 @@ final class LocateFilesByGlobPatternTest extends TestCase
      */
     private function files(array $globPatterns, $dir): array
     {
-        $files = [];
+        $files          = [];
         $filesGenerator = ($this->locator)($globPatterns, $dir);
         foreach ($filesGenerator as $file) {
             $files[] = $file;
         }
+
         return $files;
     }
-
 }

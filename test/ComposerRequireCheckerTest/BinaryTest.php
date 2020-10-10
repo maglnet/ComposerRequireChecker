@@ -1,21 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest;
 
-use function implode;
 use PHPUnit\Framework\TestCase;
+
+use function exec;
+use function implode;
+use function strpos;
+
+use const PHP_OS;
 
 final class BinaryTest extends TestCase
 {
-    /** @var string */
-    private $bin;
+    private string $bin;
 
     protected function setUp(): void
     {
-        if (strpos(\PHP_OS, "WIN") === 0) {
+        if (strpos(PHP_OS, 'WIN') === 0) {
             $this->bin = __DIR__ . "\\..\\..\\bin\\composer-require-checker.bat";
         } else {
-            $this->bin = __DIR__ . "/../../bin/composer-require-checker";
+            $this->bin = __DIR__ . '/../../bin/composer-require-checker';
         }
     }
 
@@ -27,17 +33,17 @@ final class BinaryTest extends TestCase
 
     public function testUnknownSymbols(): void
     {
-        $path = __DIR__ . "/../fixtures/unknownSymbols/composer.json";
+        $path = __DIR__ . '/../fixtures/unknownSymbols/composer.json';
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertStringContainsString("The following unknown symbols were found", implode("\n", $output));
+        $this->assertStringContainsString('The following unknown symbols were found', implode("\n", $output));
     }
 
     public function testInvalidConfiguration(): void
     {
-        $path = __DIR__ . "/../fixtures/validJson.json";
+        $path = __DIR__ . '/../fixtures/validJson.json';
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertStringContainsString("dependencies have not been installed", implode("\n", $output));
+        $this->assertStringContainsString('dependencies have not been installed', implode("\n", $output));
     }
 }

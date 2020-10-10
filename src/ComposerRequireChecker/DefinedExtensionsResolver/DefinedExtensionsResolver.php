@@ -1,6 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\DefinedExtensionsResolver;
+
+use function array_merge;
+use function file_get_contents;
+use function json_decode;
+use function strpos;
+use function substr;
 
 class DefinedExtensionsResolver
 {
@@ -10,14 +18,18 @@ class DefinedExtensionsResolver
 
         $extensions = [];
         foreach ($requires as $require => $version) {
-            if ($require == 'php' || $require == 'php-64bit') {
+            if ($require === 'php' || $require === 'php-64bit') {
                 $extensions = array_merge($extensions, $phpCoreExtensions);
                 continue;
             }
-            if (strpos($require, 'ext-') === 0) {
-                $extensions = array_merge($extensions, [substr($require, 4)]);
+
+            if (strpos($require, 'ext-') !== 0) {
+                continue;
             }
+
+            $extensions = array_merge($extensions, [substr($require, 4)]);
         }
+
         return $extensions;
     }
 }

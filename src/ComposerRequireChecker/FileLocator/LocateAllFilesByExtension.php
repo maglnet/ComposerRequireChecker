@@ -1,8 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\FileLocator;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Traversable;
+
+use function assert;
+use function implode;
+use function preg_match;
+use function preg_quote;
+use function preg_replace;
+use function str_replace;
+use function trim;
+
+use const DIRECTORY_SEPARATOR;
 
 final class LocateAllFilesByExtension
 {
@@ -10,9 +25,9 @@ final class LocateAllFilesByExtension
     {
         foreach ($directories as $directory) {
             yield from $this->filterFilesByExtension(
-                new \RecursiveIteratorIterator(
-                    new \RecursiveDirectoryIterator($directory),
-                    \RecursiveIteratorIterator::LEAVES_ONLY
+                new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($directory),
+                    RecursiveIteratorIterator::LEAVES_ONLY
                 ),
                 $fileExtension,
                 $blacklist
@@ -24,15 +39,15 @@ final class LocateAllFilesByExtension
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
-        $blacklistMatcher = '{('.implode('|', $this->prepareBlacklistPatterns($blacklist)).')}';
+        $blacklistMatcher = '{(' . implode('|', $this->prepareBlacklistPatterns($blacklist)) . ')}';
 
-        /* @var $file \SplFileInfo */
         foreach ($files as $file) {
+            assert($file instanceof SplFileInfo);
             if ($blacklist && preg_match($blacklistMatcher, $file->getPathname())) {
                 continue;
             }
 
-            if (!preg_match($extensionMatcher, $file->getBasename())) {
+            if (! preg_match($extensionMatcher, $file->getBasename())) {
                 continue;
             }
 
@@ -46,10 +61,10 @@ final class LocateAllFilesByExtension
             return [];
         }
 
-        $dirSep = \preg_quote(DIRECTORY_SEPARATOR, '{}');
+        $dirSep = preg_quote(DIRECTORY_SEPARATOR, '{}');
 
         foreach ($blacklistPaths as &$path) {
-            $path = preg_replace('{' . $dirSep . '+}', DIRECTORY_SEPARATOR, \preg_quote(trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR), '{}'));
+            $path = preg_replace('{' . $dirSep . '+}', DIRECTORY_SEPARATOR, preg_quote(trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR), '{}'));
             $path = str_replace('\\*\\*', '.+?', $path);
             $path = str_replace('\\*', '[^' . $dirSep . ']+?', $path);
         }

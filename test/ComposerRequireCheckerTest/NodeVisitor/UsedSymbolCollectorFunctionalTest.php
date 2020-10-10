@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
@@ -9,32 +11,23 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+use function array_diff;
+use function file_get_contents;
 
 /**
  * @coversNothing
- *
  * @group functional
  */
 final class UsedSymbolCollectorFunctionalTest extends TestCase
 {
-    /**
-     * @var UsedSymbolCollector
-     */
-    private $collector;
+    private UsedSymbolCollector $collector;
 
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
+    private NodeTraverserInterface $traverser;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->collector = new UsedSymbolCollector();
@@ -99,9 +92,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php function foo($bar) : My\ReturnType {}');
 
         self::assertSameCollectedSymbols(
-            [
-                'My\ReturnType',
-            ],
+            ['My\ReturnType'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -111,9 +102,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php class Foo { function foo($bar) : My\ReturnType {}}');
 
         self::assertSameCollectedSymbols(
-            [
-                'My\ReturnType',
-            ],
+            ['My\ReturnType'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -123,9 +112,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php function foo($bar) : int {}');
 
         self::assertSameCollectedSymbols(
-            [
-                'int',
-            ],
+            ['int'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -162,7 +149,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
     private function traverseClassAST(string $className): array
     {
         return $this->traverseStringAST(
-            file_get_contents((new \ReflectionClass($className))->getFileName())
+            file_get_contents((new ReflectionClass($className))->getFileName())
         );
     }
 

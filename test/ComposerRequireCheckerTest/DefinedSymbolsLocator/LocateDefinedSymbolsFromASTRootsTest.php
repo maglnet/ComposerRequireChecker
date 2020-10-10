@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ArrayObject;
@@ -18,8 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
-    /** @var LocateDefinedSymbolsFromASTRoots */
-    private $locator;
+    private LocateDefinedSymbolsFromASTRoots $locator;
 
     protected function setUp(): void
     {
@@ -38,7 +39,8 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateClass(): void
     {
         $roots = [
-            new Class_('MyClassA'), new Class_('MyClassB'),
+            new Class_('MyClassA'),
+            new Class_('MyClassB'),
             new Class_('MyClassC'),
         ];
 
@@ -71,7 +73,8 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
     public function testBasicLocateTrait(): void
     {
         $roots = [
-            new Trait_('MyTraitA'), new Trait_('MyTraitB'),
+            new Trait_('MyTraitA'),
+            new Trait_('MyTraitB'),
             new Trait_('MyTraitC'),
         ];
 
@@ -103,14 +106,13 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
             new FuncCall(new Name('define'), [
                 new Arg(new String_('CONST_NAME')),
                 new Arg(new String_('CONST_VALUE')),
-            ])
+            ]),
         ];
 
         $symbols = $this->locate([$roots]);
 
         $this->assertIsArray($symbols);
         $this->assertCount(1, $symbols);
-
     }
 
     public function testBasicDoNotLocateNamespacedDefineCalls(): void
@@ -119,14 +121,13 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
             new FuncCall(new Name('define', ['namespacedName' => new Name\FullyQualified('Foo\define')]), [
                 new Arg(new String_('NO_CONST')),
                 new Arg(new String_('NO_SOMETHING')),
-            ])
+            ]),
         ];
 
         $symbols = $this->locate([$roots]);
 
         $this->assertIsArray($symbols);
         $this->assertCount(0, $symbols);
-
     }
 
     private function locate(array $roots): array

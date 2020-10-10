@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\UsedSymbolsLocator;
 
 use ArrayObject;
@@ -9,13 +11,14 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 
+use function file_get_contents;
+
 /**
  * @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots
  */
 final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
-    /** @var LocateUsedSymbolsFromASTRoots */
-    private $locator;
+    private LocateUsedSymbolsFromASTRoots $locator;
 
     protected function setUp(): void
     {
@@ -26,7 +29,7 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 
     public function testNoAsts(): void
     {
-        $asts = [];
+        $asts    = [];
         $symbols = $this->locate($asts);
 
         $this->assertCount(0, $symbols);
@@ -34,9 +37,9 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 
     public function testLocate(): void
     {
-        $node = new Class_('Foo');
+        $node          = new Class_('Foo');
         $node->extends = new Name('Bar');
-        $symbols = $this->locate([[$node]]);
+        $symbols       = $this->locate([[$node]]);
 
         $this->assertCount(1, $symbols);
         $this->assertContains('Bar', $symbols);
@@ -58,9 +61,7 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 
         $ast = $parser->parse(file_get_contents(__DIR__ . '/../../fixtures/unknownSymbols/src/OtherThing.php'));
 
-        $symbols = $this->locate([
-            $ast,
-        ]);
+        $symbols = $this->locate([$ast]);
 
         $this->assertSame($expectedSymbols, $symbols);
     }

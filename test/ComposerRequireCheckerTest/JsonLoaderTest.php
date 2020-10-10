@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest;
 
 use ComposerRequireChecker\Exception\InvalidJsonException;
@@ -28,7 +30,7 @@ final class JsonLoaderTest extends TestCase
 
     public function testHasDataWithValidFile(): void
     {
-        $path = __DIR__ . '/../fixtures/validJson.json';
+        $path   = __DIR__ . '/../fixtures/validJson.json';
         $loader = new JsonLoader($path);
         $this->assertEquals($loader->getData(), ['foo' => 'bar']);
     }

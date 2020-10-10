@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
@@ -9,36 +11,27 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+use function array_diff;
+use function file_get_contents;
 
 /**
  * @coversNothing
- *
  * @group functional
  */
 final class DefinedSymbolCollectorFunctionalTest extends TestCase
 {
-    /**
-     * @var DefinedSymbolCollector
-     */
-    private $collector;
+    private DefinedSymbolCollector $collector;
 
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
+    private NodeTraverserInterface $traverser;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
-        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());
@@ -125,7 +118,6 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-
     private function traverseStringAST(string $phpSource): array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
@@ -135,7 +127,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     {
         return $this->traverser->traverse(
             $this->parser->parse(
-                file_get_contents((new \ReflectionClass($className))->getFileName())
+                file_get_contents((new ReflectionClass($className))->getFileName())
             )
         );
     }

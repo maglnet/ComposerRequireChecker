@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
@@ -7,6 +9,10 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Traversable;
+
+use function array_merge;
+use function array_unique;
+use function array_values;
 
 final class LocateDefinedSymbolsFromASTRoots
 {

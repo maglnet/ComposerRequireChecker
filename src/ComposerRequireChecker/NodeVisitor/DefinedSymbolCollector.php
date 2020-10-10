@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+use UnexpectedValueException;
+
+use function array_keys;
+use function get_class;
+use function sprintf;
 
 final class DefinedSymbolCollector extends NodeVisitorAbstract
 {
-    /**
-     * @var mixed[]
-     */
-    private $definedSymbols = [];
+    /** @var mixed[] */
+    private array $definedSymbols = [];
 
     public function __construct()
     {
@@ -49,68 +54,78 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         return $node;
     }
 
-    private function recordClassDefinition(Node $node)
+    private function recordClassDefinition(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Class_ && !$node->isAnonymous()) {
-            $this->recordDefinitionOf($node);
+        if (! ($node instanceof Node\Stmt\Class_) || $node->isAnonymous()) {
+            return;
+        }
+
+        $this->recordDefinitionOf($node);
+    }
+
+    private function recordInterfaceDefinition(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Interface_)) {
+            return;
+        }
+
+        $this->recordDefinitionOf($node);
+    }
+
+    private function recordTraitDefinition(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Trait_)) {
+            return;
+        }
+
+        $this->recordDefinitionOf($node);
+    }
+
+    private function recordFunctionDefinition(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Function_)) {
+            return;
+        }
+
+        $this->recordDefinitionOf($node);
+    }
+
+    private function recordConstDefinition(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Const_)) {
+            return;
+        }
+
+        foreach ($node->consts as $const) {
+            $this->recordDefinitionOf($const);
         }
     }
 
-    private function recordInterfaceDefinition(Node $node)
+    private function recordDefinedConstDefinition(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Interface_) {
-            $this->recordDefinitionOf($node);
+        if (! ($node instanceof Node\Expr\FuncCall) || ! ($node->name instanceof Node\Name) || $node->name->toString() !== 'define') {
+            return;
         }
+
+        if (
+            $node->name->hasAttribute('namespacedName')
+            && $node->name->getAttribute('namespacedName') instanceof Node\Name\FullyQualified
+            && $node->name->getAttribute('namespacedName')->toString() !== 'define'
+        ) {
+            return;
+        }
+
+        if (! ($node->args[0]->value instanceof Node\Scalar\String_)) {
+            return;
+        }
+
+        $this->recordDefinitionOfStringSymbol($node->args[0]->value->value);
     }
 
-    private function recordTraitDefinition(Node $node)
+    private function recordDefinitionOf(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Trait_) {
-            $this->recordDefinitionOf($node);
-        }
-    }
-
-    private function recordFunctionDefinition(Node $node)
-    {
-        if ($node instanceof Node\Stmt\Function_) {
-            $this->recordDefinitionOf($node);
-        }
-    }
-
-    private function recordConstDefinition(Node $node)
-    {
-        if ($node instanceof Node\Stmt\Const_) {
-            foreach ($node->consts as $const) {
-                $this->recordDefinitionOf($const);
-            }
-        }
-    }
-
-    private function recordDefinedConstDefinition(Node $node)
-    {
-        if ($node instanceof Node\Expr\FuncCall && $node->name instanceof Node\Name && $node->name->toString() === 'define') {
-            if ($node->name->hasAttribute('namespacedName')
-                && $node->name->getAttribute('namespacedName') instanceof Node\Name\FullyQualified
-                && $node->name->getAttribute('namespacedName')->toString() !== 'define'
-            ) {
-                return;
-            }
-
-            if ($node->args[0]->value instanceof Node\Scalar\String_) {
-                $this->recordDefinitionOfStringSymbol($node->args[0]->value->value);
-            }
-        }
-    }
-
-    /**
-     * @param Node $node
-     *
-     * @return void
-     */
-    private function recordDefinitionOf(Node $node)
-    {
-        if (!isset($node->namespacedName)) {
-            throw new \UnexpectedValueException(
+        if (! isset($node->namespacedName)) {
+            throw new UnexpectedValueException(
                 sprintf(
                     'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
                     . 'did you pass it through a name resolver visitor?',
@@ -120,10 +135,10 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             );
         }
 
-        $this->recordDefinitionOfStringSymbol((string)$node->namespacedName);
+        $this->recordDefinitionOfStringSymbol((string) $node->namespacedName);
     }
 
-    private function recordDefinitionOfStringSymbol(string $symbolName)
+    private function recordDefinitionOfStringSymbol(string $symbolName): void
     {
         $this->definedSymbols[$symbolName] = $symbolName;
     }

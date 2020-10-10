@@ -1,16 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\FileLocator;
 
+use ArrayIterator;
 use Generator;
+
+use function array_map;
+use function array_merge;
+use function array_reduce;
+use function array_values;
+use function is_dir;
+use function is_file;
+use function ltrim;
+use function str_replace;
 
 final class LocateComposerPackageSourceFiles
 {
     /**
      * @param mixed[] $composerData The contents of composer.json for a package
      * @param string  $packageDir   The path to package
-     *
-     * @return Generator
      */
     public function __invoke(array $composerData, string $packageDir): Generator
     {
@@ -20,14 +30,17 @@ final class LocateComposerPackageSourceFiles
             $this->getFilePaths($composerData['autoload']['classmap'] ?? [], $packageDir),
             $blacklist
         );
+
         yield from $this->locateFilesInFilesInFilesDefinitions(
             $this->getFilePaths($composerData['autoload']['files'] ?? [], $packageDir),
             $blacklist
         );
+
         yield from $this->locateFilesInPsr0Definitions(
             $this->getFilePaths($composerData['autoload']['psr-0'] ?? [], $packageDir),
             $blacklist
         );
+
         yield from $this->locateFilesInPsr4Definitions(
             $this->getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir),
             $blacklist
@@ -38,11 +51,12 @@ final class LocateComposerPackageSourceFiles
     {
         $flattened = array_reduce(
             $sourceDirs,
-            function (array $sourceDirs, $sourceDir) {
-                return array_merge($sourceDirs, (array)$sourceDir);
+            static function (array $sourceDirs, $sourceDir) {
+                return array_merge($sourceDirs, (array) $sourceDir);
             },
             []
         );
+
         return array_values(
             array_map(
                 function (string $sourceDir) use ($packageDir) {
@@ -86,6 +100,6 @@ final class LocateComposerPackageSourceFiles
 
     private function extractFilesFromDirectory(string $directory, ?array $blacklist): Generator
     {
-        yield from (new LocateAllFilesByExtension())->__invoke(new \ArrayIterator([$directory]), '.php', $blacklist);
+        yield from (new LocateAllFilesByExtension())->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);
     }
 }

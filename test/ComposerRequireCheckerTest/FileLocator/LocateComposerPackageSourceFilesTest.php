@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
@@ -8,31 +10,32 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
+use function count;
+use function dirname;
+use function json_encode;
+use function str_replace;
+
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
  */
 final class LocateComposerPackageSourceFilesTest extends TestCase
 {
-    /** @var LocateComposerPackageSourceFiles */
-    private $locator;
-    /** @var vfsStreamDirectory */
-    private $root;
+    private LocateComposerPackageSourceFiles $locator;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateComposerPackageSourceFiles();
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
     }
 
     public function testFromClassmap(): void
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}',
-            'src' => [
-                'MyClassA.php' => '<?php class MyClassA {}',
-            ],
+            'src' => ['MyClassA.php' => '<?php class MyClassA {}'],
             'MyClassB.php' => '<?php class MyClassB {}',
         ]);
 
@@ -61,9 +64,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-0": ["src"]}}',
             'src' => [
-                'MyNamespace' => [
-                    'MyClass.php' => '<?php namespace MyNamespace; class MyClass {}',
-                ],
+                'MyNamespace' => ['MyClass.php' => '<?php namespace MyNamespace; class MyClass {}'],
             ],
         ]);
 
@@ -77,9 +78,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     {
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": "src"}}}',
-            'src' => [
-                'MyClass.php' => '<?php namespace MyNamespace; class MyClass {}',
-            ],
+            'src' => ['MyClass.php' => '<?php namespace MyNamespace; class MyClass {}'],
         ]);
 
         $files = $this->files($this->root->getChild('composer.json')->url());
@@ -123,7 +122,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src/MyNamespace"]}}}',
             'src' => [
-                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']
+                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
             ],
         ]);
 
@@ -138,7 +137,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src\\\\MyNamespace"]}}}',
             'src' => [
-                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']
+                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
             ],
         ]);
 
@@ -158,18 +157,12 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         vfsStream::create([
             'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": ' . $excludedPatternJson . '}}',
             'ClassA.php' => '<?php namespace MyNamespace; class ClassA {}',
-            'tests' => [
-                'ATest.php' => '<?php namespace MyNamespace; class ATest {}',
-            ],
+            'tests' => ['ATest.php' => '<?php namespace MyNamespace; class ATest {}'],
             'foo' => [
-                'Bar' => [
-                    'BTest.php' => '<?php namespace MyNamespace; class BTest {}',
-                ],
+                'Bar' => ['BTest.php' => '<?php namespace MyNamespace; class BTest {}'],
                 'src' => [
                     'ClassB.php' => '<?php namespace MyNamespace; class ClassB {}',
-                    'Bar' => [
-                        'CTest.php' => '<?php namespace MyNamespace; class CTest {}',
-                    ],
+                    'Bar' => ['CTest.php' => '<?php namespace MyNamespace; class CTest {}'],
                 ],
             ],
         ]);
@@ -230,12 +223,13 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
      */
     private function files(string $composerJson): array
     {
-        $composerData = (new JsonLoader($composerJson))->getData();
-        $files = [];
+        $composerData   = (new JsonLoader($composerJson))->getData();
+        $files          = [];
         $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
             $files[] = str_replace('\\', '/', $file);
         }
+
         return $files;
     }
 }

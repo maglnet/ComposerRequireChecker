@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\GeneratorUtil;
 
 use Traversable;
@@ -7,11 +9,12 @@ use Traversable;
 final class ComposeGenerators
 {
     /**
+     * @param  Traversable<TKey, TValue> ...$generators
+     *
+     * @return Traversable<int, TValue>
+     *
      * @template TKey
      * @template TValue
-     *
-     * @param  Traversable<TKey, TValue> ...$generators
-     * @return Traversable<int, TValue>
      */
     public function __invoke(Traversable ...$generators): Traversable
     {

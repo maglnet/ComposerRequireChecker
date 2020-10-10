@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Application;
+use InvalidArgumentException;
+use LogicException;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -14,44 +18,40 @@ use function file_put_contents;
 use function unlink;
 use function version_compare;
 
+use const PHP_VERSION;
+
 final class CheckCommandTest extends TestCase
 {
-
-    /**
-     * @var CommandTester
-     */
-    private $commandTester;
+    private CommandTester $commandTester;
 
     protected function setUp(): void
     {
         $application = new Application();
-        $command = $application->get('check');
+        $command     = $application->get('check');
 
         $this->commandTester = new CommandTester($command);
     }
 
     public function testExceptionIfComposerJsonNotFound(): void
     {
-        self::expectException(\InvalidArgumentException::class);
+        self::expectException(InvalidArgumentException::class);
 
-        $this->commandTester->execute([
-            'composer-json' => 'this-will-not-be-found.json'
-        ]);
+        $this->commandTester->execute(['composer-json' => 'this-will-not-be-found.json']);
     }
 
     public function testExceptionIfNoSymbolsFound(): void
     {
-        self::expectException(\LogicException::class);
+        self::expectException(LogicException::class);
 
         $this->commandTester->execute([
-            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noSymbols/composer.json'
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noSymbols/composer.json',
         ]);
     }
 
     public function testUnknownSymbolsFound(): void
     {
         $this->commandTester->execute([
-            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json'
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
         ]);
 
         $this->assertSame(1, $this->commandTester->getStatusCode());
@@ -68,7 +68,7 @@ final class CheckCommandTest extends TestCase
     {
         $this->commandTester->execute([
             // that's our own composer.json, lets be sure our self check does not throw errors
-            'composer-json' => dirname(__DIR__, 3) . '/composer.json'
+            'composer-json' => dirname(__DIR__, 3) . '/composer.json',
         ]);
 
         $this->assertSame(0, $this->commandTester->getStatusCode());
@@ -143,6 +143,7 @@ JSON
         if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
             self::markTestSkipped('This test does not work in PHP8');
         }
+
         $baseDir = dirname(__DIR__, 2) . '/fixtures/noUnknownSymbols/';
         $tmpFile = $baseDir . 'src/Match.php';
         file_put_contents($tmpFile, '<?php class Match { }');

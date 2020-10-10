@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
@@ -19,31 +21,20 @@ use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 final class DefinedSymbolCollectorTest extends TestCase
 {
-    /**
-     * @var DefinedSymbolCollector
-     */
-    private $collector;
+    private DefinedSymbolCollector $collector;
 
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
+    private NodeTraverserInterface $traverser;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
-        $this->parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());
@@ -52,7 +43,7 @@ final class DefinedSymbolCollectorTest extends TestCase
 
     public function testExceptionWhenNoNamespaceDefined(): void
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(UnexpectedValueException::class);
         $node = new Class_('gedöns');
         $this->collector->enterNode($node);
     }

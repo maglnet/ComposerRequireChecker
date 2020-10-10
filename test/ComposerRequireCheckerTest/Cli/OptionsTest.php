@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Options;
 use PHPUnit\Framework\TestCase;
+
+use function file_get_contents;
+use function json_decode;
 
 final class OptionsTest extends TestCase
 {
     public function testOptionsAcceptPhpCoreExtensions(): void
     {
         $options = new Options([
-            'php-core-extensions' => ['something']
+            'php-core-extensions' => ['something'],
         ]);
 
         $this->assertSame(['something'], $options->getPhpCoreExtensions());
@@ -19,7 +24,7 @@ final class OptionsTest extends TestCase
     public function testOptionsAcceptSymbolWhitelist(): void
     {
         $options = new Options([
-            'symbol-whitelist' => ['foo', 'bar']
+            'symbol-whitelist' => ['foo', 'bar'],
         ]);
 
         $this->assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
@@ -42,7 +47,7 @@ final class OptionsTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $options = new Options([
-            'foo-bar' => ['foo', 'bar']
+            'foo-bar' => ['foo', 'bar'],
         ]);
     }
 }
