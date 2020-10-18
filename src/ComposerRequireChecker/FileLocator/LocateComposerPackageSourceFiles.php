@@ -48,8 +48,7 @@ final class LocateComposerPackageSourceFiles
     }
 
     /**
-     * @param array<string>  $sourceDirs
-     * @param string<string> $packageDir
+     * @param array<string> $sourceDirs
      *
      * @return array<string>
      */

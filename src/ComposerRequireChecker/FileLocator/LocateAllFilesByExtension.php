@@ -42,8 +42,8 @@ final class LocateAllFilesByExtension
     }
 
     /**
-     * @param Traversable<string> $files
-     * @param array<string>|null  $blacklist
+     * @param Traversable<SplFileInfo> $files
+     * @param array<string>|null       $blacklist
      *
      * @return Traversable<string>
      */
