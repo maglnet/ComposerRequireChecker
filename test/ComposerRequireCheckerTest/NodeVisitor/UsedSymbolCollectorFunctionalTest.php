@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -129,7 +130,26 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
     public function testUseTraitAdaptionAlias(): void
     {
-        $this->traverseStringAST('<?php namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
+        $this->traverseStringAST(<<<'EOF'
+            <?php
+            
+            namespace Foo;
+            
+            trait BarTrait
+            {
+                protected function test()
+                {
+                }
+            }
+            
+            class UseTrait
+            {
+                use BarTrait {
+                    test as public;
+                }
+            }
+            EOF
+        );
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait'],
@@ -137,7 +157,10 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private function traverseStringAST(string $stringAST)
+    /**
+     * @return array<Node>
+     */
+    private function traverseStringAST(string $stringAST): array
     {
         return $this->traverser->traverse(
             $this->parser->parse(
@@ -146,6 +169,9 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    /**
+     * @return array<Node>
+     */
     private function traverseClassAST(string $className): array
     {
         return $this->traverseStringAST(
@@ -153,6 +179,10 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    /**
+     * @param array<mixed> $expected
+     * @param array<mixed> $actual
+     */
     private static function assertSameCollectedSymbols(array $expected, array $actual): void
     {
         self::assertSame(array_diff($expected, $actual), array_diff($actual, $expected));

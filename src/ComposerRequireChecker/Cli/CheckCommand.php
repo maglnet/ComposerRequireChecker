@@ -9,8 +9,8 @@ use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
-use ComposerRequireChecker\Exception\InvalidJsonException;
-use ComposerRequireChecker\Exception\NotReadableException;
+use ComposerRequireChecker\Exception\InvalidJson;
+use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
@@ -155,17 +155,19 @@ class CheckCommand extends Command
             return new Options();
         }
 
-        return new Options((new JsonLoader($fileName))->getData());
+        return new Options(JsonLoader::getData($fileName));
     }
 
     /**
-     * @throws InvalidJsonException
-     * @throws NotReadableException
+     * @return array<array-key, mixed>
+     *
+     * @throws InvalidJson
+     * @throws NotReadable
      */
     private function getComposerData(string $jsonFile): array
     {
         // JsonLoader throws an exception if it cannot load the file
-        return (new JsonLoader($jsonFile))->getData();
+        return JsonLoader::getData($jsonFile);
     }
 
     private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles

@@ -11,6 +11,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
 use function count;
+use function sprintf;
 use function str_replace;
 
 /**
@@ -41,7 +42,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
         $dir   = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         $files = [];
         for ($i = 0; $i < 3; $i++) {
-            $files[] = vfsStream::newFile("MyClass$i.php")->at($dir);
+            $files[] = vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', null);
@@ -56,7 +57,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     {
         $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile("MyClass$i.php")->at($dir);
+            vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', ['MyClass6']);
@@ -69,7 +70,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     {
         $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile("Directory$i/MyClass.php")->at($dir);
+            vfsStream::newFile(sprintf('Directory%d/MyClass.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', ['Directory5/']);
@@ -79,8 +80,8 @@ final class LocateAllFilesByExtensionTest extends TestCase
     }
 
     /**
-     * @param array $blacklist
-     * @param array $expectedFiles
+     * @param array<string> $blacklist
+     * @param array<string> $expectedFiles
      *
      * @dataProvider provideBlacklists
      */
@@ -107,6 +108,9 @@ final class LocateAllFilesByExtensionTest extends TestCase
         $this->assertContains($this->root->getChild('MyNamespaceA/Foo/FooClass.php')->url(), $foundFiles);
     }
 
+    /**
+     * @return array<string, array<array<string>>>
+     */
     public function provideBlacklists(): array
     {
         return [
@@ -142,10 +146,10 @@ final class LocateAllFilesByExtensionTest extends TestCase
     }
 
     /**
-     * @param string[]   $directories
-     * @param array|null $blacklist
+     * @param array<string>      $directories
+     * @param array<string>|null $blacklist
      *
-     * @return array|string[]
+     * @return array<string>
      */
     private function locate(array $directories, string $fileExtension, ?array $blacklist): array
     {

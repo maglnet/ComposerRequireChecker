@@ -47,6 +47,12 @@ final class LocateComposerPackageSourceFiles
         );
     }
 
+    /**
+     * @param array<string>  $sourceDirs
+     * @param string<string> $packageDir
+     *
+     * @return array<string>
+     */
     private function getFilePaths(array $sourceDirs, string $packageDir): array
     {
         $flattened = array_reduce(
@@ -72,21 +78,37 @@ final class LocateComposerPackageSourceFiles
         return str_replace('\\', '/', $path);
     }
 
+    /**
+     * @param array<string>      $locations
+     * @param array<string>|null $blacklist
+     */
     private function locateFilesInPsr0Definitions(array $locations, ?array $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
 
+    /**
+     * @param array<string>      $locations
+     * @param array<string>|null $blacklist
+     */
     private function locateFilesInPsr4Definitions(array $locations, ?array $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
 
+    /**
+     * @param array<string>      $locations
+     * @param array<string>|null $blacklist
+     */
     private function locateFilesInClassmapDefinitions(array $locations, ?array $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
 
+    /**
+     * @param array<string>      $locations
+     * @param array<string>|null $blacklist
+     */
     private function locateFilesInFilesInFilesDefinitions(array $locations, ?array $blacklist): Generator
     {
         foreach ($locations as $location) {
@@ -98,6 +120,9 @@ final class LocateComposerPackageSourceFiles
         }
     }
 
+    /**
+     * @param array<string>|null $blacklist
+     */
     private function extractFilesFromDirectory(string $directory, ?array $blacklist): Generator
     {
         yield from (new LocateAllFilesByExtension())->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);

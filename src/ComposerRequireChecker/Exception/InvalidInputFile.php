@@ -6,6 +6,6 @@ namespace ComposerRequireChecker\Exception;
 
 use Exception;
 
-class InvalidJsonException extends Exception
+class InvalidInputFile extends Exception
 {
 }

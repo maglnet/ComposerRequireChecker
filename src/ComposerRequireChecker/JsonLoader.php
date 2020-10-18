@@ -4,47 +4,45 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker;
 
-use ComposerRequireChecker\Exception\InvalidJsonException;
-use ComposerRequireChecker\Exception\NotReadableException;
+use ComposerRequireChecker\Exception\InvalidJson;
+use ComposerRequireChecker\Exception\NotReadable;
+use Throwable;
 
 use function file_get_contents;
 use function is_readable;
 use function json_decode;
-use function json_last_error;
-use function json_last_error_msg;
 
-use const JSON_ERROR_NONE;
+use const JSON_THROW_ON_ERROR;
 
+/**
+ * @internal
+ */
 class JsonLoader
 {
-    /** @var mixed */
-    private $data;
-
     /**
-     * @internal
+     * @return   array<array-key, mixed>
      *
-     * @throws   InvalidJsonException
-     * @throws   NotReadableException
+     * @throws InvalidJson
+     * @throws NotReadable
      */
-    public function __construct(string $path)
+    public static function getData(string $path): array
     {
-        if (! is_readable($path) || ($content = file_get_contents($path)) === false) {
-            throw new NotReadableException('unable to read ' . $path);
+        if (! is_readable($path)) {
+            throw new NotReadable('unable to read ' . $path);
         }
 
-        $this->data = json_decode($content, true);
-        if ($this->data === null && json_last_error() !== JSON_ERROR_NONE) {
-            throw new InvalidJsonException('error parsing ' . $path . ': ' . json_last_error_msg());
-        }
-    }
+        $content = file_get_contents($path);
 
-    /**
-     * @internal
-     *
-     * @return   mixed
-     */
-    public function getData()
-    {
-        return $this->data;
+        if ($content === false) {
+            throw new NotReadable('unable to read ' . $path);
+        }
+
+        try {
+            $decodedData = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+        } catch (Throwable $exception) {
+            throw new InvalidJson('error parsing ' . $path . ': ' . $exception->getMessage(), 0, $exception);
+        }
+
+        return $decodedData;
     }
 }

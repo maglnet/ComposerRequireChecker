@@ -6,7 +6,7 @@ namespace ComposerRequireChecker\DependencyGuesser;
 
 use Generator;
 
-interface GuesserInterface
+interface Guesser
 {
     public function __invoke(string $symbolName): Generator;
 }

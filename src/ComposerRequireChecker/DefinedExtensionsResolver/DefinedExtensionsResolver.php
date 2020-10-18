@@ -12,6 +12,11 @@ use function substr;
 
 class DefinedExtensionsResolver
 {
+    /**
+     * @param array<string> $phpCoreExtensions
+     *
+     * @return array<string>
+     */
     public function __invoke(string $composerJson, array $phpCoreExtensions = []): array
     {
         $requires = json_decode(file_get_contents($composerJson), true)['require'] ?? [];

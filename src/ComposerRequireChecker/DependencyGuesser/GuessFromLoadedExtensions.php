@@ -11,9 +11,10 @@ use Generator;
 use function get_loaded_extensions;
 use function in_array;
 
-class GuessFromLoadedExtensions implements GuesserInterface
+class GuessFromLoadedExtensions implements Guesser
 {
-    private $loadedExtensions;
+    /** @var array<string> */
+    private array $loadedExtensions;
 
     /** @var string[]|null */
     private ?array $coreExtensions = null;

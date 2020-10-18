@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest\FileLocator;
 
-use ComposerRequireChecker\Exception\DependenciesNotInstalledException;
+use ComposerRequireChecker\Exception\DependenciesNotInstalled;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -53,7 +53,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $this->expectException(DependenciesNotInstalledException::class);
+        $this->expectException(DependenciesNotInstalled::class);
         $this->locate($this->root->getChild('composer.json')->url());
     }
 

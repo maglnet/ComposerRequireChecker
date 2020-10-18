@@ -52,9 +52,11 @@ final class LocateFilesByGlobPatternTest extends TestCase
     }
 
     /**
-     * @return string[]
+     * @param array<string> $globPatterns
+     *
+     * @return array<string>
      */
-    private function files(array $globPatterns, $dir): array
+    private function files(array $globPatterns, string $dir): array
     {
         $files          = [];
         $filesGenerator = ($this->locator)($globPatterns, $dir);

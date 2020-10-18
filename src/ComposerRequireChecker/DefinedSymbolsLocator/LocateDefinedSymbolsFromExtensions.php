@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
-use ComposerRequireChecker\Exception\UnknownExtensionException;
+use ComposerRequireChecker\Exception\UnknownExtension;
 use ReflectionExtension;
 use Throwable;
 
@@ -28,7 +28,7 @@ class LocateDefinedSymbolsFromExtensions
      *
      * @return string[]
      *
-     * @throws UnknownExtensionException if the extension cannot be found
+     * @throws UnknownExtension if the extension cannot be found.
      */
     public function __invoke(array $extensionNames): array
     {
@@ -44,7 +44,7 @@ class LocateDefinedSymbolsFromExtensions
                     $extensionReflection->getClassNames()
                 );
             } catch (Throwable $e) {
-                throw new UnknownExtensionException($e->getMessage());
+                throw new UnknownExtension($e->getMessage());
             }
         }
 

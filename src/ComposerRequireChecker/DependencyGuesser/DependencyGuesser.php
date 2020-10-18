@@ -9,7 +9,7 @@ use Generator;
 
 class DependencyGuesser
 {
-    /** @var GuesserInterface[] */
+    /** @var Guesser[] */
     private array $guessers = [];
 
     public function __construct(?Options $options = null)
@@ -17,7 +17,7 @@ class DependencyGuesser
         $this->guessers[] = new GuessFromLoadedExtensions($options);
     }
 
-    public function __invoke($symbolName): Generator
+    public function __invoke(string $symbolName): Generator
     {
         foreach ($this->guessers as $guesser) {
             yield from $guesser($symbolName);

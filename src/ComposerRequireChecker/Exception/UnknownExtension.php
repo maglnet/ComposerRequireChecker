@@ -6,6 +6,6 @@ namespace ComposerRequireChecker\Exception;
 
 use Exception;
 
-class NotReadableException extends Exception
+class UnknownExtension extends Exception
 {
 }

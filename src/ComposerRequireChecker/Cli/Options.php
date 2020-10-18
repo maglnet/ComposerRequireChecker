@@ -13,7 +13,8 @@ use function ucwords;
 
 class Options
 {
-    private $symbolWhitelist = [
+    /** @var array<string>  */
+    private array $symbolWhitelist = [
         'null',
         'true',
         'false', // consts
@@ -31,7 +32,8 @@ class Options
         'object', // types
     ];
 
-    private $phpCoreExtensions = [
+    /** @var array<string>  */
+    private array $phpCoreExtensions = [
         'Core',
         'date',
         'pcre',
@@ -44,10 +46,13 @@ class Options
     /**
      * @see https://github.com/webmozart/glob
      *
-     * @var string[] a list of glob patterns for files that should be scanned in addition
+     * @var array<string> a list of glob patterns for files that should be scanned in addition
      */
     private array $scanFiles = [];
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function __construct(array $options = [])
     {
         foreach ($options as $key => $option) {
@@ -63,7 +68,7 @@ class Options
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getSymbolWhitelist(): array
     {
@@ -71,7 +76,7 @@ class Options
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getPhpCoreExtensions(): array
     {
@@ -79,7 +84,7 @@ class Options
     }
 
     /**
-     * @param array $symbolWhitelist
+     * @param array<string> $symbolWhitelist
      */
     public function setSymbolWhitelist(array $symbolWhitelist): void
     {
@@ -87,7 +92,7 @@ class Options
     }
 
     /**
-     * @param array $phpCoreExtensions
+     * @param array<string> $phpCoreExtensions
      */
     public function setPhpCoreExtensions(array $phpCoreExtensions): void
     {
@@ -95,7 +100,7 @@ class Options
     }
 
     /**
-     * @return string[] a list of glob patterns for files that should be scanned in addition
+     * @return array<string> a list of glob patterns for files that should be scanned in addition
      */
     public function getScanFiles(): array
     {
@@ -103,7 +108,7 @@ class Options
     }
 
     /**
-     * @param string[] $scanFiles a list of glob patterns for files that should be scanned in addition
+     * @param array<string> $scanFiles a list of glob patterns for files that should be scanned in addition
      */
     public function setScanFiles(array $scanFiles): void
     {
@@ -111,7 +116,7 @@ class Options
     }
 
     /**
-     * @param  string $string some-string
+     * @param string $string some-string
      *
      * @return string someString
      */

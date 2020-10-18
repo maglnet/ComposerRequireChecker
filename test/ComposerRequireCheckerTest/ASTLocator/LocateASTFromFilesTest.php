@@ -11,6 +11,7 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use PhpParser\Error;
 use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
+use PhpParser\Node\Stmt;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -94,6 +95,8 @@ final class LocateASTFromFilesTest extends TestCase
 
     /**
      * @param string[] $files
+     *
+     * @return array<array<Stmt>>
      */
     private function locate(array $files): array
     {

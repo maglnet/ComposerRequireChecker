@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -90,7 +91,9 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
     public function testWillCollectDefinedConstDefinition(): void
     {
-        $this->traverseStringAST('define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");');
+        $this->traverseStringAST(
+            'define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");'
+        );
 
         self::assertSameCollectedSymbols(
             ['CONST_A', 'FooSpace\CONST_A'],
@@ -100,7 +103,18 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
     public function testWillNotCollectNamespacedDefineCalls(): void
     {
-        $this->traverseStringAST('namespace Foo { function define($bar, $baz) {return;} define("NOT_A_CONST", "NOT_SOMETHING"); }');
+        $this->traverseStringAST(<<<'php'
+            namespace Foo {
+        
+            function define($bar, $baz)
+            {
+                return;
+            }
+        
+            define("NOT_A_CONST", "NOT_SOMETHING");
+            }
+php
+        );
 
         self::assertNotContains(
             'NOT_A_CONST',
@@ -110,7 +124,24 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
     public function testTraitAdaptionDefinition(): void
     {
-        $this->traverseStringAST('namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
+        $this->traverseStringAST(<<<'php'
+            namespace Foo;
+            
+            trait BarTrait
+            {
+                protected function test()
+                {
+                }
+            }
+            
+            class UseTrait
+            {
+                use BarTrait {
+                    test as public;
+                }
+            }
+php
+        );
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait', 'Foo\UseTrait'],
@@ -118,11 +149,17 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    /**
+     * @return array<Node>
+     */
     private function traverseStringAST(string $phpSource): array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
     }
 
+    /**
+     * @return array<Node>
+     */
     private function traverseClassAST(string $className): array
     {
         return $this->traverser->traverse(
@@ -132,6 +169,10 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    /**
+     * @param array<mixed> $expected
+     * @param array<mixed> $actual
+     */
     private static function assertSameCollectedSymbols(array $expected, array $actual): void
     {
         self::assertSame(array_diff($expected, $actual), array_diff($actual, $expected));

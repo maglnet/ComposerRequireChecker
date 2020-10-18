@@ -6,6 +6,6 @@ namespace ComposerRequireChecker\Exception;
 
 use Exception;
 
-class DependenciesNotInstalledException extends Exception
+class NotReadable extends Exception
 {
 }

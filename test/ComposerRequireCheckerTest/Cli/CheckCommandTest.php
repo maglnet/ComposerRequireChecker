@@ -55,13 +55,15 @@ final class CheckCommandTest extends TestCase
         ]);
 
         $this->assertSame(1, $this->commandTester->getStatusCode());
-        $this->assertStringContainsString('The following unknown symbols were found:', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('Example\Library\Dependency', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('FILTER_VALIDATE_URL', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('filter_var', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('Foo\Bar\Baz', $this->commandTester->getDisplay());
-        $this->assertStringContainsString('libxml_clear_errors', $this->commandTester->getDisplay());
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString('The following unknown symbols were found:', $display);
+        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
+        $this->assertStringContainsString('Example\Library\Dependency', $display);
+        $this->assertStringContainsString('FILTER_VALIDATE_URL', $display);
+        $this->assertStringContainsString('filter_var', $display);
+        $this->assertStringContainsString('Foo\Bar\Baz', $display);
+        $this->assertStringContainsString('libxml_clear_errors', $display);
     }
 
     public function testSelfCheckShowsNoErrors(): void
@@ -72,11 +74,15 @@ final class CheckCommandTest extends TestCase
         ]);
 
         $this->assertSame(0, $this->commandTester->getStatusCode());
-        $this->assertStringContainsString('no unknown symbols found', $this->commandTester->getDisplay());
+        $display = $this->commandTester->getDisplay();
+        $this->assertStringContainsString('no unknown symbols found', $display);
 
         // verbose output should not be shown
-        $this->assertDoesNotMatchRegularExpression('/Collecting defined (vendor|extension) symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertDoesNotMatchRegularExpression('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $this->assertDoesNotMatchRegularExpression(
+            '/Collecting defined (vendor|extension) symbols... found \d+ symbols./',
+            $display
+        );
+        $this->assertDoesNotMatchRegularExpression('/Collecting used symbols... found \d+ symbols./', $display);
     }
 
     public function testVerboseSelfCheckShowsCounts(): void
@@ -88,9 +94,10 @@ final class CheckCommandTest extends TestCase
             'verbosity' => OutputInterface::VERBOSITY_VERBOSE,
         ]);
 
-        $this->assertMatchesRegularExpression('/Collecting defined vendor symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertMatchesRegularExpression('/Collecting defined extension symbols... found \d+ symbols./', $this->commandTester->getDisplay());
-        $this->assertMatchesRegularExpression('/Collecting used symbols... found \d+ symbols./', $this->commandTester->getDisplay());
+        $display = $this->commandTester->getDisplay();
+        $this->assertMatchesRegularExpression('/Collecting defined vendor symbols... found \d+ symbols./', $display);
+        $this->assertMatchesRegularExpression('/Collecting defined extension symbols... found \d+ symbols./', $display);
+        $this->assertMatchesRegularExpression('/Collecting used symbols... found \d+ symbols./', $display);
     }
 
     public function testWithAdditionalSourceFiles(): void
@@ -111,13 +118,18 @@ JSON
             '--config-file' => $root->getChild('config.json')->url(),
         ]);
 
-        $this->assertMatchesRegularExpression('/There were no unknown symbols found./', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression(
+            '/There were no unknown symbols found./',
+            $this->commandTester->getDisplay()
+        );
     }
 
     public function testSourceFileThatUsesDevDependency(): void
     {
         $root = vfsStream::setup();
-        vfsStream::create(['config.json' => '{"scan-files":["test/ComposerRequireCheckerTest/Cli/CheckCommandTest.php"]}']);
+        vfsStream::create(
+            ['config.json' => '{"scan-files":["test/ComposerRequireCheckerTest/Cli/CheckCommandTest.php"]}']
+        );
 
         $exitCode = $this->commandTester->execute([
             // that's our own composer.json
@@ -126,7 +138,10 @@ JSON
         ]);
 
         $this->assertNotEquals(0, $exitCode);
-        $this->assertMatchesRegularExpression('/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression(
+            '/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s',
+            $this->commandTester->getDisplay()
+        );
     }
 
     public function testNoUnknownSymbolsFound(): void
@@ -135,7 +150,10 @@ JSON
         $this->commandTester->execute(['composer-json' => $baseDir . 'composer.json']);
 
         self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
-        self::assertStringContainsString('There were no unknown symbols found.', $this->commandTester->getDisplay());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay()
+        );
     }
 
     public function testReservedKeywordInPhp8DoesNotThrowExceptionInPhp7(): void

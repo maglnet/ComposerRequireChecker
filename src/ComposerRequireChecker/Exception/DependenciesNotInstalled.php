@@ -6,6 +6,6 @@ namespace ComposerRequireChecker\Exception;
 
 use Exception;
 
-class UnknownExtensionException extends Exception
+class DependenciesNotInstalled extends Exception
 {
 }

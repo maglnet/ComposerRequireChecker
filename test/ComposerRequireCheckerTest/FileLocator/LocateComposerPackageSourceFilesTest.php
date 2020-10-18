@@ -13,7 +13,10 @@ use PHPUnit\Framework\TestCase;
 use function count;
 use function dirname;
 use function json_encode;
+use function sprintf;
 use function str_replace;
+
+use const JSON_THROW_ON_ERROR;
 
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
@@ -148,14 +151,20 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     }
 
     /**
+     * @param array<string> $excludedPattern
+     * @param array<string> $expectedFiles
+     *
      * @dataProvider provideExcludePattern
      */
     public function testFromPsr4WithExcludeFromClassmap(array $excludedPattern, array $expectedFiles): void
     {
-        $excludedPatternJson = json_encode($excludedPattern);
+        $excludedPatternJson = json_encode($excludedPattern, JSON_THROW_ON_ERROR);
 
         vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": ' . $excludedPatternJson . '}}',
+            'composer.json' => sprintf(
+                '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": %s}}',
+                $excludedPatternJson
+            ),
             'ClassA.php' => '<?php namespace MyNamespace; class ClassA {}',
             'tests' => ['ATest.php' => '<?php namespace MyNamespace; class ATest {}'],
             'foo' => [
@@ -176,7 +185,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<string, array<array<string>>>
      */
     public function provideExcludePattern(): array
     {
@@ -223,7 +232,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
      */
     private function files(string $composerJson): array
     {
-        $composerData   = (new JsonLoader($composerJson))->getData();
+        $composerData   = JsonLoader::getData($composerJson);
         $files          = [];
         $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {

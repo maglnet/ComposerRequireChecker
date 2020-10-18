@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
+use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -130,6 +131,11 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
         $this->assertCount(0, $symbols);
     }
 
+    /**
+     * @param array<Node> $roots
+     *
+     * @return array<string>
+     */
     private function locate(array $roots): array
     {
         return ($this->locator)(new ArrayObject($roots));

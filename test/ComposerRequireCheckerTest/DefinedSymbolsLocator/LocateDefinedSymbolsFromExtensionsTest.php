@@ -22,7 +22,7 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 
     public function testThrowsExceptionForUnknownExtension(): void
     {
-        $this->expectException('ComposerRequireChecker\Exception\UnknownExtensionException');
+        $this->expectException('ComposerRequireChecker\Exception\UnknownExtension');
         $this->locator->__invoke(['unknown_extension_name']);
     }
 

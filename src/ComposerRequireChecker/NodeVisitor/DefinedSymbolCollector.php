@@ -103,7 +103,11 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
 
     private function recordDefinedConstDefinition(Node $node): void
     {
-        if (! ($node instanceof Node\Expr\FuncCall) || ! ($node->name instanceof Node\Name) || $node->name->toString() !== 'define') {
+        if (
+            ! ($node instanceof Node\Expr\FuncCall)
+            || ! ($node->name instanceof Node\Name)
+            || $node->name->toString() !== 'define'
+        ) {
             return;
         }
 

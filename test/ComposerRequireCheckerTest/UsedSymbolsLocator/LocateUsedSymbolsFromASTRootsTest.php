@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\UsedSymbolsLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\ParserFactory;
@@ -67,7 +68,9 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
     }
 
     /**
-     * @return string[]
+     * @param array<Node> $asts
+     *
+     * @return array<string>
      */
     private function locate(array $asts): array
     {

@@ -21,6 +21,12 @@ use const DIRECTORY_SEPARATOR;
 
 final class LocateAllFilesByExtension
 {
+    /**
+     * @param Traversable<string> $directories
+     * @param array<string>|null  $blacklist
+     *
+     * @return Traversable<string>
+     */
     public function __invoke(Traversable $directories, string $fileExtension, ?array $blacklist): Traversable
     {
         foreach ($directories as $directory) {
@@ -35,6 +41,12 @@ final class LocateAllFilesByExtension
         }
     }
 
+    /**
+     * @param Traversable<string> $files
+     * @param array<string>|null  $blacklist
+     *
+     * @return Traversable<string>
+     */
     private function filterFilesByExtension(Traversable $files, string $fileExtension, ?array $blacklist): Traversable
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
@@ -55,6 +67,11 @@ final class LocateAllFilesByExtension
         }
     }
 
+    /**
+     * @param array<string>|null $blacklistPaths
+     *
+     * @return array<string>
+     */
     private function prepareBlacklistPatterns(?array $blacklistPaths): array
     {
         if ($blacklistPaths === null) {
@@ -64,7 +81,14 @@ final class LocateAllFilesByExtension
         $dirSep = preg_quote(DIRECTORY_SEPARATOR, '{}');
 
         foreach ($blacklistPaths as &$path) {
-            $path = preg_replace('{' . $dirSep . '+}', DIRECTORY_SEPARATOR, preg_quote(trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR), '{}'));
+            $path = preg_replace(
+                '{' . $dirSep . '+}',
+                DIRECTORY_SEPARATOR,
+                preg_quote(
+                    trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR),
+                    '{}'
+                )
+            );
             $path = str_replace('\\*\\*', '.+?', $path);
             $path = str_replace('\\*', '[^' . $dirSep . ']+?', $path);
         }

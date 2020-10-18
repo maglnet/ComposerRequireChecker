@@ -18,8 +18,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 
@@ -27,14 +25,11 @@ final class DefinedSymbolCollectorTest extends TestCase
 {
     private DefinedSymbolCollector $collector;
 
-    private Parser $parser;
-
     private NodeTraverserInterface $traverser;
 
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
-        $this->parser    = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());

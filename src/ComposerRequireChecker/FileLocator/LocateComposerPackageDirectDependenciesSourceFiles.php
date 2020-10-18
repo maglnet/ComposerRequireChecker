@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\FileLocator;
 
-use ComposerRequireChecker\Exception\DependenciesNotInstalledException;
-use ComposerRequireChecker\Exception\NotReadableException;
+use ComposerRequireChecker\Exception\DependenciesNotInstalled;
+use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use Generator;
 
@@ -41,18 +41,18 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     /**
      * Lookup each vendor package's composer.json info from installed.json
      *
-     * @return array Keys are the package name and value is the composer.json as an array
+     * @return array<string, array<mixed>> Keys are the package name and value is the composer.json as an array
      *
-     * @throws DependenciesNotInstalledException When composer install/update has not been run
+     * @throws DependenciesNotInstalled When composer install/update has not been run.
      */
     private function getInstalledPackages(string $vendorDir): array
     {
         try {
-            $installedData = (new JsonLoader($vendorDir . '/composer/installed.json'))->getData();
-        } catch (NotReadableException $e) {
+            $installedData = JsonLoader::getData($vendorDir . '/composer/installed.json');
+        } catch (NotReadable $e) {
             $message = 'The composer dependencies have not been installed, run composer install/update first';
 
-            throw new DependenciesNotInstalledException($message);
+            throw new DependenciesNotInstalled($message);
         }
 
         $installedPackages = [];
