@@ -8,5 +8,7 @@
     <file>src</file>
     <file>test</file>
     <exclude-pattern>test/fixtures/*</exclude-pattern>
-    <rule ref="Doctrine"/>
+    <rule ref="Doctrine">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
 </ruleset>
