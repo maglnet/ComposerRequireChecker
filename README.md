@@ -6,7 +6,6 @@ This will prevent you from using "soft" dependencies that are not defined within
 [![PHP ^7.4](https://img.shields.io/badge/PHP-^7.4-brightgreen.svg?style=flat-square)](https://php.net)
 [![current version](https://img.shields.io/packagist/v/maglnet/composer-require-checker.svg?style=flat-square)](https://packagist.org/packages/maglnet/composer-require-checker)
 [![Build Status](https://img.shields.io/travis/maglnet/ComposerRequireChecker.svg?style=flat-square)](https://travis-ci.org/maglnet/ComposerRequireChecker)
-[![Code Coverage](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/maglnet/ComposerRequireChecker/?branch=master)
 
 ## What's it about?
 
