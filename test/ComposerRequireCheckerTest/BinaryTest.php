@@ -30,7 +30,7 @@ final class BinaryTest extends TestCase
         $path = __DIR__ . "/../fixtures/unknownSymbols/composer.json";
         exec("{$this->bin} check {$path} 2>&1", $output, $return);
         $this->assertSame(1, $return);
-        $this->assertStringContainsString("The following 2 unknown symbols were found", implode("\n", $output));
+        $this->assertStringContainsString("The following 6 unknown symbols were found", implode("\n", $output));
     }
 
     public function testInvalidConfiguration(): void
