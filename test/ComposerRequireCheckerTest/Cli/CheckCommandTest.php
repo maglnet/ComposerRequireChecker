@@ -126,7 +126,7 @@ JSON
         ]);
 
         $this->assertNotEquals(0, $exitCode);
-        $this->assertMatchesRegularExpression('/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
+        $this->assertMatchesRegularExpression('/The following 2 unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s', $this->commandTester->getDisplay());
     }
 
     public function testNoUnknownSymbolsFound(): void
