@@ -55,7 +55,7 @@ final class CheckCommandTest extends TestCase
         ]);
 
         $this->assertSame(1, $this->commandTester->getStatusCode());
-        $this->assertStringContainsString('The following unknown symbols were found:', $this->commandTester->getDisplay());
+        $this->assertStringContainsString('The following 6 unknown symbols were found:', $this->commandTester->getDisplay());
         $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $this->commandTester->getDisplay());
         $this->assertStringContainsString('Example\Library\Dependency', $this->commandTester->getDisplay());
         $this->assertStringContainsString('FILTER_VALIDATE_URL', $this->commandTester->getDisplay());
