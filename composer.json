@@ -39,7 +39,7 @@
         "doctrine/coding-standard": "^8.1.0",
         "mikey179/vfsstream": "^1.6.8",
         "phpstan/phpstan": "^0.12.54",
-        "phpunit/phpunit": "^9.4.0",
+        "phpunit/phpunit": "^9.4.2",
         "vimeo/psalm": "^3.12.2"
     },
     "config": {
