@@ -1,10 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\Cli;
+
+use InvalidArgumentException;
+
+use function method_exists;
+use function str_replace;
+use function ucfirst;
+use function ucwords;
 
 class Options
 {
-    private $symbolWhitelist = [
+    /** @var array<string>  */
+    private array $symbolWhitelist = [
         'null',
         'true',
         'false', // consts
@@ -19,41 +29,46 @@ class Options
         'iterable',
         'callable',
         'void',
-        'object' // types
+        'object', // types
     ];
 
-    private $phpCoreExtensions = [
-        "Core",
-        "date",
-        "pcre",
-        "Phar",
-        "Reflection",
-        "SPL",
-        "standard",
+    /** @var array<string>  */
+    private array $phpCoreExtensions = [
+        'Core',
+        'date',
+        'pcre',
+        'Phar',
+        'Reflection',
+        'SPL',
+        'standard',
     ];
 
     /**
-     * @var string[] a list of glob patterns for files that should be scanned in addition
      * @see https://github.com/webmozart/glob
+     *
+     * @var array<string> a list of glob patterns for files that should be scanned in addition
      */
-    private $scanFiles = [];
+    private array $scanFiles = [];
 
-
+    /**
+     * @param array<string, mixed> $options
+     */
     public function __construct(array $options = [])
     {
         foreach ($options as $key => $option) {
             $methodName = 'set' . $this->getCamelCase($key);
-            if (!method_exists($this, $methodName)) {
-                throw new \InvalidArgumentException(
+            if (! method_exists($this, $methodName)) {
+                throw new InvalidArgumentException(
                     $key . ' is not a known option - there is no method ' . $methodName
                 );
             }
+
             $this->$methodName($option);
         }
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getSymbolWhitelist(): array
     {
@@ -61,7 +76,7 @@ class Options
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getPhpCoreExtensions(): array
     {
@@ -69,23 +84,23 @@ class Options
     }
 
     /**
-     * @param array $symbolWhitelist
+     * @param array<string> $symbolWhitelist
      */
-    public function setSymbolWhitelist(array $symbolWhitelist)
+    public function setSymbolWhitelist(array $symbolWhitelist): void
     {
         $this->symbolWhitelist = $symbolWhitelist;
     }
 
     /**
-     * @param array $phpCoreExtensions
+     * @param array<string> $phpCoreExtensions
      */
-    public function setPhpCoreExtensions(array $phpCoreExtensions)
+    public function setPhpCoreExtensions(array $phpCoreExtensions): void
     {
         $this->phpCoreExtensions = $phpCoreExtensions;
     }
 
     /**
-     * @return string[] a list of glob patterns for files that should be scanned in addition
+     * @return array<string> a list of glob patterns for files that should be scanned in addition
      */
     public function getScanFiles(): array
     {
@@ -93,7 +108,7 @@ class Options
     }
 
     /**
-     * @param string[] $scanFiles a list of glob patterns for files that should be scanned in addition
+     * @param array<string> $scanFiles a list of glob patterns for files that should be scanned in addition
      */
     public function setScanFiles(array $scanFiles): void
     {
@@ -102,6 +117,7 @@ class Options
 
     /**
      * @param string $string some-string
+     *
      * @return string someString
      */
     private function getCamelCase(string $string): string

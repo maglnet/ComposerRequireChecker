@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\FileLocator;
 
 use ArrayObject;
@@ -8,22 +10,24 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
+use function count;
+use function sprintf;
+use function str_replace;
+
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateAllFilesByExtension
  */
 final class LocateAllFilesByExtensionTest extends TestCase
 {
-    /** @var LocateAllFilesByExtension */
-    private $locator;
-    /** @var vfsStreamDirectory */
-    private $root;
+    private LocateAllFilesByExtension $locator;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateAllFilesByExtension();
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
     }
 
     public function testLocateFromNoDirectories(): void
@@ -35,10 +39,10 @@ final class LocateAllFilesByExtensionTest extends TestCase
 
     public function testLocateFromASingleDirectory(): void
     {
-        $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
+        $dir   = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         $files = [];
         for ($i = 0; $i < 3; $i++) {
-            $files[] = vfsStream::newFile("MyClass$i.php")->at($dir);
+            $files[] = vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', null);
@@ -53,7 +57,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     {
         $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile("MyClass$i.php")->at($dir);
+            vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', ['MyClass6']);
@@ -66,7 +70,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     {
         $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile("Directory$i/MyClass.php")->at($dir);
+            vfsStream::newFile(sprintf('Directory%d/MyClass.php', $i))->at($dir);
         }
 
         $foundFiles = $this->locate([$dir->url()], '.php', ['Directory5/']);
@@ -76,8 +80,8 @@ final class LocateAllFilesByExtensionTest extends TestCase
     }
 
     /**
-     * @param array $blacklist
-     * @param array $expectedFiles
+     * @param array<string> $blacklist
+     * @param array<string> $expectedFiles
      *
      * @dataProvider provideBlacklists
      */
@@ -88,14 +92,10 @@ final class LocateAllFilesByExtensionTest extends TestCase
                 'MyClass.php' => '<?php class MyClass {}',
                 'Foo' => [
                     'FooClass.php' => '<?php class FooCalls {}',
-                    'Bar' => [
-                        'BarClass.php' => '<?php class BarClass {}',
-                    ]
+                    'Bar' => ['BarClass.php' => '<?php class BarClass {}'],
                 ],
-                'Bar' => [
-                    'AnotherBarClass.php' => '<?php class AnotherBarClass {}',
-                ]
-            ]
+                'Bar' => ['AnotherBarClass.php' => '<?php class AnotherBarClass {}'],
+            ],
         ]);
 
         $foundFiles = $this->locate([$this->root->url()], '.php', $blacklist);
@@ -104,10 +104,15 @@ final class LocateAllFilesByExtensionTest extends TestCase
         foreach ($expectedFiles as $file) {
             $this->assertContains($this->root->getChild($file)->url(), $foundFiles);
         }
+
         $this->assertContains($this->root->getChild('MyNamespaceA/Foo/FooClass.php')->url(), $foundFiles);
     }
 
-    public function provideBlacklists(): array {
+    /**
+     * @return array<string, array<array<string>>>
+     */
+    public function provideBlacklists(): array
+    {
         return [
             'No blacklist' => [
                 [],
@@ -116,7 +121,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
                     'MyNamespaceA/Foo/FooClass.php',
                     'MyNamespaceA/Foo/Bar/BarClass.php',
                     'MyNamespaceA/Bar/AnotherBarClass.php',
-                ]
+                ],
             ],
             '* wildcard' => [
                 ['Another*.php'],
@@ -124,29 +129,27 @@ final class LocateAllFilesByExtensionTest extends TestCase
                     'MyNamespaceA/MyClass.php',
                     'MyNamespaceA/Foo/FooClass.php',
                     'MyNamespaceA/Foo/Bar/BarClass.php',
-                ]
+                ],
             ],
             '** wildcard' => [
                 ['**/Bar'],
                 [
                     'MyNamespaceA/MyClass.php',
                     'MyNamespaceA/Foo/FooClass.php',
-                ]
+                ],
             ],
             'Combined patterns' => [
                 ['My*.php', 'Bar/'],
-                [
-                    'MyNamespaceA/Foo/FooClass.php',
-                ]
+                ['MyNamespaceA/Foo/FooClass.php'],
             ],
         ];
     }
 
     /**
-     * @param string[] $directories
-     * @param string $fileExtension
-     * @param array|null $blacklist
-     * @return array|\string[]
+     * @param array<string>      $directories
+     * @param array<string>|null $blacklist
+     *
+     * @return array<string>
      */
     private function locate(array $directories, string $fileExtension, ?array $blacklist): array
     {
@@ -154,6 +157,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
         foreach (($this->locator)(new ArrayObject($directories), $fileExtension, $blacklist) as $file) {
             $files[] = str_replace('\\', '/', $file);
         }
+
         return $files;
     }
 }

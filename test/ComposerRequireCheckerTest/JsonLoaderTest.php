@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest;
 
-use ComposerRequireChecker\Exception\InvalidJsonException;
-use ComposerRequireChecker\Exception\NotReadableException;
+use ComposerRequireChecker\Exception\InvalidJson;
+use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
@@ -15,21 +17,20 @@ final class JsonLoaderTest extends TestCase
     public function testHasErrorWithWrongPath(): void
     {
         $path = __DIR__ . '/wrong/path/non-existing-file.json';
-        $this->expectException(NotReadableException::class);
-        new JsonLoader($path);
+        $this->expectException(NotReadable::class);
+        JsonLoader::getData($path);
     }
 
     public function testHasErrorWithInvalidFile(): void
     {
         $path = __DIR__ . '/../fixtures/invalidJson';
-        $this->expectException(InvalidJsonException::class);
-        new JsonLoader($path);
+        $this->expectException(InvalidJson::class);
+        JsonLoader::getData($path);
     }
 
     public function testHasDataWithValidFile(): void
     {
         $path = __DIR__ . '/../fixtures/validJson.json';
-        $loader = new JsonLoader($path);
-        $this->assertEquals($loader->getData(), ['foo' => 'bar']);
+        $this->assertEquals(JsonLoader::getData($path), ['foo' => 'bar']);
     }
 }

@@ -1,40 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+
+use function array_diff;
+use function file_get_contents;
 
 /**
  * @coversNothing
- *
  * @group functional
  */
 final class UsedSymbolCollectorFunctionalTest extends TestCase
 {
-    /**
-     * @var UsedSymbolCollector
-     */
-    private $collector;
+    private UsedSymbolCollector $collector;
 
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
+    private NodeTraverserInterface $traverser;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->collector = new UsedSymbolCollector();
@@ -99,9 +93,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php function foo($bar) : My\ReturnType {}');
 
         self::assertSameCollectedSymbols(
-            [
-                'My\ReturnType',
-            ],
+            ['My\ReturnType'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -111,9 +103,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php class Foo { function foo($bar) : My\ReturnType {}}');
 
         self::assertSameCollectedSymbols(
-            [
-                'My\ReturnType',
-            ],
+            ['My\ReturnType'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -123,9 +113,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseStringAST('<?php function foo($bar) : int {}');
 
         self::assertSameCollectedSymbols(
-            [
-                'int',
-            ],
+            ['int'],
             $this->collector->getCollectedSymbols()
         );
     }
@@ -142,7 +130,26 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
     public function testUseTraitAdaptionAlias(): void
     {
-        $this->traverseStringAST('<?php namespace Foo; trait BarTrait { protected function test(){}} class UseTrait { use BarTrait {test as public;} }');
+        $this->traverseStringAST(<<<'EOF'
+            <?php
+            
+            namespace Foo;
+            
+            trait BarTrait
+            {
+                protected function test()
+                {
+                }
+            }
+            
+            class UseTrait
+            {
+                use BarTrait {
+                    test as public;
+                }
+            }
+            EOF
+        );
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait'],
@@ -150,7 +157,10 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    private function traverseStringAST(string $stringAST)
+    /**
+     * @return array<Node>
+     */
+    private function traverseStringAST(string $stringAST): array
     {
         return $this->traverser->traverse(
             $this->parser->parse(
@@ -159,13 +169,20 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
+    /**
+     * @return array<Node>
+     */
     private function traverseClassAST(string $className): array
     {
         return $this->traverseStringAST(
-            file_get_contents((new \ReflectionClass($className))->getFileName())
+            file_get_contents((new ReflectionClass($className))->getFileName())
         );
     }
 
+    /**
+     * @param array<mixed> $expected
+     * @param array<mixed> $actual
+     */
     private static function assertSameCollectedSymbols(array $expected, array $actual): void
     {
         self::assertSame(array_diff($expected, $actual), array_diff($actual, $expected));

@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use PHPUnit\Framework\TestCase;
 
+use function array_merge;
+use function count;
+use function in_array;
+
 final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 {
+    private LocateDefinedSymbolsFromExtensions $locator;
 
-    /**
-     * @var LocateDefinedSymbolsFromExtensions
-     */
-    private $locator;
-
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->locator = new LocateDefinedSymbolsFromExtensions();
@@ -23,7 +22,7 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 
     public function testThrowsExceptionForUnknownExtension(): void
     {
-        $this->expectException('ComposerRequireChecker\Exception\UnknownExtensionException');
+        $this->expectException('ComposerRequireChecker\Exception\UnknownExtension');
         $this->locator->__invoke(['unknown_extension_name']);
     }
 
@@ -54,14 +53,14 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 
     public function testPackageNameInterpolation(): void
     {
-        $symbols = $this->locator->__invoke(['zend-opcache']);
+        $symbols  = $this->locator->__invoke(['zend-opcache']);
         $symbols2 = $this->locator->__invoke(['Zend Opcache']);
         $this->assertEquals($symbols, $symbols2);
     }
 
     public function testCanHandleMultipleExtensions(): void
     {
-        $coreSymbols = $this->locator->__invoke(['Core']);
+        $coreSymbols     = $this->locator->__invoke(['Core']);
         $standardSymbols = $this->locator->__invoke(['standard']);
 
         $this->assertGreaterThan(1, count($coreSymbols));

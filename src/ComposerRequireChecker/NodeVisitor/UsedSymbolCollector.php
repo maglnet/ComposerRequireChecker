@@ -1,16 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function is_string;
+
 final class UsedSymbolCollector extends NodeVisitorAbstract
 {
-    /**
-     * @var mixed[]
-     */
-    private $collectedSymbols = [];
+    /** @var mixed[] */
+    private array $collectedSymbols = [];
 
     public function __construct()
     {
@@ -52,130 +57,156 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         return parent::enterNode($node);
     }
 
-    private function recordExtendsUsage(Node $node)
+    private function recordExtendsUsage(Node $node): void
     {
         if ($node instanceof Node\Stmt\Class_) {
             array_map([$this, 'recordUsageOf'], array_filter([$node->extends]));
         }
 
-        if ($node instanceof Node\Stmt\Interface_) {
-            array_map([$this, 'recordUsageOf'], array_filter($node->extends));
+        if (! ($node instanceof Node\Stmt\Interface_)) {
+            return;
         }
+
+        array_map([$this, 'recordUsageOf'], array_filter($node->extends));
     }
 
-    private function recordImplementsUsage(Node $node)
+    private function recordImplementsUsage(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Class_) {
-            array_map([$this, 'recordUsageOf'], $node->implements);
+        if (! ($node instanceof Node\Stmt\Class_)) {
+            return;
         }
+
+        array_map([$this, 'recordUsageOf'], $node->implements);
     }
 
-    private function recordClassExpressionUsage(Node $node)
+    private function recordClassExpressionUsage(Node $node): void
     {
-        if (($node instanceof Node\Expr\StaticCall
-                || $node instanceof Node\Expr\StaticPropertyFetch
-                || $node instanceof Node\Expr\ClassConstFetch
-                || $node instanceof Node\Expr\New_
-                || $node instanceof Node\Expr\Instanceof_
+        if (
+            ! (
+            $node instanceof Node\Expr\StaticCall
+            || $node instanceof Node\Expr\StaticPropertyFetch
+            || $node instanceof Node\Expr\ClassConstFetch
+            || $node instanceof Node\Expr\New_
+            || $node instanceof Node\Expr\Instanceof_
             )
-            && $node->class instanceof Node\Name
         ) {
-            $this->recordUsageOf($node->class);
+            return;
+        }
+
+        if (! $node->class instanceof Node\Name) {
+            return;
+        }
+
+        $this->recordUsageOf($node->class);
+    }
+
+    private function recordCatchUsage(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Catch_)) {
+            return;
+        }
+
+        foreach ($node->types as $type) {
+            $this->recordUsageOf($type);
         }
     }
 
-    private function recordCatchUsage(Node $node)
+    private function recordFunctionCallUsage(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Catch_) {
-            foreach ($node->types as $type) {
-                $this->recordUsageOf($type);
-            }
-        }
-    }
-
-    private function recordFunctionCallUsage(Node $node)
-    {
-        if ($node instanceof Node\Expr\FuncCall
-            && $node->name instanceof Node\Name
+        if (
+            ! ($node instanceof Node\Expr\FuncCall)
+            || ! ($node->name instanceof Node\Name)
         ) {
-            $this->recordUsageOf($node->name);
+            return;
         }
+
+        $this->recordUsageOf($node->name);
     }
 
-    private function recordFunctionParameterTypesUsage(Node $node)
+    private function recordFunctionParameterTypesUsage(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Function_
-            || $node instanceof Node\Stmt\ClassMethod
+        if (
+            ! ($node instanceof Node\Stmt\Function_)
+            && ! ($node instanceof Node\Stmt\ClassMethod)
         ) {
-            foreach ($node->getParams() as $param) {
-                if ($param->type instanceof Node\Name) {
-                    $this->recordUsageOf($param->type);
-                }
-                if (is_string($param->type) || $param->type instanceof Node\Identifier) {
-                    $this->recordUsageOfByString($param->type);
-                }
+            return;
+        }
+
+        foreach ($node->getParams() as $param) {
+            if ($param->type instanceof Node\Name) {
+                $this->recordUsageOf($param->type);
             }
+
+            if ($param->type instanceof Node\Identifier) {
+                $this->recordUsageOfByString($param->type->toString());
+            }
+
+            if (! is_string($param->type)) {
+                continue;
+            }
+
+            $this->recordUsageOfByString($param->type);
         }
     }
 
-    private function recordFunctionReturnTypeUsage(Node $node)
+    private function recordFunctionReturnTypeUsage(Node $node): void
     {
-        if ($node instanceof Node\Stmt\Function_
-            || $node instanceof Node\Stmt\ClassMethod
+        if (
+            ! ($node instanceof Node\Stmt\Function_)
+            && ! ($node instanceof Node\Stmt\ClassMethod)
         ) {
-            $returnType = $node->getReturnType();
-
-            if ($returnType instanceof Node\Name) {
-                $this->recordUsageOf($returnType);
-            }
-            if ($returnType instanceof Node\Identifier) {
-                $this->recordUsageOfByString($returnType->toString());
-            }
+            return;
         }
+
+        $returnType = $node->getReturnType();
+
+        if ($returnType instanceof Node\Name) {
+            $this->recordUsageOf($returnType);
+        }
+
+        if (! ($returnType instanceof Node\Identifier)) {
+            return;
+        }
+
+        $this->recordUsageOfByString($returnType->toString());
     }
 
-    private function recordConstantFetchUsage(Node $node)
+    private function recordConstantFetchUsage(Node $node): void
     {
-        if ($node instanceof Node\Expr\ConstFetch) {
-            $this->recordUsageOf($node->name);
+        if (! ($node instanceof Node\Expr\ConstFetch)) {
+            return;
         }
+
+        $this->recordUsageOf($node->name);
     }
 
-    private function recordTraitUsage(Node $node)
+    private function recordTraitUsage(Node $node): void
     {
-        if (!$node instanceof Node\Stmt\TraitUse) {
+        if (! $node instanceof Node\Stmt\TraitUse) {
             return;
         }
 
         array_map([$this, 'recordUsageOf'], $node->traits);
 
         foreach ($node->adaptations as $adaptation) {
-            if (null !== $adaptation->trait) {
+            if ($adaptation->trait !== null) {
                 $this->recordUsageOf($adaptation->trait);
             }
 
-            if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
-                array_map([$this, 'recordUsageOf'], $adaptation->insteadof);
+            if (! ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence)) {
+                continue;
             }
+
+            array_map([$this, 'recordUsageOf'], $adaptation->insteadof);
         }
     }
 
-    /**
-     * @param Node\Name $symbol
-     *
-     * @return void
-     */
-    private function recordUsageOf(Node\Name $symbol)
+    private function recordUsageOf(Node\Name $symbol): void
     {
-        $this->collectedSymbols[(string)$symbol] = $symbol;
+        $this->collectedSymbols[(string) $symbol] = $symbol;
     }
 
-    /**
-     * @param string $symbol
-     *
-     * @return void
-     */
-    private function recordUsageOfByString(string $symbol)
+    private function recordUsageOfByString(string $symbol): void
     {
         $this->collectedSymbols[$symbol] = $symbol;
     }

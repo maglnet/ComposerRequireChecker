@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\ASTLocator;
 
 use ArrayObject;
@@ -9,26 +11,27 @@ use org\bovigo\vfs\vfsStreamDirectory;
 use PhpParser\Error;
 use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
+use PhpParser\Node\Stmt;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+
+use function iterator_to_array;
 
 /**
  * @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles
  */
 final class LocateASTFromFilesTest extends TestCase
 {
-    /** @var LocateASTFromFiles */
-    private $locator;
-    /** @var vfsStreamDirectory */
-    private $root;
+    private LocateASTFromFiles $locator;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), null);
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
     }
 
     public function testLocate(): void
@@ -56,8 +59,8 @@ final class LocateASTFromFilesTest extends TestCase
     public function testDoNotFailOnParseErrorWithErrorHandler(): void
     {
         $collectingErrorHandler = new Collecting();
-        $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), $collectingErrorHandler);
-        $files = [
+        $this->locator          = new LocateASTFromFiles(new Php7(new Lexer()), $collectingErrorHandler);
+        $files                  = [
             $this->createFile('MyBadCode', '<?php this causes a parse error'),
         ];
 
@@ -75,7 +78,7 @@ final class LocateASTFromFilesTest extends TestCase
         $parserMock->method('parse')->willReturn(null);
 
         $this->locator = new LocateASTFromFiles($parserMock, null);
-        $files = [
+        $files         = [
             $this->createFile(
                 'MyBadCode',
                 'this content is not relevant because the parser is mocked and always returns null'
@@ -85,13 +88,15 @@ final class LocateASTFromFilesTest extends TestCase
         $this->locate($files);
     }
 
-    private function createFile(string $path, string $content = null): string
+    private function createFile(string $path, ?string $content = null): string
     {
         return vfsStream::newFile($path)->at($this->root)->setContent($content)->url();
     }
 
     /**
      * @param string[] $files
+     *
+     * @return array<array<Stmt>>
      */
     private function locate(array $files): array
     {

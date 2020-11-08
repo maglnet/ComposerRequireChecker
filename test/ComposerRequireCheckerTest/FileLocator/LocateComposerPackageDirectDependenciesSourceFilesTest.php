@@ -1,29 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\FileLocator;
 
-use ComposerRequireChecker\Exception\DependenciesNotInstalledException;
+use ComposerRequireChecker\Exception\DependenciesNotInstalled;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+
+use function iterator_to_array;
+use function reset;
+use function str_replace;
 
 /**
  * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles
  */
 final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
-    /** @var LocateComposerPackageDirectDependenciesSourceFiles */
-    private $locator;
-    /** @var vfsStreamDirectory */
-    private $root;
+    private LocateComposerPackageDirectDependenciesSourceFiles $locator;
+    private vfsStreamDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateComposerPackageDirectDependenciesSourceFiles();
-        $this->root = vfsStream::setup();
+        $this->root    = vfsStream::setup();
     }
 
     public function testNoDependencies(): void
@@ -31,9 +35,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{}',
             'vendor' => [
-                'composer' => [
-                    'installed.json' => '{"packages":[]}',
-                ],
+                'composer' => ['installed.json' => '{"packages":[]}'],
             ],
         ]);
 
@@ -51,7 +53,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
             ],
         ]);
 
-        $this->expectException(DependenciesNotInstalledException::class);
+        $this->expectException(DependenciesNotInstalled::class);
         $this->locate($this->root->getChild('composer.json')->url());
     }
 
@@ -60,14 +62,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
             'vendor' => [
-                'composer' => [
-                    'installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}',
-                ],
+                'composer' => ['installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
                 'foo' => [
                     'bar' => [
-                        'src' => [
-                            'MyClass.php' => '',
-                        ],
+                        'src' => ['MyClass.php' => ''],
                     ],
                 ],
             ],
@@ -78,7 +76,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertCount(1, $files);
 
         $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile = str_replace('\\', '/', reset($files));
+        $actualFile   = str_replace('\\', '/', reset($files));
         $this->assertSame($expectedFile, $actualFile);
     }
 
@@ -87,14 +85,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{"require": {"foo/bar": "^1.0"}}',
             'vendor' => [
-                'composer' => [
-                    'installed.json' => '{"packages":[]}',
-                ],
+                'composer' => ['installed.json' => '{"packages":[]}'],
                 'foo' => [
                     'bar' => [
-                        'src' => [
-                            'MyClass.php' => '',
-                        ],
+                        'src' => ['MyClass.php' => ''],
                     ],
                 ],
             ],
@@ -110,14 +104,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"},"config":{"vendor-dir":"alternate-vendor"}}',
             'alternate-vendor' => [
-                'composer' => [
-                    'installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}',
-                ],
+                'composer' => ['installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
                 'foo' => [
                     'bar' => [
-                        'src' => [
-                            'MyClass.php' => '',
-                        ],
+                        'src' => ['MyClass.php' => ''],
                     ],
                 ],
             ],
@@ -128,7 +118,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertCount(1, $files);
 
         $expectedFile = $this->root->getChild('alternate-vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile = str_replace('\\', '/', reset($files));
+        $actualFile   = str_replace('\\', '/', reset($files));
         $this->assertSame($expectedFile, $actualFile);
     }
 
@@ -137,14 +127,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
             'vendor' => [
-                'composer' => [
-                    'installed.json' => '{"packages": [{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}',
-                ],
+                'composer' => ['installed.json' => '{"packages": [{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
                 'foo' => [
                     'bar' => [
-                        'src' => [
-                            'MyClass.php' => '',
-                        ],
+                        'src' => ['MyClass.php' => ''],
                     ],
                 ],
             ],
@@ -155,13 +141,12 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertCount(1, $files);
 
         $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile = str_replace('\\', '/', reset($files));
+        $actualFile   = str_replace('\\', '/', reset($files));
         $this->assertSame($expectedFile, $actualFile);
 
-        # Ensure we didn't leave our temporary composer.json lying around
+        // Ensure we didn't leave our temporary composer.json lying around
         $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
     }
-
 
     /**
      * https://github.com/composer/composer/pull/7999
@@ -171,14 +156,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         vfsStream::create([
             'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
             'vendor' => [
-                'composer' => [
-                    'installed.json' => '[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]',
-                ],
+                'composer' => ['installed.json' => '[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]'],
                 'foo' => [
                     'bar' => [
-                        'src' => [
-                            'MyClass.php' => '',
-                        ],
+                        'src' => ['MyClass.php' => ''],
                     ],
                 ],
             ],
@@ -189,10 +170,10 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertCount(1, $files);
 
         $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile = str_replace('\\', '/', reset($files));
+        $actualFile   = str_replace('\\', '/', reset($files));
         $this->assertSame($expectedFile, $actualFile);
 
-        # Ensure we didn't leave our temporary composer.json lying around
+        // Ensure we didn't leave our temporary composer.json lying around
         $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
     }
 

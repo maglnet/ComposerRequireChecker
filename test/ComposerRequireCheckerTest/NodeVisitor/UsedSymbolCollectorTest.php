@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
@@ -28,8 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class UsedSymbolCollectorTest extends TestCase
 {
-    /** @var UsedSymbolCollector */
-    private $visitor;
+    private UsedSymbolCollector $visitor;
 
     protected function setUp(): void
     {
@@ -40,7 +41,7 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testExtendingClass(): void
     {
-        $node = new Class_('Foo');
+        $node          = new Class_('Foo');
         $node->extends = new Name('Bar');
 
         $this->visitor->enterNode($node);
@@ -52,7 +53,7 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testExtendingInterface(): void
     {
-        $node = new Interface_('Foo');
+        $node          = new Interface_('Foo');
         $node->extends = [new Name('Bar'), new Name('Baz')];
 
         $this->visitor->enterNode($node);
@@ -65,7 +66,7 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testImplements(): void
     {
-        $node = new Class_('Foo');
+        $node             = new Class_('Foo');
         $node->implements = [new Name('Bar'), new Name('Baz')];
 
         $this->visitor->enterNode($node);
@@ -78,8 +79,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testStaticCall(): void
     {
-        $class = new Name('Foo');
-        $node = new StaticCall($class, 'foo');
+        $class       = new Name('Foo');
+        $node        = new StaticCall($class, 'foo');
         $node->class = $class;
 
         $this->visitor->enterNode($node);
@@ -91,8 +92,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testStaticPropertyFetch(): void
     {
-        $class = new Name('Foo');
-        $node = new StaticPropertyFetch($class, 'foo');
+        $class       = new Name('Foo');
+        $node        = new StaticPropertyFetch($class, 'foo');
         $node->class = $class;
 
         $this->visitor->enterNode($node);
@@ -104,8 +105,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testClassConstantFetch(): void
     {
-        $class = new Name('Foo');
-        $node = new ClassConstFetch($class, 'FOO');
+        $class       = new Name('Foo');
+        $node        = new ClassConstFetch($class, 'FOO');
         $node->class = $class;
 
         $this->visitor->enterNode($node);
@@ -117,8 +118,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testNew(): void
     {
-        $class = new Name('Foo');
-        $node = new New_($class);
+        $class       = new Name('Foo');
+        $node        = new New_($class);
         $node->class = $class;
 
         $this->visitor->enterNode($node);
@@ -130,8 +131,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testInstanceof(): void
     {
-        $class = new Name('Foo');
-        $node = new Instanceof_(new Variable('foo'), $class);
+        $class       = new Name('Foo');
+        $node        = new Instanceof_(new Variable('foo'), $class);
         $node->class = $class;
 
         $this->visitor->enterNode($node);
@@ -144,7 +145,7 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testCatch(): void
     {
         $class = new Name('Foo');
-        $node = new Catch_([$class], new Variable('e'));
+        $node  = new Catch_([$class], new Variable('e'));
 
         $this->visitor->enterNode($node);
 
@@ -156,8 +157,8 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testFunctionCallUsage(): void
     {
         $functionName = new Name('foo');
-        $node = new FuncCall($functionName);
-        $node->name = $functionName;
+        $node         = new FuncCall($functionName);
+        $node->name   = $functionName;
 
         $this->visitor->enterNode($node);
 
@@ -169,10 +170,10 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testFunctionParameterType(): void
     {
         $functionName = new Name('foo');
-        $node = new Function_($functionName);
-        $node->name = $functionName;
-        $param = new Param(new Variable('bar'));
-        $param->type = new Name('Baz');
+        $node         = new Function_($functionName);
+        $node->name   = $functionName;
+        $param        = new Param(new Variable('bar'));
+        $param->type  = new Name('Baz');
         $node->params = [$param];
 
         $this->visitor->enterNode($node);
@@ -185,10 +186,10 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testFunctionParameterTypeAsString(): void
     {
         $functionName = new Name('foo');
-        $node = new Function_($functionName);
-        $node->name = $functionName;
-        $param = new Param(new Variable('bar'));
-        $param->type = 'Baz';
+        $node         = new Function_($functionName);
+        $node->name   = $functionName;
+        $param        = new Param(new Variable('bar'));
+        $param->type  = 'Baz';
         $node->params = [$param];
 
         $this->visitor->enterNode($node);
@@ -201,10 +202,10 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testMethodParameterType(): void
     {
         $functionName = new Name('foo');
-        $node = new ClassMethod($functionName);
-        $node->name = $functionName;
-        $param = new Param(new Variable('bar'));
-        $param->type = new Name('Baz');
+        $node         = new ClassMethod($functionName);
+        $node->name   = $functionName;
+        $param        = new Param(new Variable('bar'));
+        $param->type  = new Name('Baz');
         $node->params = [$param];
 
         $this->visitor->enterNode($node);
@@ -217,10 +218,10 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testMethodParameterTypeAsString(): void
     {
         $functionName = new Name('foo');
-        $node = new ClassMethod($functionName);
-        $node->name = $functionName;
-        $param = new Param(new Variable('bar'));
-        $param->type = 'Baz';
+        $node         = new ClassMethod($functionName);
+        $node->name   = $functionName;
+        $param        = new Param(new Variable('bar'));
+        $param->type  = 'Baz';
         $node->params = [$param];
 
         $this->visitor->enterNode($node);
@@ -232,8 +233,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testFunctionReturnType(): void
     {
-        $functionName = new Name('foo');
-        $node = new Function_($functionName);
+        $functionName     = new Name('foo');
+        $node             = new Function_($functionName);
         $node->returnType = new Name('Bar');
 
         $this->visitor->enterNode($node);
@@ -245,8 +246,8 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testMethodReturnType(): void
     {
-        $functionName = new Name('foo');
-        $node = new ClassMethod($functionName);
+        $functionName     = new Name('foo');
+        $node             = new ClassMethod($functionName);
         $node->returnType = new Name('Bar');
 
         $this->visitor->enterNode($node);
@@ -259,8 +260,8 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testConstantFetch(): void
     {
         $exceptionClass = new Name('FooException');
-        $node = new ConstFetch($exceptionClass);
-        $node->name = $exceptionClass;
+        $node           = new ConstFetch($exceptionClass);
+        $node->name     = $exceptionClass;
 
         $this->visitor->enterNode($node);
 
@@ -283,7 +284,7 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testTraitUseVisibilityAdaptation(): void
     {
         $traitUseAdaption = new Alias(null, 'testMethod', Class_::MODIFIER_PUBLIC, null);
-        $traitUse = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
+        $traitUse         = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
 
         $this->visitor->enterNode($traitUse);
 
@@ -295,7 +296,7 @@ final class UsedSymbolCollectorTest extends TestCase
     public function testTraitUsePrecedenceAdaptation(): void
     {
         $traitUseAdaption = new Precedence(new Name('Bar'), 'testMethod', [new Name('Baz')]);
-        $traitUse = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
+        $traitUse         = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
 
         $this->visitor->enterNode($traitUse);
 
@@ -308,7 +309,7 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testBeforeTraverseResetsRecordedSymbols(): void
     {
-        $node = new Class_('Foo');
+        $node          = new Class_('Foo');
         $node->extends = new Name('Bar');
         $this->visitor->enterNode($node);
 

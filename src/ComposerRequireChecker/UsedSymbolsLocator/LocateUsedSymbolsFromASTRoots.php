@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\UsedSymbolsLocator;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
@@ -7,6 +9,11 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use Traversable;
+
+use function array_merge;
+use function array_unique;
+use function array_values;
+use function natcasesort;
 
 final class LocateUsedSymbolsFromASTRoots
 {

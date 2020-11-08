@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="maglnet/ComposerRequireChecker coding standard">
+    <arg value="p"/>
+    <arg value="s"/>
+    <arg name="colors"/>
+    <arg name="cache" value=".phpcs-cache"/>
+
+    <file>src</file>
+    <file>test</file>
+    <exclude-pattern>test/fixtures/*</exclude-pattern>
+    <rule ref="Doctrine">
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
+</ruleset>

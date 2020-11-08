@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireChecker\ASTLocator;
 
 use PhpParser\ErrorHandler;
@@ -7,23 +9,18 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use RuntimeException;
 use Traversable;
+
+use function file_get_contents;
 use function sprintf;
 
 final class LocateASTFromFiles
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
-
-    /**
-     * @var ErrorHandler
-     */
-    private $errorHandler;
+    private Parser $parser;
+    private ?ErrorHandler $errorHandler;
 
     public function __construct(Parser $parser, ?ErrorHandler $errorHandler)
     {
-        $this->parser = $parser;
+        $this->parser       = $parser;
         $this->errorHandler = $errorHandler;
     }
 
@@ -38,7 +35,7 @@ final class LocateASTFromFiles
             $stmts = $this->parser->parse(file_get_contents($file), $this->errorHandler);
 
             if ($stmts === null) {
-                throw new RuntimeException(sprintf("Parsing the file [%s] resulted in an error.", $file));
+                throw new RuntimeException(sprintf('Parsing the file [%s] resulted in an error.', $file));
             }
 
             yield $stmts;

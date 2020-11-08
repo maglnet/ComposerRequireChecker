@@ -7,3 +7,4 @@
 /phpdox.xml
 /phpmd.xml
 /phpunit.xml
+/.phpcs-cache

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Application;
@@ -8,11 +10,7 @@ use Symfony\Component\Console\Command\Command;
 
 final class ApplicationTest extends TestCase
 {
-
-    /**
-     * @var Application
-     */
-    private $application;
+    private Application $application;
 
     protected function setUp(): void
     {
