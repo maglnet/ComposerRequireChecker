@@ -9,7 +9,6 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use Traversable;
 
-use function assert;
 use function implode;
 use function preg_match;
 use function preg_quote;
@@ -54,7 +53,6 @@ final class LocateAllFilesByExtension
         $blacklistMatcher = '{(' . implode('|', $this->prepareBlacklistPatterns($blacklist)) . ')}';
 
         foreach ($files as $file) {
-            assert($file instanceof SplFileInfo);
             if ($blacklist && preg_match($blacklistMatcher, $file->getPathname())) {
                 continue;
             }

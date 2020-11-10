@@ -108,12 +108,12 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             return;
         }
 
-        if (
-            $node->name->hasAttribute('namespacedName')
-            && $node->name->getAttribute('namespacedName') instanceof Node\Name\FullyQualified
-            && $node->name->getAttribute('namespacedName')->toString() !== 'define'
-        ) {
-            return;
+        if ($node->name->hasAttribute('namespacedName')) {
+            /** @var mixed $namespacedName */
+            $namespacedName = $node->name->getAttribute('namespacedName');
+            if ($namespacedName instanceof Node\Name\FullyQualified && $namespacedName->toString() !== 'define') {
+                return;
+            }
         }
 
         if (! ($node->args[0]->value instanceof Node\Scalar\String_)) {

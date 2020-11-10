@@ -55,6 +55,9 @@ class Options
      */
     public function __construct(array $options = [])
     {
+        /**
+         * @var mixed $option
+         */
         foreach ($options as $key => $option) {
             $methodName = 'set' . $this->getCamelCase($key);
             if (! method_exists($this, $methodName)) {

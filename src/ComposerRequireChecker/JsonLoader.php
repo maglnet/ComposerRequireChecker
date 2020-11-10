@@ -28,8 +28,11 @@ class JsonLoader
      */
     public static function getData(string $path): array
     {
+        $content = self::getFileContentFromPath($path);
+
         try {
-            $decodedData = json_decode(self::getFileContentFromPath($path), true, 512, JSON_THROW_ON_ERROR);
+            $decodedData = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            Assert::isArray($decodedData);
         } catch (Throwable $exception) {
             throw new InvalidJson('error parsing ' . $path . ': ' . $exception->getMessage(), 0, $exception);
         }

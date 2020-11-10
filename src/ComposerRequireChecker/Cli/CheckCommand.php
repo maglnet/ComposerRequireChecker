@@ -29,6 +29,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Assert\Assert;
 
 use function array_diff;
 use function array_merge;
@@ -171,8 +172,6 @@ class CheckCommand extends Command
     }
 
     /**
-     * @return array<array-key, mixed>
-     *
      * @throws InvalidJson
      * @throws NotReadable
      */
@@ -184,7 +183,10 @@ class CheckCommand extends Command
             return new Options();
         }
 
-        return new Options(JsonLoader::getData($fileName));
+        $config = JsonLoader::getData($fileName);
+        Assert::isMap($config);
+
+        return new Options($config);
     }
 
     /**

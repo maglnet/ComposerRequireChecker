@@ -12,9 +12,7 @@ use Generator;
 use function array_key_exists;
 use function assert;
 use function dirname;
-use function file_get_contents;
 use function is_string;
-use function json_decode;
 
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
@@ -22,7 +20,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     {
         $packageDir = dirname($composerJsonPath);
 
-        $composerJson    = json_decode(file_get_contents($composerJsonPath), true);
+        $composerJson    = JsonLoader::getData($composerJsonPath);
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
         assert(is_string($configVendorDir));
         $vendorDirs = [];
