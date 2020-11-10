@@ -198,7 +198,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordUsageOf(Node\Name $symbol): void
     {
-        $this->collectedSymbols[(string) $symbol] = $symbol;
+        $this->collectedSymbols[(string) $symbol] = (string)$symbol;
     }
 
     private function recordUsageOfByString(string $symbol): void
