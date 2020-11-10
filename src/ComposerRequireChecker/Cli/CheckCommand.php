@@ -30,9 +30,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_diff;
+use function array_key_exists;
 use function count;
 use function dirname;
 use function implode;
+use function preg_match;
 use function realpath;
 
 class CheckCommand extends Command
@@ -93,6 +95,14 @@ class CheckCommand extends Command
                 )
             )
         );
+
+        if (
+            array_key_exists('composer-runtime-api', $composerData['require'] ?? [])
+            && preg_match('/^(\^|~|>|>=|=)2/', $composerData['require']['composer-runtime-api'])
+        ) {
+            $definedVendorSymbols[] = 'Composer\InstalledVersions';
+        }
+
         $this->verbose('found ' . count($definedVendorSymbols) . ' symbols.', $output, true);
 
         $this->verbose('Collecting defined extension symbols... ', $output);
