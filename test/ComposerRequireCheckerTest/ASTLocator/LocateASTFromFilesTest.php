@@ -39,6 +39,8 @@ final class LocateASTFromFilesTest extends TestCase
         $files = [
             $this->createFile('MyClassA', '<?php class MyClassA {}'),
             $this->createFile('MyClassB', '<?php class MyClassB {}'),
+            __DIR__ . '/.',
+            __DIR__ . '/..',
         ];
 
         $roots = $this->locate($files);

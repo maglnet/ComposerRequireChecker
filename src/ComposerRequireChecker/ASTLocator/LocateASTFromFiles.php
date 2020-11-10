@@ -11,6 +11,7 @@ use RuntimeException;
 use Traversable;
 
 use function file_get_contents;
+use function is_file;
 use function sprintf;
 
 final class LocateASTFromFiles
@@ -32,6 +33,10 @@ final class LocateASTFromFiles
     public function __invoke(Traversable $files): Traversable
     {
         foreach ($files as $file) {
+            if (! is_file($file)) {
+                continue;
+            }
+
             $stmts = $this->parser->parse(file_get_contents($file), $this->errorHandler);
 
             if ($stmts === null) {
