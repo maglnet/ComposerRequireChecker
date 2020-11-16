@@ -57,6 +57,10 @@ Composer require checker is configured to whitelist some symbols per default. Ha
 
 You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration.
 
+Note that you'll have to copy it's contents if you want to add something on top. This tool intentionally only 
+reads one configuration file. If you pass only your new settings, you'll get error reports about the PHP core
+extensions and internal symbols like `true` or `false` being undefined.
+
 ```sh
 bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
 ``` 
@@ -64,13 +68,16 @@ bin/composer-require-checker check --config-file=path/to/config.json /path/to/yo
 ### Scan Additional Files
 
 To scan files, that are not part of your autoload definition you may add glob patterns to the config file's `scan-files`
-section.
+section. Copy the default file and add to your copy.
 
 The following example would also scan the file `bin/console` and all files with `.php` extension within your `bin/` folder:
 
 ```
 "scan-files" : ["bin/console", "bin/*.php"]
 ```
+
+If you don't like copying the tool's default settings, consider adding these paths to the Composer autoloading section 
+of your project instead.
 
 ## Usage
 
