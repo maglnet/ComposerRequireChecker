@@ -9,11 +9,17 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 ## What's it about?
 
-Your code most certainly uses external dependencies. And if it's only extending PHPUnits `TestCase`. And to make sure that your code knows where to find that `TestCase`-class you for sure called `composer require --dev phpunit/phpunit`. That means your dependency is a hard dependency. 
+Your code most certainly uses external dependencies. Imagine that you found a library to access a remote API. You require `thatvendor/api-lib` for your software and use it in your code.
 
-But what if you did a `composer require phpunit/dbunit`? As that package requires phpunit/phpunit as well all your dependencies would still work, wouldn't they? But only out of sheer luck (and in this far fetched example because it's the way it's designed). But from your `composer.json` one wouldn't immediately know that you'd use PHPUnits `TestCase`-class. That's what a "soft dependency" is. And you should avoid those as they might blow. Imagine the person maintaining the library that also includes the package that you depend on suddenly using a completely different library. Suddenly your code would break after a `composer update` for no apparent reason. Just because you didn't include the dependency as a "first level" dependency in the first place.
+Then you see that another remote API is available, but no library exists. The use case is simple, so you look around and find that `guzzlehttp/guzzle` (or any other HTTP client library) is already installed, and you use it right away to fetch some info.
 
-This CLI-Tool parses your code and your composer.json-file to see whether your code contains such "soft dependencies" that might break your code.
+Then some day, when you update your dependencies, your access to the second API breaks. Why? Turns out that the reason `guzzlehttp/guzzle` was installed is that it is a dependency of `thatvendor/api-lib` you included, and their developers decided to update from an earlier major version to the latest and greatest, simply stating in their changelog: "Version 3.1.0 uses the lates major version of Guzzle - no breaking changes expected."
+
+And you think: What about my broken code?
+
+Composer-require-checker parses your code and your composer.json-file to see whether your code uses symbols that are not declared as a required library. If you rely on components that are already installed, but you didn't explicitly request them, this tool will complain about them, and you should require them explicitly. This will prevent unexpected updates.
+
+In the situation above you wouldn't get the latest update of `thatvendor/api-lib`, but your code would continue to work if you also required `guzzlehttp/guzzle` before the update.
 
 ## Installation / Usage
 
