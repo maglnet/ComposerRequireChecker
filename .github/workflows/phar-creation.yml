@@ -33,7 +33,7 @@ jobs:
                   tools: "phing"
                   coverage: "none"
                   php-version: "${{ matrix.php-version }}"
-                  ini-values: memory_limit=-1
+                  ini-values: memory_limit=-1, phar.readonly=0
 
             - name: "Cache dependencies"
               uses: "actions/cache@v2"
