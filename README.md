@@ -9,17 +9,21 @@ This will prevent you from using "soft" dependencies that are not defined within
 
 ## What's it about?
 
-Your code most certainly uses external dependencies. Imagine that you found a library to access a remote API. You require `thatvendor/api-lib` for your software and use it in your code.
+"Soft" (or transitive) dependencies are code that you did not explicitly define to be there, but use it nonetheless. The opposite is a "hard" (or direct) dependency.
 
-Then you see that another remote API is available, but no library exists. The use case is simple, so you look around and find that `guzzlehttp/guzzle` (or any other HTTP client library) is already installed, and you use it right away to fetch some info.
+Your code most certainly uses external dependencies. Imagine that you found a library to access a remote API. You require `thatvendor/api-lib` for your software and use it in your code. This library is a hard dependency.
+
+Then you see that another remote API is available, but no library exists. The use case is simple, so you look around and find that `guzzlehttp/guzzle` (or any other HTTP client library) is already installed, and you use it right away to fetch some info. Guzzle just became a soft dependency.
 
 Then some day, when you update your dependencies, your access to the second API breaks. Why? Turns out that the reason `guzzlehttp/guzzle` was installed is that it is a dependency of `thatvendor/api-lib` you included, and their developers decided to update from an earlier major version to the latest and greatest, simply stating in their changelog: "Version 3.1.0 uses the lates major version of Guzzle - no breaking changes expected."
 
 And you think: What about my broken code?
 
-Composer-require-checker parses your code and your composer.json-file to see whether your code uses symbols that are not declared as a required library. If you rely on components that are already installed, but you didn't explicitly request them, this tool will complain about them, and you should require them explicitly. This will prevent unexpected updates.
+Composer-require-checker parses your code and your composer.json-file to see whether your code uses symbols that are not declared as a required library, i.e. that are soft dependencies. If you rely on components that are already installed, but you didn't explicitly request them, this tool will complain about them, and you should require them explicitly, making them hard dependencies. This will prevent unexpected updates.
 
 In the situation above you wouldn't get the latest update of `thatvendor/api-lib`, but your code would continue to work if you also required `guzzlehttp/guzzle` before the update.
+
+The tool will also check for usage of PHP functions that are only available if an extension is installed, and will complain if that extension isn't explicitly required.
 
 ## Installation / Usage
 
