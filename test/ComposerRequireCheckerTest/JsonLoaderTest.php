@@ -28,6 +28,13 @@ final class JsonLoaderTest extends TestCase
         JsonLoader::getData($path);
     }
 
+    public function testHasDataWithValidFileButNoArrayContent(): void
+    {
+        $path = __DIR__ . '/../fixtures/validJsonNotAnArray.json';
+        $this->expectException(InvalidJson::class);
+        JsonLoader::getData($path);
+    }
+
     public function testHasDataWithValidFile(): void
     {
         $path = __DIR__ . '/../fixtures/validJson.json';

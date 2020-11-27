@@ -24,6 +24,7 @@ final class LocateComposerPackageSourceFiles
      */
     public function __invoke(array $composerData, string $packageDir): Generator
     {
+        /** @var array<string>|null $blacklist */
         $blacklist = $composerData['autoload']['exclude-from-classmap'] ?? null;
 
         yield from $this->locateFilesInClassmapDefinitions(
@@ -56,7 +57,10 @@ final class LocateComposerPackageSourceFiles
     {
         $flattened = array_reduce(
             $sourceDirs,
-            static function (array $sourceDirs, $sourceDir) {
+            /**
+             * @param array|string $sourceDir
+             */
+            static function (array $sourceDirs, $sourceDir): array {
                 return array_merge($sourceDirs, (array) $sourceDir);
             },
             []

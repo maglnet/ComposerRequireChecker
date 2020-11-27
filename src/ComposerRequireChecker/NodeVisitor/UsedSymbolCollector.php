@@ -10,11 +10,10 @@ use PhpParser\NodeVisitorAbstract;
 use function array_filter;
 use function array_keys;
 use function array_map;
-use function is_string;
 
 final class UsedSymbolCollector extends NodeVisitorAbstract
 {
-    /** @var mixed[] */
+    /** @var array<string, string> */
     private array $collectedSymbols = [];
 
     public function __construct()
@@ -22,7 +21,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCollectedSymbols(): array
     {
@@ -137,15 +136,11 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 $this->recordUsageOf($param->type);
             }
 
-            if ($param->type instanceof Node\Identifier) {
-                $this->recordUsageOfByString($param->type->toString());
-            }
-
-            if (! is_string($param->type)) {
+            if (! ($param->type instanceof Node\Identifier)) {
                 continue;
             }
 
-            $this->recordUsageOfByString($param->type);
+            $this->recordUsageOfByString($param->type->toString());
         }
     }
 
@@ -203,7 +198,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
 
     private function recordUsageOf(Node\Name $symbol): void
     {
-        $this->collectedSymbols[(string) $symbol] = $symbol;
+        $this->collectedSymbols[(string) $symbol] = (string) $symbol;
     }
 
     private function recordUsageOfByString(string $symbol): void

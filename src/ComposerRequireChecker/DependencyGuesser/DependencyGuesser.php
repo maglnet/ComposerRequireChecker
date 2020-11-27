@@ -17,6 +17,9 @@ class DependencyGuesser
         $this->guessers[] = new GuessFromLoadedExtensions($options);
     }
 
+    /**
+     * @return Generator<string>
+     */
     public function __invoke(string $symbolName): Generator
     {
         foreach ($this->guessers as $guesser) {

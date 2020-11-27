@@ -55,6 +55,9 @@ class Options
      */
     public function __construct(array $options = [])
     {
+        /**
+         * @var mixed $option
+         */
         foreach ($options as $key => $option) {
             $methodName = 'set' . $this->getCamelCase($key);
             if (! method_exists($this, $methodName)) {
@@ -115,11 +118,6 @@ class Options
         $this->scanFiles = $scanFiles;
     }
 
-    /**
-     * @param string $string some-string
-     *
-     * @return string someString
-     */
     private function getCamelCase(string $string): string
     {
         return ucfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));

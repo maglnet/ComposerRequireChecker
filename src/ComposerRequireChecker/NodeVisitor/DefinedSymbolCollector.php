@@ -14,7 +14,7 @@ use function sprintf;
 
 final class DefinedSymbolCollector extends NodeVisitorAbstract
 {
-    /** @var mixed[] */
+    /** @var array<string, string> */
     private array $definedSymbols = [];
 
     public function __construct()
@@ -32,17 +32,14 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getDefinedSymbols(): array
     {
         return array_keys($this->definedSymbols);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): Node
     {
         $this->recordClassDefinition($node);
         $this->recordInterfaceDefinition($node);
@@ -111,12 +108,12 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             return;
         }
 
-        if (
-            $node->name->hasAttribute('namespacedName')
-            && $node->name->getAttribute('namespacedName') instanceof Node\Name\FullyQualified
-            && $node->name->getAttribute('namespacedName')->toString() !== 'define'
-        ) {
-            return;
+        if ($node->name->hasAttribute('namespacedName')) {
+            /** @var mixed $namespacedName */
+            $namespacedName = $node->name->getAttribute('namespacedName');
+            if ($namespacedName instanceof Node\Name\FullyQualified && $namespacedName->toString() !== 'define') {
+                return;
+            }
         }
 
         if (! ($node->args[0]->value instanceof Node\Scalar\String_)) {

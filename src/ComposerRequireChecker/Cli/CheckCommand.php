@@ -29,20 +29,26 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Webmozart\Assert\Assert;
 
 use function array_diff;
 use function array_merge;
 use function count;
 use function dirname;
+use function gettype;
 use function implode;
+use function is_string;
 use function realpath;
+use function sprintf;
 
 class CheckCommand extends Command
 {
+    public const NAME = 'check';
+
     protected function configure(): void
     {
         $this
-            ->setName('check')
+            ->setName(self::NAME)
             ->setDescription('check the defined dependencies against your code')
             ->addOption(
                 'config-file',
@@ -68,12 +74,23 @@ class CheckCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (! $output->isQuiet()) {
-            $output->writeln($this->getApplication()->getLongVersion());
+            $application = $this->getApplication();
+            $output->writeln($application !== null ? $application->getLongVersion() : 'Unknown version');
         }
 
-        $composerJson = realpath($input->getArgument('composer-json'));
+        $composerJsonArgument = $input->getArgument('composer-json');
+
+        if (is_string($composerJsonArgument) === false) {
+            throw new InvalidArgumentException(sprintf(
+                'composer-json must be type of string but %s given',
+                gettype($composerJsonArgument)
+            ));
+        }
+
+        $composerJson = realpath($composerJsonArgument);
+
         if ($composerJson === false) {
-            throw new InvalidArgumentException('file not found: [' . $input->getArgument('composer-json') . ']');
+            throw new InvalidArgumentException(sprintf('file not found: [%s]', $composerJsonArgument));
         }
 
         $composerData = $this->getComposerData($composerJson);
@@ -154,14 +171,22 @@ class CheckCommand extends Command
         return (int) (bool) $unknownSymbols;
     }
 
+    /**
+     * @throws InvalidJson
+     * @throws NotReadable
+     */
     private function getCheckOptions(InputInterface $input): Options
     {
         $fileName = $input->getOption('config-file');
-        if (! $fileName) {
+
+        if (is_string($fileName) === false) {
             return new Options();
         }
 
-        return new Options(JsonLoader::getData($fileName));
+        $config = JsonLoader::getData($fileName);
+        Assert::isMap($config);
+
+        return new Options($config);
     }
 
     /**

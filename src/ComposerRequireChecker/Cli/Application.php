@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli;
 
-use PackageVersions\Versions;
+use Composer\InstalledVersions;
 use Symfony\Component\Console\Application as AbstractApplication;
+
+use function sprintf;
 
 class Application extends AbstractApplication
 {
@@ -13,11 +15,15 @@ class Application extends AbstractApplication
     {
         parent::__construct(
             'ComposerRequireChecker',
-            Versions::getVersion('maglnet/composer-require-checker')
+            sprintf(
+                '%s@%s',
+                (string) InstalledVersions::getPrettyVersion('maglnet/composer-require-checker'),
+                (string) InstalledVersions::getReference('maglnet/composer-require-checker')
+            )
         );
 
         $check = new CheckCommand();
         $this->add($check);
-        $this->setDefaultCommand($check->getName());
+        $this->setDefaultCommand(CheckCommand::NAME);
     }
 }

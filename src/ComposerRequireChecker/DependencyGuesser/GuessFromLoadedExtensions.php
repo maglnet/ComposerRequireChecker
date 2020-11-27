@@ -29,6 +29,9 @@ class GuessFromLoadedExtensions implements Guesser
         $this->coreExtensions = $options->getPhpCoreExtensions();
     }
 
+    /**
+     * @return Generator<string>
+     */
     public function __invoke(string $symbolName): Generator
     {
         $definedSymbolsFromExtensions = new LocateDefinedSymbolsFromExtensions();

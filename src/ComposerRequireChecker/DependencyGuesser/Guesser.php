@@ -8,5 +8,8 @@ use Generator;
 
 interface Guesser
 {
+    /**
+     * @return Generator<string>
+     */
     public function __invoke(string $symbolName): Generator;
 }
