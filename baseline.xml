@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="3.16@d03e5ef057d6adc656c0ff7e166c50b73b4f48f3">
-  <file src="src/ComposerRequireChecker/Cli/Application.php">
-    <DeprecatedClass occurrences="1">
-      <code>Versions::getVersion('maglnet/composer-require-checker')</code>
-    </DeprecatedClass>
-  </file>
+<files psalm-version="4.2.1@ea9cb72143b77e7520c52fa37290bd8d8bc88fd9">
   <file src="src/ComposerRequireChecker/Cli/CheckCommand.php">
     <MixedArgumentTypeCoercion occurrences="2"/>
   </file>
@@ -15,12 +10,6 @@
       <code>$composerData['autoload']['psr-0'] ?? []</code>
       <code>$composerData['autoload']['psr-4'] ?? []</code>
     </MixedArgument>
-    <MixedArgumentTypeCoercion occurrences="4">
-      <code>$this-&gt;getFilePaths($composerData['autoload']['classmap'] ?? [], $packageDir)</code>
-      <code>$this-&gt;getFilePaths($composerData['autoload']['files'] ?? [], $packageDir)</code>
-      <code>$this-&gt;getFilePaths($composerData['autoload']['psr-0'] ?? [], $packageDir)</code>
-      <code>$this-&gt;getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir)</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/ComposerRequireChecker/NodeVisitor/DefinedSymbolCollector.php">
     <NoInterfaceProperties occurrences="1">
