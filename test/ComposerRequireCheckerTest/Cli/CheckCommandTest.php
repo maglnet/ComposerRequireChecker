@@ -54,7 +54,7 @@ final class CheckCommandTest extends TestCase
             'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
         ]);
 
-        $this->assertSame(1, $this->commandTester->getStatusCode());
+        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
         $this->assertStringContainsString('The following unknown symbols were found:', $display);
@@ -146,8 +146,9 @@ JSON
 
     public function testNoUnknownSymbolsFound(): void
     {
-        $baseDir = dirname(__DIR__, 2) . '/fixtures/noUnknownSymbols/';
-        $this->commandTester->execute(['composer-json' => $baseDir . 'composer.json']);
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noUnknownSymbols/composer.json',
+        ]);
 
         self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
         self::assertStringContainsString(
@@ -170,5 +171,31 @@ JSON
 
         unlink($tmpFile);
         self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+    }
+
+    public function testUnknownComposerSymbolFound(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownComposerSymbol/composer.json',
+        ]);
+
+        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString('The following unknown symbols were found:', $display);
+        $this->assertStringContainsString('Composer\InstalledVersions', $display);
+    }
+
+    public function testNoUnknownComposerSymbolFound(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noUnknownComposerSymbol/composer.json',
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay()
+        );
     }
 }

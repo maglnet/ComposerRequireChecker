@@ -1,0 +1,11 @@
+{
+    "name": "example/library",
+    "autoload": {
+        "psr-4": {
+            "Example\\Library\\": "src/"
+        }
+    },
+    "require": {
+        "composer-runtime-api": "^2"
+    }
+}
