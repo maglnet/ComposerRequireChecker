@@ -4,9 +4,6 @@ name: "Building Require-Checker phar"
 
 on:
     pull_request:
-    push:
-        branches:
-            - "master"
 
 jobs:
     build:
