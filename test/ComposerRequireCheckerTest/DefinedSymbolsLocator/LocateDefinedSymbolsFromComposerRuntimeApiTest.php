@@ -60,7 +60,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
     }
 
     /**
-     * @param mixed[] $composerData
+     * @param array<string, mixed> $composerData
      *
      * @return string[]
      */
