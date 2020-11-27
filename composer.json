@@ -29,8 +29,8 @@
         "php": "7.4.*",
         "ext-json": "*",
         "ext-phar": "*",
+        "composer-runtime-api": "^2.0.0",
         "nikic/php-parser": "^4.10.2",
-        "ocramius/package-versions": "^1.11.0",
         "symfony/console": "^5.1.8",
         "webmozart/assert": "^1.9.1",
         "webmozart/glob": "^4.1.0"
