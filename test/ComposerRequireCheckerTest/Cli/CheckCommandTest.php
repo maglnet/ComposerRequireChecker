@@ -66,7 +66,7 @@ final class CheckCommandTest extends TestCase
         $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('The following unknown symbols were found:', $display);
+        $this->assertStringContainsString('The following 6 unknown symbols were found:', $display);
         $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
         $this->assertStringContainsString('Example\Library\Dependency', $display);
         $this->assertStringContainsString('FILTER_VALIDATE_URL', $display);
@@ -148,7 +148,7 @@ JSON
 
         $this->assertNotEquals(0, $exitCode);
         $this->assertMatchesRegularExpression(
-            '/The following unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s',
+            '/The following 2 unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s',
             $this->commandTester->getDisplay()
         );
     }
@@ -191,7 +191,7 @@ JSON
         $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('The following unknown symbols were found:', $display);
+        $this->assertStringContainsString('The following 1 unknown symbols were found:', $display);
         $this->assertStringContainsString('Composer\InstalledVersions', $display);
     }
 
