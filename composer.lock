@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5dfe08126b23c595a458b69e6c97bb70",
+    "content-hash": "de60ef315042fd0e40195f070d16934f",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -915,26 +915,25 @@
         },
         {
             "name": "webmozart/glob",
-            "version": "4.1.0",
+            "version": "4.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/webmozart/glob.git",
-                "reference": "3cbf63d4973cf9d780b93d2da8eec7e4a9e63bbe"
+                "url": "https://github.com/webmozarts/glob.git",
+                "reference": "d1561806559682928e91de5822cd407ec2ace181"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/glob/zipball/3cbf63d4973cf9d780b93d2da8eec7e4a9e63bbe",
-                "reference": "3cbf63d4973cf9d780b93d2da8eec7e4a9e63bbe",
+                "url": "https://api.github.com/repos/webmozarts/glob/zipball/d1561806559682928e91de5822cd407ec2ace181",
+                "reference": "d1561806559682928e91de5822cd407ec2ace181",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3|^7.0",
+                "php": "^7.3 || ^8.0.0",
                 "webmozart/path-util": "^2.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.6",
-                "sebastian/version": "^1.0.1",
-                "symfony/filesystem": "^2.5"
+                "phpunit/phpunit": "^8.0",
+                "symfony/filesystem": "^5.1"
             },
             "type": "library",
             "extra": {
@@ -959,10 +958,10 @@
             ],
             "description": "A PHP implementation of Ant's glob.",
             "support": {
-                "issues": "https://github.com/webmozart/glob/issues",
-                "source": "https://github.com/webmozart/glob/tree/master"
+                "issues": "https://github.com/webmozarts/glob/issues",
+                "source": "https://github.com/webmozarts/glob/tree/4.2.0"
             },
-            "time": "2015-12-29T11:14:33+00:00"
+            "time": "2021-01-14T18:11:58+00:00"
         },
         {
             "name": "webmozart/path-util",
@@ -4100,7 +4099,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.4.*",
+        "php": "^7.4 || ^8.0",
         "ext-json": "*",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0"

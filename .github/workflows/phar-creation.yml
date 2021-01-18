@@ -17,6 +17,7 @@ jobs:
                     - "locked"
                 php-version:
                     - "7.4"
+                    - "8.0"
                 operating-system:
                     - "ubuntu-latest"
 
@@ -65,5 +66,5 @@ jobs:
             - name: "Upload phar file artifact"
               uses: actions/upload-artifact@v2
               with:
-                  name: composer-require-checker.phar
+                  name: composer-require-checker-${{ matrix.php-version }}.phar
                   path: build/composer-require-checker.phar
