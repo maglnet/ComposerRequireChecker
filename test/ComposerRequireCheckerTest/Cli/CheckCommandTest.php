@@ -191,7 +191,7 @@ JSON
         $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('The following unknown symbols were found:', $display);
+        $this->assertStringContainsString('The following 1 unknown symbols were found:', $display);
         $this->assertStringContainsString('Composer\InstalledVersions', $display);
     }
 
