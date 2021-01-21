@@ -6,6 +6,9 @@ namespace Example\Library;
 
 use Foo\Bar\Baz;
 
+function foo() {
+}
+
 final class OtherThing
 {
     public function baz(Baz $baz)
@@ -18,5 +21,7 @@ final class OtherThing
             $baz->value(),
             FILTER_VALIDATE_URL
         );
+
+        foo();
     }
 }

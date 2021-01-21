@@ -50,6 +50,7 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
     {
         $expectedSymbols = [
             'Doctrine\Common\Collections\ArrayCollection',
+            'Example\Library\foo',
             'FILTER_VALIDATE_URL',
             'filter_var',
             'Foo\Bar\Baz',
