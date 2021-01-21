@@ -1,23 +1,16 @@
-# Change Log
+# Changelog
+
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
-
-## [unreleased] - tba
-
-### Added
-
-### Changed
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.1.0] - 2019-12-28
 ### Added
-
 - Add support of Symfony Console 5. - #174
 - Test on PHP 7.4 - #164
 
 ### Changed
-
 - updated a lot of dependencies within the phar file
 - Require ext-zend-opcache for development. - #161 #160
 - Invalid version reported when installed without .git - #109 
@@ -40,7 +33,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Enhancement: Normalize composer.json - #122 
 - Don't load composer.json file twice - #116
 
-
 ## [2.0.0] - 2019-03-19
 ### Added
 - add symbol counts to check command for verbose output - #90
@@ -50,7 +42,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - use `installed.json` instead of `composer.json`
-
 
 ## [1.1.0] - 2018-09-03
 ### Added
@@ -63,8 +54,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - only using stable dependencies now (#86)
 
 ## [1.0.0] - 2018-07-11
-### Added
-
 ### Changed
 - update `nikic/php-parser` to `~4.0` (#75)
 
@@ -77,10 +66,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fixes usage of `exclude-from-classmap` key of composer.json (#60)
 - fixed several docblocks 
 
-
 ## [0.2.0] - 2018-01-20
-### Added
-
 ### Changed
 - PHP 7.1 required
 - displays more detailed errors if json config format is not valid
@@ -93,14 +79,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - add shebang `#!/usr/bin/env php` to phar file / allows direct execution of phar file 
 
-### Changed
-
 ## [0.1.5] - 2017-07-23
 ### Added
 - added builtin phar extension to default list
 - fixes problems when parsing anonymous classes (#23)
-
-### Changed
 
 ## [0.1.4] - 2017-05-13
 ### Changed
@@ -122,11 +104,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.1] - 2015-12-02
 
-
 ## [0.1.0] - 2015-12-02
 
-
-[unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/2.1.0...HEAD
+[Unreleased]: https://github.com/maglnet/ComposerRequireChecker/compare/2.1.0...HEAD
 [2.1.0]: https://github.com/maglnet/ComposerRequireChecker/compare/2.0.0...2.1.0
 [2.0.0]: https://github.com/maglnet/ComposerRequireChecker/compare/1.1.0...2.0.0
 [1.1.0]: https://github.com/maglnet/ComposerRequireChecker/compare/1.0.0...1.1.0
