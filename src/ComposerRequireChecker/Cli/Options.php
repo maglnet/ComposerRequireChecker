@@ -30,6 +30,7 @@ class Options
         'callable',
         'void',
         'object', // types
+        'mixed',
     ];
 
     /** @var array<string>  */
