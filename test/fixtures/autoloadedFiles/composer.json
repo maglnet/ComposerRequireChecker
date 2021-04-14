@@ -1,0 +1,6 @@
+{
+    "name": "example/library",
+    "autoload": {
+        "files": ["src/include.php"]
+    }
+}
