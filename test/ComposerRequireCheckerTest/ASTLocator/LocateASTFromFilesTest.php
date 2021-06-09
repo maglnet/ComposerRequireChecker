@@ -6,9 +6,9 @@ namespace ComposerRequireCheckerTest\ASTLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\Exception\FileParseFailed;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use PhpParser\Error;
 use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
@@ -50,7 +50,8 @@ final class LocateASTFromFilesTest extends TestCase
 
     public function testFailOnParseError(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(FileParseFailed::class);
+        $this->expectExceptionMessageMatches('/^vfs:\/\/root\/MyBadCode: /');
         $files = [
             $this->createFile('MyBadCode', '<?php this causes a parse error'),
         ];
