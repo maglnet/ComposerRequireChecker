@@ -5,27 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.3.0 - TBD
+## 3.3.0 - 2021-06-09
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.3.0](https://github.com/maglnet/ComposerRequireChecker/milestone/15)
 
-- Nothing.
+Feature release (minor)
 
-### Deprecated
+### 3.3.0
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **10**
+- Total contributors: **3**
 
-### Removed
+#### enhancement
 
-- Nothing.
+ - [273: Catch PHP Parser error and rethrow it with file information](https://github.com/maglnet/ComposerRequireChecker/pull/273) thanks to @bobvandevijver
 
-### Fixed
+#### dependencies
 
-- Nothing.
+ - [261: Bump vimeo/psalm from 4.6.4 to 4.7.0](https://github.com/maglnet/ComposerRequireChecker/pull/261) thanks to @dependabot[bot]
+ - [260: Bump symfony/console from 5.2.5 to 5.2.6](https://github.com/maglnet/ComposerRequireChecker/pull/260) thanks to @dependabot[bot]
+ - [258: Bump phpunit/phpunit from 9.5.0 to 9.5.4](https://github.com/maglnet/ComposerRequireChecker/pull/258) thanks to @dependabot[bot]
+ - [257: Bump vimeo/psalm from 4.3.2 to 4.6.4](https://github.com/maglnet/ComposerRequireChecker/pull/257) thanks to @dependabot[bot]
+ - [254: Bump symfony/console from 5.2.1 to 5.2.5](https://github.com/maglnet/ComposerRequireChecker/pull/254) thanks to @dependabot[bot]
+ - [253: Bump phpstan/phpstan from 0.12.64 to 0.12.81](https://github.com/maglnet/ComposerRequireChecker/pull/253) thanks to @dependabot[bot]
+ - [247: Bump phpunit/phpunit from 9.5.0 to 9.5.2](https://github.com/maglnet/ComposerRequireChecker/pull/247) thanks to @dependabot-preview[bot]
+ - [246: Bump phpstan/phpstan from 0.12.64 to 0.12.80](https://github.com/maglnet/ComposerRequireChecker/pull/246) thanks to @dependabot-preview[bot]
+ - [241: Bump webmozart/glob from 4.2.0 to 4.3.0](https://github.com/maglnet/ComposerRequireChecker/pull/241) thanks to @dependabot-preview[bot]
 
 ## [2.1.0] - 2019-12-28
 ### Added
