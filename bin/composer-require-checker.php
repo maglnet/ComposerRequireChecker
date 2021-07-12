@@ -27,6 +27,11 @@ if (false === $foundAutoloadFile) {
 }
 
 use ComposerRequireChecker\Cli\Application;
+use Composer\XdebugHandler\XdebugHandler;
+
+$xdebug = new XdebugHandler('ComposerRequireChecker');
+$xdebug->check();
+unset($xdebug);
 
 $application = new Application();
 $application->run();
