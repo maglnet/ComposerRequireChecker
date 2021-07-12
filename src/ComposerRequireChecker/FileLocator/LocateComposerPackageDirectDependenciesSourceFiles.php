@@ -66,9 +66,6 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
         /** @var array<array{name: string}> $packages */
         $packages = $installedData['packages'] ?? $installedData;
 
-        /**
-         * @var array{name: string} $vendorJson
-         */
         foreach ($packages as $vendorJson) {
             $vendorName                     = $vendorJson['name'];
             $installedPackages[$vendorName] = $vendorJson;
