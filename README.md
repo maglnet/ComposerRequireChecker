@@ -60,13 +60,13 @@ If this is already done, run it like this:
 composer-require-checker check /path/to/your/project/composer.json
 ```
 
-### A note about XDebug
+### A note about Xdebug
 
-If your PHP is including XDebug when running ComposerRequireChecker, you may experience additional issues like exceeding the XDebug-related max-nesting-level - and on top, XDebug slows PHP down.
+If your PHP is including Xdebug when running ComposerRequireChecker, you may experience additional issues like exceeding the Xdebug-related max-nesting-level - and on top, Xdebug slows PHP down.
 
-It is recommended to run ComposerRequireChecker without XDebug. 
+It is recommended to run ComposerRequireChecker without Xdebug. 
 
-If you cannot provide a PHP instance without XDebug yourself, try setting an environment variable like this for just the command: `XDEBUG_MODE=none php composer-require-checker`.
+If you cannot provide a PHP instance without Xdebug yourself, try setting an environment variable like this for just the command: `XDEBUG_MODE=off php composer-require-checker`.
 
 ## Configuration
 
