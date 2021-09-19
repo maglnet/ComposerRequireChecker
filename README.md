@@ -32,7 +32,7 @@ Composer require checker is not supposed to be installed as part of your project
 ### PHAR file [preferred]
 
 Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
-Download the latest release and and run it like this:
+[Download the latest release](https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar) and and run it like this:
 ```
 php composer-require-checker.phar check /path/to/your/project/composer.json
 ```
