@@ -62,4 +62,4 @@ jobs:
               run: "composer install --no-interaction --no-progress --no-suggest"
 
             - name: "PHPStan"
-              run: "vendor/bin/phpstan analyse -l 5 src --memory-limit=-1"
+              run: "vendor/bin/phpstan --memory-limit=-1"
