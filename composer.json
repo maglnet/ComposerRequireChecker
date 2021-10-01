@@ -39,7 +39,7 @@
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^9.0.0",
         "mikey179/vfsstream": "^1.6.10",
-        "phpstan/phpstan": "^0.12.96",
+        "phpstan/phpstan": "^0.12.99",
         "phpunit/phpunit": "^9.5.10",
         "vimeo/psalm": "^4.10.0"
     },
