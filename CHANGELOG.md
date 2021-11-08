@@ -5,27 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.3.1 - TBD
+## 3.3.1 - 2021-11-08
 
-### Added
 
-- Nothing.
+-----
 
-### Changed
+### Release Notes for [3.3.1](https://github.com/maglnet/ComposerRequireChecker/milestone/17)
 
-- Nothing.
+3.3.x bugfix release (patch)
 
-### Deprecated
+### 3.3.1
 
-- Nothing.
+- Total issues resolved: **1**
+- Total pull requests resolved: **1**
+- Total contributors: **2**
 
-### Removed
+#### bug
 
-- Nothing.
-
-### Fixed
-
-- Nothing.
+ - [310: For unix-y phar file, always use unix-y line endings](https://github.com/maglnet/ComposerRequireChecker/pull/310) thanks to @mfn
+ - [281: PHAR 3.3.0 has \r char that breaks tool under Linux](https://github.com/maglnet/ComposerRequireChecker/issues/281) thanks to @Slamdunk
 
 ## 3.3.0 - 2021-06-09
 
