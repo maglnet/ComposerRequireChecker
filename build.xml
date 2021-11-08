@@ -57,7 +57,7 @@
     <!-- ============================================  -->
     <target name="phar-build" depends="run-test">
         <!--create the package-->
-        <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . PHP_EOL . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
+        <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . chr(10) . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
         <pharpackage basedir="./"
                      destfile="${build-dir}/${phing.project.name}.phar"
                      stub="bin/clistub.php"
