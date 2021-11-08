@@ -32,7 +32,7 @@ Composer require checker is not supposed to be installed as part of your project
 ### PHAR file [preferred]
 
 Please check the [releases](https://github.com/maglnet/ComposerRequireChecker/releases) for available phar files.
-Download the latest release and and run it like this:
+[Download the latest release](https://github.com/maglnet/ComposerRequireChecker/releases/latest/download/composer-require-checker.phar) and and run it like this:
 ```
 php composer-require-checker.phar check /path/to/your/project/composer.json
 ```
@@ -59,6 +59,14 @@ If this is already done, run it like this:
 ```
 composer-require-checker check /path/to/your/project/composer.json
 ```
+
+### A note about Xdebug
+
+If your PHP is including Xdebug when running ComposerRequireChecker, you may experience additional issues like exceeding the Xdebug-related max-nesting-level - and on top, Xdebug slows PHP down.
+
+It is recommended to run ComposerRequireChecker without Xdebug. 
+
+If you cannot provide a PHP instance without Xdebug yourself, try setting an environment variable like this for just the command: `XDEBUG_MODE=off php composer-require-checker`.
 
 ## Configuration
 

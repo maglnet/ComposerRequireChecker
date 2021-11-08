@@ -30,18 +30,18 @@
         "ext-json": "*",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
-        "nikic/php-parser": "^4.10.2",
-        "symfony/console": "^5.2.6",
+        "nikic/php-parser": "^4.13.0",
+        "symfony/console": "^5.3.10",
         "webmozart/assert": "^1.9.1",
-        "webmozart/glob": "^4.3.0"
+        "webmozart/glob": "^4.4.0"
     },
     "require-dev": {
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^9.0.0",
-        "mikey179/vfsstream": "^1.6.8",
-        "phpstan/phpstan": "^0.12.85",
-        "phpunit/phpunit": "^9.5.4",
-        "vimeo/psalm": "^4.7.0"
+        "mikey179/vfsstream": "^1.6.10",
+        "phpstan/phpstan": "^0.12.99",
+        "phpunit/phpunit": "^9.5.10",
+        "vimeo/psalm": "^4.11.2"
     },
     "config": {
         "optimize-autoloader": true,
