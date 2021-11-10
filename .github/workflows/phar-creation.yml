@@ -28,6 +28,9 @@ jobs:
               env:
                 PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
 
+            - name: "Install dependencies for build environment"
+              run: "composer install --no-interaction --no-progress --no-suggest"
+
             - name: "Build and sign phar file via phing"
               run: "vendor/bin/phing phar-build phar-sign"
 
