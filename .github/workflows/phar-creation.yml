@@ -31,8 +31,8 @@ jobs:
                   php-version: ${{ matrix.php-version }}
                   ini-values: memory_limit=-1, phar.readonly=0
 
-            - name: "Install dependencies"
-              run: "composer update --no-interaction --no-progress --no-suggest"
+            - name: "Install prod dependencies"
+              run: "composer update --no-interaction --no-progress --no-suggest --no-dev"
 
             - name: "Build phar file via phing"
               run: "phing phar-build"
@@ -41,7 +41,7 @@ jobs:
  #             if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
               run: |
                 echo "$PRIVATE_KEY" > privatekey.pem
-                openssl dgst -sha512 -sign privatekey.pem --detach-sign --output build/composer-require-checker.phar.asc build/composer-require-checker.phar
+                openssl dgst -sha512 -sign privatekey.pem -out build/composer-require-checker.phar.asc build/composer-require-checker.phar
               env:
                 PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
 
