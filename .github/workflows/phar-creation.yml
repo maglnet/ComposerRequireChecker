@@ -4,22 +4,20 @@ name: "Building Require-Checker phar"
 
 on:
     pull_request:
+#    release:
+#      types: [published]
 
 jobs:
     build:
         name: "Building Require-Checker phar"
 
-        runs-on: ${{ matrix.operating-system }}
+        runs-on: "ubuntu-latest"
 
         strategy:
             matrix:
-                dependencies:
-                    - "locked"
                 php-version:
                     - "7.4"
                     - "8.0"
-                operating-system:
-                    - "ubuntu-latest"
 
         steps:
             - name: "Checkout"
@@ -30,41 +28,27 @@ jobs:
               with:
                   tools: "phing"
                   coverage: "none"
-                  php-version: "${{ matrix.php-version }}"
+                  php-version: ${{ matrix.php-version }}
                   ini-values: memory_limit=-1, phar.readonly=0
 
-            - name: Get Composer cache directory
-              id: composer-cache
-              run: echo "::set-output name=dir::$(composer config cache-dir)"
-
-            - name: Cache dependencies
-              uses: actions/cache@v2
-              with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-${{ matrix.dependencies }}
-                restore-keys: |
-                  composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-
-                  composer-${{ runner.os }}-${{ matrix.php-version }}-
-                  composer-${{ runner.os }}-
-                  composer-
-
-            - name: "Install lowest dependencies"
-              if: ${{ matrix.dependencies == 'lowest' }}
-              run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
-
-            - name: "Install highest dependencies"
-              if: ${{ matrix.dependencies == 'highest' }}
+            - name: "Install dependencies"
               run: "composer update --no-interaction --no-progress --no-suggest"
 
-            - name: "Install locked dependencies"
-              if: ${{ matrix.dependencies == 'locked' }}
-              run: "composer install --no-interaction --no-progress --no-suggest"
+            - name: "Build phar file via phing"
+              run: "phing phar-build"
 
-            - name: "build via phing"
-              run: "phing"
+            - name: "Sign Phar"
+ #             if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+              run: |
+                echo "$PRIVATE_KEY" > privatekey.pem
+                openssl dgst -sha512 -sign privatekey.pem --detach-sign --output build/composer-require-checker.phar.asc build/composer-require-checker.phar
+              env:
+                PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
 
             - name: "Upload phar file artifact"
               uses: actions/upload-artifact@v2
               with:
                   name: composer-require-checker-${{ matrix.php-version }}.phar
-                  path: build/composer-require-checker.phar
+                  path: |
+                    build/composer-require-checker.phar
+                    build/composer-require-checker.phar.asc
