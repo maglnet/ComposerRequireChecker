@@ -37,10 +37,7 @@
     <!-- ============================================  -->
     <target name="phar-prepare-dependencies">
         <!--install dependencies without development requirements-->
-        <composer command="install">
-            <arg value="--no-dev"/>
-            <arg value="-o"/>
-        </composer>
+        <exec command="composer install --no-dev -o" passthru="true" checkreturn="true"/>
     </target>
 
     <!-- ============================================  -->
@@ -55,8 +52,9 @@
     <!-- ============================================  -->
     <!-- Target: phar-build                            -->
     <!-- ============================================  -->
-    <target name="phar-build" depends="run-test">
+    <target name="phar-build" depends="phar-prepare-dependencies">
         <!--create the package-->
+        <mkdir dir="${build-dir}" />
         <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . chr(10) . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
         <pharpackage basedir="./"
                      destfile="${build-dir}/${phing.project.name}.phar"
@@ -74,7 +72,7 @@
         </pharpackage>
     </target>
 
-    <target name="phar-sign" depends="phar-build">
+    <target name="phar-sign">
         <delete file="${build-dir}/${phing.project.name}.phar.asc"/>
         <exec executable="gpg" checkreturn="true" passthru="true">
             <arg value="--batch" />
