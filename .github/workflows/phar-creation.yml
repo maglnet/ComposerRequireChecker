@@ -19,7 +19,6 @@ jobs:
             - name: "Install PHP"
               uses: "shivammathur/setup-php@v2"
               with:
-                  tools: "phing"
                   coverage: "none"
                   php-version: "7.4"
                   ini-values: memory_limit=-1, phar.readonly=0
@@ -29,11 +28,8 @@ jobs:
               env:
                 PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
 
-            - name: "Build phar file via phing"
-              run: "phing phar-build"
-
-            - name: "Sign Phar"
-              run: "phing phar-sign"
+            - name: "Build and sign phar file via phing"
+              run: "vendor/bin/phing phar-build phar-sign"
 
             - name: "Upload phar file artifact"
               uses: actions/upload-artifact@v2
