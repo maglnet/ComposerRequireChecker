@@ -37,10 +37,7 @@
     <!-- ============================================  -->
     <target name="phar-prepare-dependencies">
         <!--install dependencies without development requirements-->
-        <composer command="install">
-            <arg value="--no-dev"/>
-            <arg value="-o"/>
-        </composer>
+        <exec command="composer install --no-dev -o" passthru="true" checkreturn="true"/>
     </target>
 
     <!-- ============================================  -->
