@@ -55,7 +55,7 @@
     <!-- ============================================  -->
     <!-- Target: phar-build                            -->
     <!-- ============================================  -->
-    <target name="phar-build" depends="run-test">
+    <target name="phar-build" depends="phar-prepare-dependencies">
         <!--create the package-->
         <php expression="file_put_contents('bin/clistub.php', '#!/usr/bin/env php' . chr(10) . Phar::createDefaultStub('bin/composer-require-checker.php'))"/>
         <pharpackage basedir="./"

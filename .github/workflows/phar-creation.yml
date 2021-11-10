@@ -13,12 +13,6 @@ jobs:
 
         runs-on: "ubuntu-latest"
 
-        strategy:
-            matrix:
-                php-version:
-                    - "7.4"
-                    - "8.0"
-
         steps:
             - name: "Checkout"
               uses: "actions/checkout@v2"
@@ -28,11 +22,8 @@ jobs:
               with:
                   tools: "phing"
                   coverage: "none"
-                  php-version: ${{ matrix.php-version }}
+                  php-version: "7.4"
                   ini-values: memory_limit=-1, phar.readonly=0
-
-            - name: "Install prod dependencies"
-              run: "composer update --no-interaction --no-progress --no-suggest --no-dev"
 
             - name: "Build phar file via phing"
               run: "phing phar-build"
@@ -48,7 +39,7 @@ jobs:
             - name: "Upload phar file artifact"
               uses: actions/upload-artifact@v2
               with:
-                  name: composer-require-checker-${{ matrix.php-version }}.phar
+                  name: composer-require-checker.phar
                   path: |
                     build/composer-require-checker.phar
                     build/composer-require-checker.phar.asc
