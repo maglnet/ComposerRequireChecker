@@ -72,7 +72,7 @@
         </pharpackage>
     </target>
 
-    <target name="phar-sign" depends="phar-build">
+    <target name="phar-sign">
         <delete file="${build-dir}/${phing.project.name}.phar.asc"/>
         <exec executable="gpg" checkreturn="true" passthru="true">
             <arg value="--batch" />

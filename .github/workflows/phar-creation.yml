@@ -25,16 +25,17 @@ jobs:
                   php-version: "7.4"
                   ini-values: memory_limit=-1, phar.readonly=0
 
+            - name: "Import GPG Key"
+              run: echo "$PRIVATE_KEY" | gpg --import
+              env:
+                PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
+
             - name: "Build phar file via phing"
               run: "phing phar-build"
 
             - name: "Sign Phar"
- #             if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
-              run: |
-                echo "$PRIVATE_KEY" > privatekey.pem
-                openssl dgst -sha512 -sign privatekey.pem -out build/composer-require-checker.phar.asc build/composer-require-checker.phar
-              env:
-                PRIVATE_KEY: ${{ secrets.SIGNING_SECRET_KEY }}
+#             if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+              run: "phing phar-sign"
 
             - name: "Upload phar file artifact"
               uses: actions/upload-artifact@v2
