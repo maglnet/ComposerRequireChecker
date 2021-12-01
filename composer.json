@@ -30,7 +30,7 @@
         "ext-json": "*",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
-        "nikic/php-parser": "^4.13.0",
+        "nikic/php-parser": "^4.13.2",
         "symfony/console": "^5.4.0",
         "webmozart/assert": "^1.9.1",
         "webmozart/glob": "^4.4.0"
