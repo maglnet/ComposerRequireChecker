@@ -31,6 +31,7 @@ class Options
         'void',
         'object', // types
         'mixed',
+        'never',
     ];
 
     /** @var array<string>  */
