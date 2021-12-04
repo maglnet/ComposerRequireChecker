@@ -12,6 +12,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Const_;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -69,6 +70,14 @@ final class DefinedSymbolCollectorTest extends TestCase
     public function testRecordClassDefinition(): void
     {
         $node = new Class_(new Identifier('Foo'));
+        $this->traverser->traverse([$node]);
+
+        $this->assertContains('Foo', $this->collector->getDefinedSymbols());
+    }
+
+    public function testRecordEnumDefinition(): void
+    {
+        $node = new Enum_(new Identifier('Foo'));
         $this->traverser->traverse([$node]);
 
         $this->assertContains('Foo', $this->collector->getDefinedSymbols());
