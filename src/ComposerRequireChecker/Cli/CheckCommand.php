@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\Cli;
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\Cli\ResultsWriter\CliText;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
@@ -24,19 +25,19 @@ use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webmozart\Assert\Assert;
 
+use function array_combine;
 use function array_diff;
+use function array_map;
 use function array_merge;
 use function count;
 use function dirname;
 use function gettype;
-use function implode;
 use function is_string;
 use function realpath;
 use function sprintf;
@@ -153,20 +154,23 @@ class CheckCommand extends Command
             return 0;
         }
 
+        $resultsWriter = new CliText($output);
+
         $output->writeln('The following ' . count($unknownSymbols) . ' unknown symbols were found:');
-        $table = new Table($output);
-        $table->setHeaders(['Unknown Symbol', 'Guessed Dependency']);
         $guesser = new DependencyGuesser($options);
-        foreach ($unknownSymbols as $unknownSymbol) {
-            $guessedDependencies = [];
-            foreach ($guesser($unknownSymbol) as $guessedDependency) {
-                $guessedDependencies[] = $guessedDependency;
-            }
+        $resultsWriter->write(
+            array_map(
+                static function (string $unknownSymbol) use ($guesser): array {
+                    $guessedDependencies = [];
+                    foreach ($guesser($unknownSymbol) as $guessedDependency) {
+                        $guessedDependencies[] = $guessedDependency;
+                    }
 
-            $table->addRow([$unknownSymbol, implode("\n", $guessedDependencies)]);
-        }
-
-        $table->render();
+                    return $guessedDependencies;
+                },
+                array_combine($unknownSymbols, $unknownSymbols)
+            ),
+        );
 
         return (int) (bool) $unknownSymbols;
     }
