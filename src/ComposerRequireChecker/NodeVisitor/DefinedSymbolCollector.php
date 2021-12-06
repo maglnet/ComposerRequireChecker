@@ -42,6 +42,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     public function enterNode(Node $node): Node
     {
         $this->recordClassDefinition($node);
+        $this->recordEnumDefinition($node);
         $this->recordInterfaceDefinition($node);
         $this->recordTraitDefinition($node);
         $this->recordFunctionDefinition($node);
@@ -54,6 +55,15 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     private function recordClassDefinition(Node $node): void
     {
         if (! ($node instanceof Node\Stmt\Class_) || $node->isAnonymous()) {
+            return;
+        }
+
+        $this->recordDefinitionOf($node);
+    }
+
+    private function recordEnumDefinition(Node $node): void
+    {
+        if (! ($node instanceof Node\Stmt\Enum_)) {
             return;
         }
 

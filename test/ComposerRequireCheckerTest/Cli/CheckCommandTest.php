@@ -207,4 +207,20 @@ JSON
             $this->commandTester->getDisplay()
         );
     }
+
+    /**
+     * @requires PHP >= 8.1.0
+     */
+    public function testNoUnknownEnumSymbolsFound(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noUnknownEnumSymbols/composer.json',
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay()
+        );
+    }
 }
