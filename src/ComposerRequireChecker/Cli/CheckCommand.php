@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\Cli;
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
 use ComposerRequireChecker\Cli\ResultsWriter\CliText;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
@@ -19,6 +20,7 @@ use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use LogicException;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
@@ -37,6 +39,7 @@ use function array_map;
 use function array_merge;
 use function count;
 use function dirname;
+use function file_put_contents;
 use function gettype;
 use function is_string;
 use function realpath;
@@ -69,11 +72,21 @@ class CheckCommand extends Command
                 InputOption::VALUE_NONE,
                 'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
                 . ' errors will be thrown'
+            )
+            ->addOption(
+                'output',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'generate output either as "text" or as "json", if specified, "quiet mode" is implied'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($input->getOption('output') !== null) {
+            $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
+
         if (! $output->isQuiet()) {
             $application = $this->getApplication();
             $output->writeln($application !== null ? $application->getLongVersion() : 'Unknown version');
@@ -154,7 +167,21 @@ class CheckCommand extends Command
             return 0;
         }
 
-        $resultsWriter = new CliText($output);
+        switch ($input->getOption('output')) {
+            case 'json':
+                $application   = $this->getApplication();
+                $resultsWriter = new CliJson(
+                    static function (string $string): void {
+                        file_put_contents('php://stdout', $string);
+                    },
+                    $application !== null ? $application->getVersion() : 'Unknown version',
+                    static fn () => new DateTimeImmutable()
+                );
+                break;
+            case 'text':
+            default:
+                $resultsWriter = new CliText($output);
+        }
 
         $output->writeln('The following ' . count($unknownSymbols) . ' unknown symbols were found:');
         $guesser = new DependencyGuesser($options);

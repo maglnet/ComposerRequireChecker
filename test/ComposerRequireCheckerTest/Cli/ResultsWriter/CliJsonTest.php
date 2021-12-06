@@ -4,25 +4,30 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest\Cli\ResultsWriter;
 
-use ComposerRequireChecker\Cli\ResultsWriter\JsonFile;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
+use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-use function file_get_contents;
 use function json_decode;
 
-final class JsonFileTest extends TestCase
+use const JSON_THROW_ON_ERROR;
+
+final class CliJsonTest extends TestCase
 {
-    private JsonFile $writer;
-    private vfsStreamDirectory $root;
+    private CliJson $writer;
+    private string $output = '';
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->root   = vfsStream::setup();
-        $this->writer = new JsonFile('vfs://root/path/name.json', '0.0.1');
+        $this->writer = new CliJson(
+            function (string $string): void {
+                $this->output .= $string;
+            },
+            '0.0.1',
+            static fn () => new DateTimeImmutable('@0')
+        );
     }
 
     public function testWriteReport(): void
@@ -33,16 +38,13 @@ final class JsonFileTest extends TestCase
             'dummy' => ['ext-dummy', 'ext-other'],
         ]);
 
-        self::assertFileExists('vfs://root/path/name.json');
-
-        $actual                  = json_decode(file_get_contents('vfs://root/path/name.json'), true);
-        $actual['_meta']['date'] = 'ATOM_DATE';
+        $actual = json_decode($this->output, true, JSON_THROW_ON_ERROR);
 
         self::assertSame(
             [
                 '_meta' => [
                     'composer-require-checker' => ['version' => '0.0.1'],
-                    'date' => 'ATOM_DATE',
+                    'date' => '1970-01-01T00:00:00+00:00',
                 ],
                 'unknown-symbols' => [
                     'Foo' => [],

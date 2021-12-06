@@ -14,7 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 use function dirname;
+use function file_get_contents;
 use function file_put_contents;
+use function json_decode;
 use function unlink;
 use function version_compare;
 
@@ -73,6 +75,36 @@ final class CheckCommandTest extends TestCase
         $this->assertStringContainsString('filter_var', $display);
         $this->assertStringContainsString('Foo\Bar\Baz', $display);
         $this->assertStringContainsString('libxml_clear_errors', $display);
+    }
+
+    public function testUnknownSymbolsFoundJsonReport(): void
+    {
+        $vfsRoot = vfsStream::setup();
+
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
+            '--report-json' => 'vfs://root/path/report.json',
+        ]);
+
+        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
+
+        /** @var array{'unknown-symbols': array<array-key, string[]>} $actual */
+        $actual = json_decode(file_get_contents('vfs://root/path/report.json'), true);
+
+        $this->assertSame(
+            [
+                'Doctrine\Common\Collections\ArrayCollection' => [],
+                'Example\Library\Dependency' => [],
+                'FILTER_VALIDATE_URL' => ['ext-filter'],
+                'filter_var' => ['ext-filter'],
+                'Foo\Bar\Baz' => [],
+                'libxml_clear_errors' => ['ext-libxml'],
+            ],
+            $actual['unknown-symbols']
+        );
     }
 
     public function testSelfCheckShowsNoErrors(): void
