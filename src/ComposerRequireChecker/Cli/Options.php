@@ -122,6 +122,6 @@ class Options
 
     private function getCamelCase(string $string): string
     {
-        return ucfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
 }
