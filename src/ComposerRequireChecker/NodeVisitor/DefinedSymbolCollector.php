@@ -10,6 +10,7 @@ use UnexpectedValueException;
 
 use function array_keys;
 use function get_class;
+use function property_exists;
 use function sprintf;
 
 final class DefinedSymbolCollector extends NodeVisitorAbstract
@@ -126,6 +127,10 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             }
         }
 
+        if (! ($node->args[0] instanceof Node\Arg)) {
+            return;
+        }
+
         if (! ($node->args[0]->value instanceof Node\Scalar\String_)) {
             return;
         }
@@ -133,9 +138,17 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         $this->recordDefinitionOfStringSymbol($node->args[0]->value->value);
     }
 
+    /**
+     * @psalm-param Node\Stmt\Function_|Node\Stmt\ClassLike|Node\Const_ $node
+     */
     private function recordDefinitionOf(Node $node): void
     {
-        if (! isset($node->namespacedName)) {
+        $namespacedName = null;
+        if (property_exists($node, 'namespacedName')) {
+            $namespacedName = $node->namespacedName;
+        }
+
+        if ($namespacedName === null) {
             throw new UnexpectedValueException(
                 sprintf(
                     'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
@@ -146,7 +159,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
             );
         }
 
-        $this->recordDefinitionOfStringSymbol((string) $node->namespacedName);
+        $this->recordDefinitionOfStringSymbol((string) $namespacedName);
     }
 
     private function recordDefinitionOfStringSymbol(string $symbolName): void

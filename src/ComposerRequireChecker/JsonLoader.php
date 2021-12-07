@@ -6,6 +6,7 @@ namespace ComposerRequireChecker;
 
 use ComposerRequireChecker\Exception\InvalidJson;
 use ComposerRequireChecker\Exception\NotReadable;
+use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use InvalidArgumentException;
 use Throwable;
 use Webmozart\Assert\Assert;
@@ -17,11 +18,14 @@ use const JSON_THROW_ON_ERROR;
 
 /**
  * @internal
+ *
+ * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
  */
 class JsonLoader
 {
     /**
      * @return array<array-key, mixed>
+     * @psalm-return ComposerData
      *
      * @throws InvalidJson
      * @throws NotReadable
@@ -37,6 +41,7 @@ class JsonLoader
             throw new InvalidJson('error parsing ' . $path . ': ' . $exception->getMessage(), 0, $exception);
         }
 
+        /** @psalm-var ComposerData $decodedData */
         return $decodedData;
     }
 

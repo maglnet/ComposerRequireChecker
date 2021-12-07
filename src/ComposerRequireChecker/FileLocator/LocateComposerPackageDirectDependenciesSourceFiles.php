@@ -10,10 +10,12 @@ use ComposerRequireChecker\JsonLoader;
 use Generator;
 
 use function array_key_exists;
-use function assert;
+use function array_keys;
 use function dirname;
-use function is_string;
 
+/**
+ * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
+ */
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
     public function __invoke(string $composerJsonPath): Generator
@@ -22,14 +24,9 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $composerJson    = JsonLoader::getData($composerJsonPath);
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
-        assert(is_string($configVendorDir));
-        $vendorDirs = [];
+        $vendorDirs      = [];
 
-        /**
-         * @var mixed $vendorRequiredVersion
-         */
-        foreach ($composerJson['require'] ?? [] as $vendorName => $vendorRequiredVersion) {
-            assert(is_string($vendorName));
+        foreach (array_keys($composerJson['require'] ?? []) as $vendorName) {
             $vendorDirs[$vendorName] = $packageDir . '/' . $configVendorDir . '/' . $vendorName;
         }
 
@@ -47,7 +44,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     /**
      * Lookup each vendor package's composer.json info from installed.json
      *
-     * @return array<string, array<mixed>> Keys are the package name and value is the composer.json as an array
+     * @return array<string, ComposerData> Keys are the package name and value is the composer.json as an array
      *
      * @throws DependenciesNotInstalled When composer install/update has not been run.
      */
@@ -63,12 +60,9 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $installedPackages = [];
 
-        /** @var array<array{name: string}> $packages */
+        /** @var array<ComposerData> $packages */
         $packages = $installedData['packages'] ?? $installedData;
 
-        /**
-         * @var array{name: string} $vendorJson
-         */
         foreach ($packages as $vendorJson) {
             $vendorName                     = $vendorJson['name'];
             $installedPackages[$vendorName] = $vendorJson;

@@ -3,17 +3,4 @@
   <file src="src/ComposerRequireChecker/Cli/CheckCommand.php">
     <MixedArgumentTypeCoercion occurrences="2"/>
   </file>
-  <file src="src/ComposerRequireChecker/FileLocator/LocateComposerPackageSourceFiles.php">
-    <MixedArgument occurrences="4">
-      <code>$composerData['autoload']['classmap'] ?? []</code>
-      <code>$composerData['autoload']['files'] ?? []</code>
-      <code>$composerData['autoload']['psr-0'] ?? []</code>
-      <code>$composerData['autoload']['psr-4'] ?? []</code>
-    </MixedArgument>
-  </file>
-  <file src="src/ComposerRequireChecker/NodeVisitor/DefinedSymbolCollector.php">
-    <NoInterfaceProperties occurrences="1">
-      <code>$node-&gt;namespacedName</code>
-    </NoInterfaceProperties>
-  </file>
 </files>

@@ -31,7 +31,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Webmozart\Assert\Assert;
 
 use function array_combine;
 use function array_diff;
@@ -46,6 +45,9 @@ use function is_string;
 use function realpath;
 use function sprintf;
 
+/**
+ * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
+ */
 class CheckCommand extends Command
 {
     public const NAME = 'check';
@@ -232,13 +234,13 @@ class CheckCommand extends Command
         }
 
         $config = JsonLoader::getData($fileName);
-        Assert::isMap($config);
 
         return new Options($config);
     }
 
     /**
      * @return array<array-key, mixed>
+     * @psalm-return ComposerData
      *
      * @throws InvalidJson
      * @throws NotReadable
