@@ -14,12 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 use function dirname;
-use function file_get_contents;
 use function file_put_contents;
 use function json_decode;
 use function unlink;
 use function version_compare;
 
+use const JSON_THROW_ON_ERROR;
 use const PHP_VERSION;
 
 final class CheckCommandTest extends TestCase
@@ -77,22 +77,29 @@ final class CheckCommandTest extends TestCase
         $this->assertStringContainsString('libxml_clear_errors', $display);
     }
 
-    public function testUnknownSymbolsFoundJsonReport(): void
+    public function testInvalidOutputOptionValue(): void
     {
-        $vfsRoot = vfsStream::setup();
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "output" must be either of value "json", "text" or omitted altogether');
 
         $this->commandTester->execute([
             'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
-            '--report-json' => 'vfs://root/path/report.json',
+            '--output' => '__invalid__',
+        ]);
+    }
+
+    public function testUnknownSymbolsFoundJsonReport(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
+            '--output' => 'json',
         ]);
 
         $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
-
-        /** @var array{'unknown-symbols': array<array-key, string[]>} $actual */
-        $actual = json_decode(file_get_contents('vfs://root/path/report.json'), true);
+        /** @var array{'unknown-symbols': array<array-key, list<string>>} $actual */
+        $actual = json_decode($display, true, JSON_THROW_ON_ERROR);
 
         $this->assertSame(
             [
@@ -105,6 +112,25 @@ final class CheckCommandTest extends TestCase
             ],
             $actual['unknown-symbols']
         );
+    }
+
+    public function testUnknownSymbolsFoundTextReport(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/unknownSymbols/composer.json',
+            '--output' => 'text',
+        ]);
+
+        $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
+        $display = $this->commandTester->getDisplay();
+
+        $this->assertStringNotContainsString('The following 6 unknown symbols were found:', $display);
+        $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
+        $this->assertStringContainsString('Example\Library\Dependency', $display);
+        $this->assertStringContainsString('FILTER_VALIDATE_URL', $display);
+        $this->assertStringContainsString('filter_var', $display);
+        $this->assertStringContainsString('Foo\Bar\Baz', $display);
+        $this->assertStringContainsString('libxml_clear_errors', $display);
     }
 
     public function testSelfCheckShowsNoErrors(): void

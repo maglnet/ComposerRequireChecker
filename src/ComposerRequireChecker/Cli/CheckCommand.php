@@ -37,10 +37,11 @@ use function array_combine;
 use function array_diff;
 use function array_map;
 use function array_merge;
+use function assert;
 use function count;
 use function dirname;
-use function file_put_contents;
 use function gettype;
+use function in_array;
 use function is_string;
 use function realpath;
 use function sprintf;
@@ -79,6 +80,22 @@ class CheckCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'generate output either as "text" or as "json", if specified, "quiet mode" is implied'
             );
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        if ($input->getOption('output') === null) {
+            return;
+        }
+
+        $optionValue = $input->getOption('output');
+        assert(is_string($optionValue));
+
+        if (! in_array($optionValue, ['text', 'json'])) {
+            throw new InvalidArgumentException(
+                'Option "output" must be either of value "json", "text" or omitted altogether'
+            );
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -161,29 +178,29 @@ class CheckCommand extends Command
             $options->getSymbolWhitelist()
         );
 
-        if (! $unknownSymbols) {
-            $output->writeln('There were no unknown symbols found.');
-
-            return 0;
-        }
-
         switch ($input->getOption('output')) {
             case 'json':
                 $application   = $this->getApplication();
                 $resultsWriter = new CliJson(
-                    static function (string $string): void {
-                        file_put_contents('php://stdout', $string);
+                    static function (string $string) use ($output): void {
+                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
                     },
                     $application !== null ? $application->getVersion() : 'Unknown version',
                     static fn () => new DateTimeImmutable()
                 );
                 break;
             case 'text':
+                $resultsWriter = new CliText(
+                    $output,
+                    static function (string $string) use ($output): void {
+                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
+                    }
+                );
+                break;
             default:
                 $resultsWriter = new CliText($output);
         }
 
-        $output->writeln('The following ' . count($unknownSymbols) . ' unknown symbols were found:');
         $guesser = new DependencyGuesser($options);
         $resultsWriter->write(
             array_map(
