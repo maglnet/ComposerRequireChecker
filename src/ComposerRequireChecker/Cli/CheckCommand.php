@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\Cli;
 
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
+use ComposerRequireChecker\Cli\ResultsWriter\CliText;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
@@ -18,25 +20,28 @@ use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use LogicException;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webmozart\Assert\Assert;
 
+use function array_combine;
 use function array_diff;
+use function array_map;
 use function array_merge;
+use function assert;
 use function count;
 use function dirname;
 use function gettype;
-use function implode;
+use function in_array;
 use function is_string;
 use function realpath;
 use function sprintf;
@@ -68,11 +73,37 @@ class CheckCommand extends Command
                 InputOption::VALUE_NONE,
                 'this will cause ComposerRequireChecker to ignore errors when files cannot be parsed, otherwise'
                 . ' errors will be thrown'
+            )
+            ->addOption(
+                'output',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'generate output either as "text" or as "json", if specified, "quiet mode" is implied'
             );
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        if ($input->getOption('output') === null) {
+            return;
+        }
+
+        $optionValue = $input->getOption('output');
+        assert(is_string($optionValue));
+
+        if (! in_array($optionValue, ['text', 'json'])) {
+            throw new InvalidArgumentException(
+                'Option "output" must be either of value "json", "text" or omitted altogether'
+            );
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($input->getOption('output') !== null) {
+            $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
+
         if (! $output->isQuiet()) {
             $application = $this->getApplication();
             $output->writeln($application !== null ? $application->getLongVersion() : 'Unknown version');
@@ -147,26 +178,43 @@ class CheckCommand extends Command
             $options->getSymbolWhitelist()
         );
 
-        if (! $unknownSymbols) {
-            $output->writeln('There were no unknown symbols found.');
-
-            return 0;
+        switch ($input->getOption('output')) {
+            case 'json':
+                $application   = $this->getApplication();
+                $resultsWriter = new CliJson(
+                    static function (string $string) use ($output): void {
+                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
+                    },
+                    $application !== null ? $application->getVersion() : 'Unknown version',
+                    static fn () => new DateTimeImmutable()
+                );
+                break;
+            case 'text':
+                $resultsWriter = new CliText(
+                    $output,
+                    static function (string $string) use ($output): void {
+                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
+                    }
+                );
+                break;
+            default:
+                $resultsWriter = new CliText($output);
         }
 
-        $output->writeln('The following ' . count($unknownSymbols) . ' unknown symbols were found:');
-        $table = new Table($output);
-        $table->setHeaders(['Unknown Symbol', 'Guessed Dependency']);
         $guesser = new DependencyGuesser($options);
-        foreach ($unknownSymbols as $unknownSymbol) {
-            $guessedDependencies = [];
-            foreach ($guesser($unknownSymbol) as $guessedDependency) {
-                $guessedDependencies[] = $guessedDependency;
-            }
+        $resultsWriter->write(
+            array_map(
+                static function (string $unknownSymbol) use ($guesser): array {
+                    $guessedDependencies = [];
+                    foreach ($guesser($unknownSymbol) as $guessedDependency) {
+                        $guessedDependencies[] = $guessedDependency;
+                    }
 
-            $table->addRow([$unknownSymbol, implode("\n", $guessedDependencies)]);
-        }
-
-        $table->render();
+                    return $guessedDependencies;
+                },
+                array_combine($unknownSymbols, $unknownSymbols)
+            ),
+        );
 
         return (int) (bool) $unknownSymbols;
     }
