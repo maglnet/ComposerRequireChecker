@@ -13,12 +13,12 @@
     processIsolation="false"
     backupGlobals="false"
 >
-    <testsuite name="ComposerRequireChecker tests">
-        <directory>./test/ComposerRequireCheckerTest</directory>
-    </testsuite>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+  <testsuite name="ComposerRequireChecker tests">
+    <directory>./test/ComposerRequireCheckerTest</directory>
+  </testsuite>
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
 </phpunit>
