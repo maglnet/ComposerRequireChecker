@@ -1,0 +1,16 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "logs": {
+        "text": "php://stderr"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "minMsi": 95,
+    "minCoveredMsi": 95
+}
