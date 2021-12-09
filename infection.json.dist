@@ -5,6 +5,7 @@
             "src"
         ]
     },
+    "timeout": 30,
     "logs": {
         "text": "php://stderr"
     },
