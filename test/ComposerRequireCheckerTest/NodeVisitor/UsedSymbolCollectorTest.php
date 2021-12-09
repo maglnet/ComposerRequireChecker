@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Catch_;
@@ -169,18 +170,21 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testFunctionParameterType(): void
     {
-        $functionName = new Name('foo');
-        $node         = new Function_($functionName);
-        $node->name   = $functionName;
-        $param        = new Param(new Variable('bar'));
-        $param->type  = new Name('Baz');
-        $node->params = [$param];
+        $functionName       = new Name('foo');
+        $node               = new Function_($functionName);
+        $node->name         = $functionName;
+        $param              = new Param(new Variable('bar'));
+        $param->type        = new Name('Baz');
+        $anotherParam       = new Param(new Variable('quux'));
+        $anotherParam->type = new Identifier('foo');
+        $node->params       = [$param, $anotherParam];
 
         $this->visitor->enterNode($node);
 
         $symbols = $this->visitor->getCollectedSymbols();
-        $this->assertCount(1, $symbols);
+        $this->assertCount(2, $symbols);
         $this->assertContains('Baz', $symbols);
+        $this->assertContains('foo', $symbols);
     }
 
     public function testMethodParameterType(): void

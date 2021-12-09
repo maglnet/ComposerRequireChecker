@@ -20,6 +20,7 @@ use function unlink;
 use function version_compare;
 
 use const JSON_THROW_ON_ERROR;
+use const PHP_EOL;
 use const PHP_VERSION;
 
 final class CheckCommandTest extends TestCase
@@ -112,6 +113,7 @@ final class CheckCommandTest extends TestCase
             ],
             $actual['unknown-symbols']
         );
+        self::assertStringEndsNotWith(PHP_EOL, $display);
     }
 
     public function testUnknownSymbolsFoundTextReport(): void
@@ -131,6 +133,7 @@ final class CheckCommandTest extends TestCase
         $this->assertStringContainsString('filter_var', $display);
         $this->assertStringContainsString('Foo\Bar\Baz', $display);
         $this->assertStringContainsString('libxml_clear_errors', $display);
+        $this->assertStringEndsNotWith(PHP_EOL . PHP_EOL, $display);
     }
 
     public function testSelfCheckShowsNoErrors(): void

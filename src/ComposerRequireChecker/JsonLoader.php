@@ -11,7 +11,9 @@ use InvalidArgumentException;
 use Throwable;
 use Webmozart\Assert\Assert;
 
+use function assert;
 use function file_get_contents;
+use function is_string;
 use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
@@ -56,9 +58,7 @@ class JsonLoader
 
         $content = file_get_contents($path);
 
-        if ($content === false) {
-            throw new NotReadable('unable to read ' . $path);
-        }
+        assert(is_string($content));
 
         return $content;
     }

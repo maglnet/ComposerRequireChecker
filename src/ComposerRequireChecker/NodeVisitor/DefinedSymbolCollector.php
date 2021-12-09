@@ -33,7 +33,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getDefinedSymbols(): array
     {

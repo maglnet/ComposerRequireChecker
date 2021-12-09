@@ -75,7 +75,7 @@ final class LocateComposerPackageSourceFiles
     /**
      * @param array<string> $sourceDirs
      *
-     * @return array<string>
+     * @return list<string>
      */
     private function getFilePaths(array $sourceDirs, string $packageDir): array
     {
