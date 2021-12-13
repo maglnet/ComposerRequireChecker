@@ -16,11 +16,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
@@ -288,5 +290,38 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->visitor->beforeTraverse([]);
 
         $this->assertCount(0, $this->visitor->getCollectedSymbols());
+    }
+
+    public function testPropertyType(): void
+    {
+        $node       = new Property(Class_::MODIFIER_PUBLIC, []);
+        $node->type = new Name('Bar');
+
+        $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(1, $symbols);
+        $this->assertContains('Bar', $symbols);
+    }
+
+    public function testIgnoresNonNamePropertyType(): void
+    {
+        $node       = new Property(Class_::MODIFIER_PUBLIC, []);
+        $node->type = 'Bar';
+
+        $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(0, $symbols);
+    }
+
+    public function testIgnoresUnhandledNodeTypes(): void
+    {
+        $node = new Break_();
+
+        $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(0, $symbols);
     }
 }
