@@ -292,7 +292,7 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->assertCount(0, $this->visitor->getCollectedSymbols());
     }
 
-    public function testProperyType(): void
+    public function testPropertyType(): void
     {
         $node       = new Property(Class_::MODIFIER_PUBLIC, []);
         $node->type = new Name('Bar');
