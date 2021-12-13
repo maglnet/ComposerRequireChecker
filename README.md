@@ -109,7 +109,7 @@ So the usual workflow would be
 
 ### Dealing with custom installer plugins
 
-Composer require checker only fetches it's knowledge of where files are from your project's `composer.json`. It does not use Composer itself to understand custom directory structures.
+Composer require checker only fetches its knowledge of where files are from your project's `composer.json`. It does not use Composer itself to understand custom directory structures.
 
 If your project requires to use any install plugins to put files in directories that are not `vendor/` or defined via the `vendor-dir` config setting in `composer.json`, composer require checker will fail to detect the required code correctly.
 
