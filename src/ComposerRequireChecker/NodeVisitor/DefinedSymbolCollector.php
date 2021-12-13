@@ -9,7 +9,6 @@ use PhpParser\NodeVisitorAbstract;
 use UnexpectedValueException;
 
 use function array_keys;
-use function get_class;
 use function property_exists;
 use function sprintf;
 
@@ -153,7 +152,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
                 sprintf(
                     'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
                     . 'did you pass it through a name resolver visitor?',
-                    get_class($node),
+                    $node::class,
                     $node->getLine()
                 )
             );
