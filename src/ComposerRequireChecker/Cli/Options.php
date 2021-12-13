@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli;
 
+use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use InvalidArgumentException;
 
 use function method_exists;
 use function str_replace;
-use function ucfirst;
 use function ucwords;
 
+/**
+ * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
+ */
 class Options
 {
     /** @var array<string>  */
@@ -122,6 +125,6 @@ class Options
 
     private function getCamelCase(string $string): string
     {
-        return ucfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
+        return str_replace(' ', '', ucwords(str_replace('-', ' ', $string)));
     }
 }

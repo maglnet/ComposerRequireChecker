@@ -31,7 +31,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Webmozart\Assert\Assert;
 
 use function array_combine;
 use function array_diff;
@@ -46,6 +45,9 @@ use function is_string;
 use function realpath;
 use function sprintf;
 
+/**
+ * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
+ */
 class CheckCommand extends Command
 {
     public const NAME = 'check';
@@ -104,10 +106,7 @@ class CheckCommand extends Command
             $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
-        if (! $output->isQuiet()) {
-            $application = $this->getApplication();
-            $output->writeln($application !== null ? $application->getLongVersion() : 'Unknown version');
-        }
+        (new ApplicationHeaderWriter($this->getApplication()))->__invoke($output);
 
         $composerJsonArgument = $input->getArgument('composer-json');
 
@@ -178,13 +177,27 @@ class CheckCommand extends Command
             $options->getSymbolWhitelist()
         );
 
+        // pcov which is used for coverage does not detect executed code in anonymous functions used as callable
+        // therefore we require to have closure class.
+        $outputWrapper = new class ($output) {
+            private OutputInterface $output;
+
+            public function __construct(OutputInterface $output)
+            {
+                $this->output = $output;
+            }
+
+            public function __invoke(string $string): void
+            {
+                $this->output->write($string, false, OutputInterface::VERBOSITY_QUIET);
+            }
+        };
+
         switch ($input->getOption('output')) {
             case 'json':
                 $application   = $this->getApplication();
                 $resultsWriter = new CliJson(
-                    static function (string $string) use ($output): void {
-                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
-                    },
+                    $outputWrapper,
                     $application !== null ? $application->getVersion() : 'Unknown version',
                     static fn () => new DateTimeImmutable()
                 );
@@ -192,9 +205,7 @@ class CheckCommand extends Command
             case 'text':
                 $resultsWriter = new CliText(
                     $output,
-                    static function (string $string) use ($output): void {
-                        $output->write($string, false, OutputInterface::VERBOSITY_QUIET | OutputInterface::OUTPUT_RAW);
-                    }
+                    $outputWrapper
                 );
                 break;
             default:
@@ -232,13 +243,13 @@ class CheckCommand extends Command
         }
 
         $config = JsonLoader::getData($fileName);
-        Assert::isMap($config);
 
         return new Options($config);
     }
 
     /**
      * @return array<array-key, mixed>
+     * @psalm-return ComposerData
      *
      * @throws InvalidJson
      * @throws NotReadable

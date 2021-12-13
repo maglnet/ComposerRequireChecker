@@ -80,6 +80,8 @@ final class CliTextTest extends TestCase
         $buffer = $this->output->fetch();
         self::assertStringContainsString('The following 3 unknown symbols were found:', $buffer);
         self::assertStringNotContainsString('Foo', $buffer);
+        self::assertStringContainsString('Unknown Symbol', $output);
+        self::assertStringContainsString('Guessed Dependency', $output);
         self::assertStringContainsString('Foo', $output);
         self::assertStringContainsString('| opcache_get_status', $output);
         self::assertStringContainsString('| ext-opcache', $output);

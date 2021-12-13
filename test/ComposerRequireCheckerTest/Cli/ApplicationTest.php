@@ -22,4 +22,12 @@ final class ApplicationTest extends TestCase
         $this->assertTrue($this->application->has('check'));
         $this->assertInstanceOf(Command::class, $this->application->get('check'));
     }
+
+    public function testCheckCommandIsDefaultCommand(): void
+    {
+        self::assertStringContainsString(
+            '<info>check</info>',
+            $this->application->getDefinition()->getOption('help')->getDescription()
+        );
+    }
 }

@@ -19,7 +19,7 @@ final class LocateDefinedSymbolsFromASTRoots
     /**
      * @param Traversable<int, array<Node>> $ASTs a series of AST roots
      *
-     * @return string[] all the found symbols
+     * @return list<string> all the found symbols
      */
     public function __invoke(Traversable $ASTs): array
     {

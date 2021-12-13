@@ -13,7 +13,12 @@ class FileParseFailed extends RuntimeException
 {
     public function __construct(string $file, ?Throwable $previous = null)
     {
-        $msg = sprintf('Parsing the file [%s] resulted in an error: %s', $file, $previous->getMessage());
+        $msg = sprintf(
+            'Parsing the file [%s] resulted in an error: %s',
+            $file,
+            $previous !== null ? $previous->getMessage() : ''
+        );
+
         parent::__construct($msg, 0, $previous);
     }
 }

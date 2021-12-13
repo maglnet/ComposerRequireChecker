@@ -16,15 +16,39 @@ use function is_file;
 use function ltrim;
 use function str_replace;
 
+/**
+ * @psalm-type ComposerConfig = array{vendor-dir?: string}
+ * @psalm-type ComposerRequire = array<string, string>
+ * @psalm-type ComposerAutoload = array{
+ *                 exclude-from-classmap?: list<string>,
+ *                 classmap?: list<string>,
+ *                 files?: list<string>,
+ *                 psr-0?: list<string>,
+ *                 psr-4?: list<string>
+ *             }
+ * @psalm-type ComposerPackageData = array{
+ *                 name: string,
+ *                 require?: ComposerConfig,
+ *                 autoload?: ComposerAutoload,
+ *                 config?: ComposerConfig
+ *             }
+ * @psalm-type ComposerData = array{
+ *                 name: string,
+ *                 require?: ComposerConfig,
+ *                 autoload?: ComposerAutoload,
+ *                 config?: ComposerConfig,
+ *                 packages?: list<ComposerPackageData>
+ *             }
+ */
 final class LocateComposerPackageSourceFiles
 {
     /**
      * @param mixed[] $composerData The contents of composer.json for a package
      * @param string  $packageDir   The path to package
+     * @psalm-param ComposerData $composerData The contents of composer.json for a package
      */
     public function __invoke(array $composerData, string $packageDir): Generator
     {
-        /** @var array<string>|null $blacklist */
         $blacklist = $composerData['autoload']['exclude-from-classmap'] ?? null;
 
         yield from $this->locateFilesInClassmapDefinitions(
@@ -51,7 +75,7 @@ final class LocateComposerPackageSourceFiles
     /**
      * @param array<string> $sourceDirs
      *
-     * @return array<string>
+     * @return list<string>
      */
     private function getFilePaths(array $sourceDirs, string $packageDir): array
     {

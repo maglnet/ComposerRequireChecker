@@ -21,7 +21,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return array<string>
+     * @return list<string>
      */
     public function getCollectedSymbols(): array
     {

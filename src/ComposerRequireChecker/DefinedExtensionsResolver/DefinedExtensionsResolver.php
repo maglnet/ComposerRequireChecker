@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedExtensionsResolver;
 
+use function array_keys;
 use function array_merge;
 use function file_get_contents;
 use function json_decode;
@@ -25,7 +26,7 @@ class DefinedExtensionsResolver
         $extensions           = [];
         $addPhpCoreExtensions = false;
 
-        foreach ($requires as $require => $version) {
+        foreach (array_keys($requires) as $require) {
             if ($require === 'php' || $require === 'php-64bit') {
                 $addPhpCoreExtensions = true;
                 continue;
