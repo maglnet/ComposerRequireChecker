@@ -214,6 +214,15 @@ JSON
         );
     }
 
+    public function testAutoloadedFiles(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/autoloadedFiles/composer.json',
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+    }
+
     public function testNoUnknownSymbolsFound(): void
     {
         $this->commandTester->execute([
