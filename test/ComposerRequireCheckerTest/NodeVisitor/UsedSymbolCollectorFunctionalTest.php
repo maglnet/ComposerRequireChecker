@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
-use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -48,6 +47,8 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'ComposerRequireChecker\NodeVisitor\UsedSymbolCollector',
                 'PHPUnit\Framework\TestCase',
                 'PhpParser\NodeTraverser',
+                'PhpParser\NodeTraverserInterface',
+                'PhpParser\Parser',
                 'PhpParser\ParserFactory',
                 'file_get_contents',
                 'ReflectionClass',
@@ -124,6 +125,16 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             [],
+            $this->collector->getCollectedSymbols()
+        );
+    }
+
+    public function testWillCollectPropertyTypes(): void
+    {
+        $this->traverseStringAST('<?php class Foo { public My\PropertyType $foo; }');
+
+        self::assertSameCollectedSymbols(
+            ['My\PropertyType'],
             $this->collector->getCollectedSymbols()
         );
     }
