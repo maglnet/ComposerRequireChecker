@@ -61,9 +61,11 @@ final class OptionsTest extends TestCase
         $options->setSymbolWhitelist(['foo', 'bar']);
         $options->setScanFiles(['one', 'two', 'three']);
         $options->setPhpCoreExtensions(['ext-one', 'ext-two']);
+        $options->setCacheDirectory('var');
 
         self::assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
         self::assertSame(['one', 'two', 'three'], $options->getScanFiles());
         self::assertSame(['ext-one', 'ext-two'], $options->getPhpCoreExtensions());
+        self::assertSame('var', $options->getCacheDirectory());
     }
 }

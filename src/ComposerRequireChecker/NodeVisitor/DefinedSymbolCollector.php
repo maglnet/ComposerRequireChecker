@@ -150,8 +150,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         if ($namespacedName === null) {
             throw new UnexpectedValueException(
                 sprintf(
-                    'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
-                    . 'did you pass it through a name resolver visitor?',
+                    'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: did you pass it through a name resolver visitor?',
                     $node::class,
                     $node->getLine()
                 )

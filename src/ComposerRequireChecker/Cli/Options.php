@@ -55,6 +55,8 @@ class Options
      */
     private array $scanFiles = [];
 
+    private ?string $cacheDirectory = null;
+
     /**
      * @param array<string, mixed> $options
      */
@@ -121,6 +123,16 @@ class Options
     public function setScanFiles(array $scanFiles): void
     {
         $this->scanFiles = $scanFiles;
+    }
+
+    public function getCacheDirectory(): ?string
+    {
+        return $this->cacheDirectory;
+    }
+
+    public function setCacheDirectory(?string $cacheDirectory): void
+    {
+        $this->cacheDirectory = $cacheDirectory;
     }
 
     private function getCamelCase(string $string): string

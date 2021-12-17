@@ -13,5 +13,6 @@
     "SPL",
     "standard"
   ],
-  "scan-files" : []
+  "scan-files" : [],
+  "cache-directory": null
 }

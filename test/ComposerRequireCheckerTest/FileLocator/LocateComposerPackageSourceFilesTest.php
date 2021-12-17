@@ -37,7 +37,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     public function testFromClassmap(): void
     {
         vfsStream::create([
-            'composer.json' => '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}',
+            'composer.json' => '{"autoload": {"classmap": ["/src\\\MyClassA.php", "MyClassB.php"]}}',
             'src' => ['MyClassA.php' => '<?php class MyClassA {}'],
             'MyClassB.php' => '<?php class MyClassB {}',
         ]);
@@ -52,7 +52,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     public function testFromFiles(): void
     {
         vfsStream::create([
-            'composer.json' => '{"autoload": {"files": ["foo.php"]}}',
+            'composer.json' => '{"autoload": {"files": ["/foo.php"]}}',
             'foo.php' => '<?php class MyClass {}',
         ]);
 
@@ -65,7 +65,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     public function testFromPsr0(): void
     {
         vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-0": ["src"]}}',
+            'composer.json' => '{"autoload": {"psr-0": ["/src"]}}',
             'src' => [
                 'MyNamespace' => ['MyClass.php' => '<?php namespace MyNamespace; class MyClass {}'],
             ],

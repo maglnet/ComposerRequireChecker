@@ -63,7 +63,7 @@ final class DefinedExtensionsResolverTest extends TestCase
     public function testExtensionsAreReturned(): void
     {
         $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"ext-zip":"*","ext-curl":"*"}}')
+            ->setContent('{"require":{"invalid": "*","ext-zip":"*","ext-curl":"*"}}')
             ->url();
 
         $extensions = ($this->resolver)($composerJson);

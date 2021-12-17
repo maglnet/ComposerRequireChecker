@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli;
 
-use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
+use ComposerRequireChecker\ASTLocator\ASTLoader;
 use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
 use ComposerRequireChecker\Cli\ResultsWriter\CliText;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
@@ -19,6 +19,7 @@ use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
 use ComposerRequireChecker\JsonLoader;
+use ComposerRequireChecker\SymbolCache;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use DateTimeImmutable;
 use InvalidArgumentException;
@@ -26,6 +27,8 @@ use LogicException;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -130,17 +133,17 @@ class CheckCommand extends Command
         $getPackageSourceFiles    = new LocateComposerPackageSourceFiles();
         $getAdditionalSourceFiles = new LocateFilesByGlobPattern();
 
-        $sourcesASTs = $this->getASTFromFilesLocator($input);
+        $astLoader          = $this->getASTLoader($input);
+        $definedSymbolCache = $this->getCache($options, 'defined-symbols');
+        $usedSymbolCache    = $this->getCache($options, 'used-symbols');
 
         $this->verbose('Collecting defined vendor symbols... ', $output);
         $definedVendorSymbols = array_merge(
-            (new LocateDefinedSymbolsFromASTRoots())->__invoke(
-                $sourcesASTs(
-                    (new ComposeGenerators())->__invoke(
-                        $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
-                        $getPackageSourceFiles($composerData, dirname($composerJson)),
-                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
-                    )
+            (new LocateDefinedSymbolsFromASTRoots($astLoader, $definedSymbolCache))->__invoke(
+                (new ComposeGenerators())->__invoke(
+                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                    $getPackageSourceFiles($composerData, dirname($composerJson)),
+                    (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson)
                 )
             ),
             (new LocateDefinedSymbolsFromComposerRuntimeApi())->__invoke($composerData),
@@ -155,12 +158,10 @@ class CheckCommand extends Command
         $this->verbose('found ' . count($definedExtensionSymbols) . ' symbols.', $output, true);
 
         $this->verbose('Collecting used symbols... ', $output);
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
-            $sourcesASTs(
-                (new ComposeGenerators())->__invoke(
-                    $getPackageSourceFiles($composerData, dirname($composerJson)),
-                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
-                )
+        $usedSymbols = (new LocateUsedSymbolsFromASTRoots($astLoader, $usedSymbolCache))->__invoke(
+            (new ComposeGenerators())->__invoke(
+                $getPackageSourceFiles($composerData, dirname($composerJson)),
+                $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson))
             )
         );
         $this->verbose('found ' . count($usedSymbols) . ' symbols.', $output, true);
@@ -260,12 +261,23 @@ class CheckCommand extends Command
         return JsonLoader::getData($jsonFile);
     }
 
-    private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
+    private function getASTLoader(InputInterface $input): ASTLoader
     {
         $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
         $parser       = (new ParserFactory())->create(ParserFactory::PREFER_PHP7, new Lexer());
 
-        return new LocateASTFromFiles($parser, $errorHandler);
+        return new ASTLoader($parser, $errorHandler);
+    }
+
+    private function getCache(Options $options, string $namespace): SymbolCache
+    {
+        if ($options->getCacheDirectory() === null) {
+            $cache = new NullAdapter();
+        } else {
+            $cache = new FilesystemAdapter($namespace, 0, $options->getCacheDirectory());
+        }
+
+        return new SymbolCache($cache);
     }
 
     /**

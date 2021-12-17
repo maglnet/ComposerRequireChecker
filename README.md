@@ -97,6 +97,15 @@ The following example would also scan the file `bin/console` and all files with 
 If you don't like copying the tool's default settings, consider adding these paths to the Composer autoloading section 
 of your project instead.
 
+## Cache
+
+It's possible to cache the parsed PHP files by setting the `cache-directory` in your configuration file. For example:
+```json
+{
+  "cache-directory": "var/composer-require-checker"
+}
+```
+
 ## Usage
 
 Composer require checker runs on an existing directory structure. It does not change your code, and does not even install your composer dependencies. That is a task that is entirely up to you, allowing you to change/improve things after a scan to see if it fixes the issue.
