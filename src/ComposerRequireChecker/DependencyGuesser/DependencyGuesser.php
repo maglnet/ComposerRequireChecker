@@ -26,4 +26,9 @@ class DependencyGuesser
             yield from $guesser($symbolName);
         }
     }
+
+    public function addGuesser(Guesser $guesser): void
+    {
+        $this->guessers[] = $guesser;
+    }
 }
