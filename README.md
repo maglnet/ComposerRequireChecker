@@ -73,10 +73,11 @@ If you cannot provide a PHP instance without Xdebug yourself, try setting an env
 Composer require checker is configured to whitelist some symbols per default. Have a look at the
 [config file example](data/config.dist.json) to see which configuration options are available.
 
-You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration.
+You can now adjust this file, as needed, and tell composer-require-checker to use it for it's configuration. 
+If you want to use the default whitelist, you may remove this section and only adjust the sections you would like to change.
 
-Note that you'll have to copy it's contents if you want to add something on top. This tool intentionally only 
-reads one configuration file. If you pass only your new settings, you'll get error reports about the PHP core
+Note that if you want to add something on top of a section, you'll have to copy the whole section's content. 
+This tool intentionally only reads one configuration file. If you pass only your new settings, you'll get error reports about the PHP core
 extensions and internal symbols like `true` or `false` being undefined.
 
 ```sh
@@ -86,12 +87,14 @@ bin/composer-require-checker check --config-file=path/to/config.json /path/to/yo
 ### Scan Additional Files
 
 To scan files, that are not part of your autoload definition you may add glob patterns to the config file's `scan-files`
-section. Copy the default file and add to your copy.
+section.
 
-The following example would also scan the file `bin/console` and all files with `.php` extension within your `bin/` folder:
+The following example configuration file would also scan the file `bin/console` and all files with `.php` extension within your `bin/` folder:
 
-```
-"scan-files" : ["bin/console", "bin/*.php"]
+```json
+{
+    "scan-files" : ["bin/console", "bin/*.php"]
+}
 ```
 
 If you don't like copying the tool's default settings, consider adding these paths to the Composer autoloading section 
