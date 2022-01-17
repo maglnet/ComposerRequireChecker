@@ -7,6 +7,9 @@ namespace ComposerRequireCheckerTest\DependencyGuesser;
 use ComposerRequireChecker\DependencyGuesser\GuessFromInstalledComposerPackages;
 use PHPUnit\Framework\TestCase;
 
+use function dirname;
+use function iterator_to_array;
+
 final class GuessFromInstalledComposerPackagesTest extends TestCase
 {
     private GuessFromInstalledComposerPackages $guesser;
@@ -18,19 +21,19 @@ final class GuessFromInstalledComposerPackagesTest extends TestCase
 
     public function testGuessVendorClass(): void
     {
-        $result = ($this->guesser)(TestCase::class);
+        $result = iterator_to_array(($this->guesser)(TestCase::class));
 
         self::assertNotEmpty($result);
         self::assertContains('phpunit/phpunit', $result);
     }
 
-    public function testDoNotGuessVendorFunction(): void
+    public function testGuessVendorFunction(): void
     {
         $result = iterator_to_array(($this->guesser)('DeepCopy\deep_copy'));
 
-        self::assertEmpty($result);
+        self::assertNotEmpty($result);
+        self::assertContains('myclabs/deep-copy', $result);
     }
-
 
     public function testDoNotGuessClassFromProject(): void
     {

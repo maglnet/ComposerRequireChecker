@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DependencyGuesser;
 
 use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use ComposerRequireChecker\DependencyGuesser\GuessFromLoadedExtensions;
 use PHPUnit\Framework\TestCase;
 
 use function extension_loaded;
@@ -14,33 +15,32 @@ final class DependencyGuesserTest extends TestCase
 {
     private DependencyGuesser $guesser;
 
-    protected function setUp(): void
-    {
-        $this->guesser = new DependencyGuesser();
-    }
-
     public function testGuessExtJson(): void
     {
         if (! extension_loaded('json')) {
             $this->markTestSkipped('extension json is not available');
         }
 
-        $result = $this->guesser->__invoke('json_decode');
+        $guesser = new DependencyGuesser([new GuessFromLoadedExtensions()]);
+
+        $result = $guesser->__invoke('json_decode');
         $this->assertNotEmpty($result);
         $this->assertContains('ext-json', $result);
     }
 
     public function testDoesNotSuggestAnything(): void
     {
-        $result = $this->guesser->__invoke('an_hopefully_unique_unknown_symbol');
+        $guesser = new DependencyGuesser([new GuessFromLoadedExtensions()]);
+
+        $result = $guesser->__invoke('an_hopefully_unique_unknown_symbol');
         $this->assertFalse($result->valid());
     }
 
     public function testCoreExtensionsResolvesToPHP(): void
     {
-        $options       = new Options(['php-core-extensions' => ['SPL', 'something-else']]);
-        $this->guesser = new DependencyGuesser($options);
-        $result        = $this->guesser->__invoke('RecursiveDirectoryIterator');
+        $guesser = new DependencyGuesser([new GuessFromLoadedExtensions(new Options(['php-core-extensions' => ['SPL', 'something-else']]))]);
+
+        $result = $guesser->__invoke('RecursiveDirectoryIterator');
         $this->assertNotEmpty($result);
         $this->assertContains('php', $result);
     }
