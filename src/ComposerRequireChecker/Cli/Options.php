@@ -41,6 +41,7 @@ class Options
     private array $phpCoreExtensions = [
         'Core',
         'date',
+        'json',
         'pcre',
         'Phar',
         'Reflection',

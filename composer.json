@@ -27,7 +27,6 @@
     ],
     "require": {
         "php": "^8.0",
-        "ext-json": "*",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
         "nikic/php-parser": "^4.13.0",
@@ -49,7 +48,8 @@
         "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true
         }
     },
     "extra": {
