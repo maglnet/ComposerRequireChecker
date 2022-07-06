@@ -8,7 +8,7 @@ use function array_keys;
 use function array_merge;
 use function file_get_contents;
 use function json_decode;
-use function strpos;
+use function str_starts_with;
 use function substr;
 
 class DefinedExtensionsResolver
@@ -32,7 +32,7 @@ class DefinedExtensionsResolver
                 continue;
             }
 
-            if (strpos($require, 'ext-') !== 0) {
+            if (! str_starts_with($require, 'ext-')) {
                 continue;
             }
 

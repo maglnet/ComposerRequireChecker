@@ -7,6 +7,7 @@
   "php-core-extensions" : [
     "Core",
     "date",
+    "json",
     "pcre",
     "Phar",
     "Reflection",

@@ -41,7 +41,7 @@ class GuessFromLoadedExtensions implements Guesser
                 continue;
             }
 
-            if ($this->coreExtensions && in_array($extensionName, $this->coreExtensions)) {
+            if ($this->coreExtensions && in_array($extensionName, $this->coreExtensions, true)) {
                 yield 'php';
             }
 
