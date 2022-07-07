@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DependencyGuesser;
 
-use ComposerRequireChecker\Cli\Options;
 use Generator;
 
 class DependencyGuesser
 {
-    /** @var Guesser[] */
+    /** @var array<Guesser> */
     private array $guessers = [];
 
-    public function __construct(?Options $options = null)
+    /**
+     * @param array<Guesser> $guessers
+     */
+    public function __construct(array $guessers)
     {
-        $this->guessers[] = new GuessFromLoadedExtensions($options);
+        $this->guessers = $guessers;
     }
 
     /**

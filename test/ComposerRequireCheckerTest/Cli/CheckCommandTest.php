@@ -206,12 +206,14 @@ JSON
             'composer-json' => dirname(__DIR__, 3) . '/composer.json',
             '--config-file' => $root->getChild('config.json')->url(),
         ]);
-
         $this->assertNotEquals(0, $exitCode);
-        $this->assertMatchesRegularExpression(
-            '/The following 2 unknown symbols were found.*PHPUnit\\\\Framework\\\\TestCase/s',
-            $this->commandTester->getDisplay()
-        );
+
+        $display = $this->commandTester->getDisplay();
+        $this->assertStringContainsString('The following 2 unknown symbols were found', $display);
+        $this->assertStringContainsString('org\bovigo\vfs\vfsStream', $display);
+        $this->assertStringContainsString('mikey179/vfsstream', $display);
+        $this->assertStringContainsString('PHPUnit\Framework\TestCase', $display);
+        $this->assertStringContainsString('phpunit/phpunit', $display);
     }
 
     public function testNoUnknownSymbolsFound(): void

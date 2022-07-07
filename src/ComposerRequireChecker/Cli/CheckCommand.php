@@ -12,6 +12,8 @@ use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoot
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use ComposerRequireChecker\DependencyGuesser\GuessFromInstalledComposerPackages;
+use ComposerRequireChecker\DependencyGuesser\GuessFromLoadedExtensions;
 use ComposerRequireChecker\Exception\InvalidJson;
 use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
@@ -212,7 +214,11 @@ class CheckCommand extends Command
                 $resultsWriter = new CliText($output);
         }
 
-        $guesser = new DependencyGuesser($options);
+        $guesser = new DependencyGuesser([
+            new GuessFromLoadedExtensions($options),
+            new GuessFromInstalledComposerPackages(dirname($composerJson)),
+        ]);
+
         $resultsWriter->write(
             array_map(
                 static function (string $unknownSymbol) use ($guesser): array {

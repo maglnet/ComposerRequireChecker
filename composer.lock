@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96a447b8623496db4a1687c90d4438a5",
+    "content-hash": "43190f04ebd0bfc580949efb83c75bf7",
     "packages": [
+        {
+            "name": "jetbrains/phpstorm-stubs",
+            "version": "v2021.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JetBrains/phpstorm-stubs.git",
+                "reference": "c790a8fa467ff5d3f11b0e7c1f3698abbe37b182"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JetBrains/phpstorm-stubs/zipball/c790a8fa467ff5d3f11b0e7c1f3698abbe37b182",
+                "reference": "c790a8fa467ff5d3f11b0e7c1f3698abbe37b182",
+                "shasum": ""
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "dev-master",
+                "nikic/php-parser": "@stable",
+                "php": "^8.0",
+                "phpdocumentor/reflection-docblock": "@stable",
+                "phpunit/phpunit": "@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "PhpStormStubsMap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "PHP runtime & extensions header files for PhpStorm",
+            "homepage": "https://www.jetbrains.com/phpstorm",
+            "keywords": [
+                "autocomplete",
+                "code",
+                "inference",
+                "inspection",
+                "jetbrains",
+                "phpstorm",
+                "stubs",
+                "type"
+            ],
+            "support": {
+                "source": "https://github.com/JetBrains/phpstorm-stubs/tree/v2021.3"
+            },
+            "time": "2021-10-19T20:06:47+00:00"
+        },
         {
             "name": "nikic/php-parser",
             "version": "v4.13.2",
@@ -109,6 +157,119 @@
                 "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
             "time": "2021-11-05T16:50:12+00:00"
+        },
+        {
+            "name": "roave/better-reflection",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Roave/BetterReflection.git",
+                "reference": "24a030165953af5e4193502de1b860e3e99633d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Roave/BetterReflection/zipball/24a030165953af5e4193502de1b860e3e99633d3",
+                "reference": "24a030165953af5e4193502de1b860e3e99633d3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "jetbrains/phpstorm-stubs": "2021.3",
+                "nikic/php-parser": "^4.13.2",
+                "php": "~8.0.12 || ~8.1.0",
+                "roave/signature": "^1.5"
+            },
+            "conflict": {
+                "thecodingmachine/safe": "<1.1.3"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^9.0.0",
+                "phpstan/phpstan": "^1.2.0",
+                "phpunit/phpunit": "^9.5.9",
+                "roave/infection-static-analysis-plugin": "^1.13.0",
+                "vimeo/psalm": "^4.15.0"
+            },
+            "suggest": {
+                "composer/composer": "Required to use the ComposerSourceLocator"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Roave\\BetterReflection\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Titcumb",
+                    "email": "james@asgrim.com",
+                    "homepage": "https://github.com/asgrim"
+                },
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "https://ocramius.github.io/"
+                },
+                {
+                    "name": "Gary Hockin",
+                    "email": "gary@roave.com",
+                    "homepage": "https://github.com/geeh"
+                },
+                {
+                    "name": "Jaroslav Hanslík",
+                    "email": "kukulich@kukulich.cz",
+                    "homepage": "https://github.com/kukulich"
+                }
+            ],
+            "description": "Better Reflection - an improved code reflection API",
+            "support": {
+                "issues": "https://github.com/Roave/BetterReflection/issues",
+                "source": "https://github.com/Roave/BetterReflection/tree/5.0.0"
+            },
+            "time": "2021-12-25T17:47:19+00:00"
+        },
+        {
+            "name": "roave/signature",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Roave/Signature.git",
+                "reference": "b100e2c40e51f3c56a0b29faf3e7ca75c33df60b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Roave/Signature/zipball/b100e2c40e51f3c56a0b29faf3e7ca75c33df60b",
+                "reference": "b100e2c40e51f3c56a0b29faf3e7ca75c33df60b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "7.4.*|8.0.*|8.1.*"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^9.0",
+                "infection/infection": "^0.25.1",
+                "phpunit/phpunit": "^9.5.9",
+                "vimeo/psalm": "^4.10.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Roave\\Signature\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Sign and verify stuff",
+            "support": {
+                "issues": "https://github.com/Roave/Signature/issues",
+                "source": "https://github.com/Roave/Signature/tree/1.5.0"
+            },
+            "time": "2021-09-18T13:37:44+00:00"
         },
         {
             "name": "symfony/console",
@@ -5296,5 +5457,5 @@
     "platform-dev": {
         "ext-zend-opcache": "*"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
