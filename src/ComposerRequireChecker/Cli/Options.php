@@ -7,6 +7,8 @@ namespace ComposerRequireChecker\Cli;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use InvalidArgumentException;
 
+use function array_merge;
+use function array_unique;
 use function method_exists;
 use function str_replace;
 use function ucwords;
@@ -16,8 +18,7 @@ use function ucwords;
  */
 class Options
 {
-    /** @var array<string>  */
-    private array $symbolWhitelist = [
+    private const PHP_LANGUAGE_TYPES = [
         'null',
         'true',
         'false', // consts
@@ -36,6 +37,9 @@ class Options
         'mixed',
         'never',
     ];
+
+    /** @var array<string>  */
+    private array $symbolWhitelist = self::PHP_LANGUAGE_TYPES;
 
     /** @var array<string>  */
     private array $phpCoreExtensions = [
@@ -97,7 +101,14 @@ class Options
      */
     public function setSymbolWhitelist(array $symbolWhitelist): void
     {
-        $this->symbolWhitelist = $symbolWhitelist;
+        /*
+         * Make sure the language types (e.g. 'true', 'false', 'object', 'mixed') are always included in the symbol
+         * whitelist. If these are omitted the results can be pretty unexpected.
+         */
+        $this->symbolWhitelist = array_unique(array_merge(
+            self::PHP_LANGUAGE_TYPES,
+            $symbolWhitelist
+        ));
     }
 
     /**

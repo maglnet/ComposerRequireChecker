@@ -22,13 +22,33 @@ final class OptionsTest extends TestCase
         $this->assertSame(['something'], $options->getPhpCoreExtensions());
     }
 
-    public function testOptionsAcceptSymbolWhitelist(): void
+    public function testOptionsAcceptSymbolWhitelistAndFiltersDuplicates(): void
     {
         $options = new Options([
-            'symbol-whitelist' => ['foo', 'bar'],
+            'symbol-whitelist' => ['foo', 'bar', 'null'],
         ]);
 
-        $this->assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
+        $this->assertSame([
+            'null',
+            'true',
+            'false',
+            'static',
+            'self',
+            'parent',
+            'array',
+            'string',
+            'int',
+            'float',
+            'bool',
+            'iterable',
+            'callable',
+            'void',
+            'object',
+            'mixed',
+            'never',
+            'foo',
+            'bar',
+        ], $options->getSymbolWhitelist());
     }
 
     public function testOptionsFileRepresentsDefaults(): void
@@ -62,7 +82,28 @@ final class OptionsTest extends TestCase
         $options->setScanFiles(['one', 'two', 'three']);
         $options->setPhpCoreExtensions(['ext-one', 'ext-two']);
 
-        self::assertSame(['foo', 'bar'], $options->getSymbolWhitelist());
+        $this->assertSame([
+            'null',
+            'true',
+            'false',
+            'static',
+            'self',
+            'parent',
+            'array',
+            'string',
+            'int',
+            'float',
+            'bool',
+            'iterable',
+            'callable',
+            'void',
+            'object',
+            'mixed',
+            'never',
+            'foo',
+            'bar',
+        ], $options->getSymbolWhitelist());
+
         self::assertSame(['one', 'two', 'three'], $options->getScanFiles());
         self::assertSame(['ext-one', 'ext-two'], $options->getPhpCoreExtensions());
     }
