@@ -22,10 +22,10 @@ final class OptionsTest extends TestCase
         $this->assertSame(['something'], $options->getPhpCoreExtensions());
     }
 
-    public function testOptionsAcceptSymbolWhitelist(): void
+    public function testOptionsAcceptSymbolWhitelistAndFiltersDuplicates(): void
     {
         $options = new Options([
-            'symbol-whitelist' => ['foo', 'bar'],
+            'symbol-whitelist' => ['foo', 'bar', 'null'],
         ]);
 
         $this->assertSame([
