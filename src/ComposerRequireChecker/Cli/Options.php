@@ -51,6 +51,7 @@ class Options
         'Reflection',
         'SPL',
         'standard',
+        'tokenizer',
     ];
 
     /**

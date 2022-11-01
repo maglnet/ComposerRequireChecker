@@ -8,7 +8,8 @@
     "Phar",
     "Reflection",
     "SPL",
-    "standard"
+    "standard",
+    "tokenizer"
   ],
   "scan-files" : []
 }
