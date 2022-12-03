@@ -84,7 +84,7 @@ extensions and internal symbols like `true` or `false` being undefined.
 bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
 ``` 
 
-> By default, it uses `composer-require-checker.json` if the file exists. 
+By default, it uses `composer-require-checker.json` if the file exists. 
 
 ### Scan Additional Files
 
