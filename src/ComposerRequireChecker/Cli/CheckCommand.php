@@ -39,6 +39,7 @@ use function array_merge;
 use function assert;
 use function count;
 use function dirname;
+use function file_exists;
 use function gettype;
 use function in_array;
 use function is_string;
@@ -50,7 +51,7 @@ use function sprintf;
  */
 class CheckCommand extends Command
 {
-    public const NAME = 'check';
+    public const NAME                 = 'check';
     private const DEFAULT_CONFIG_PATH = 'composer-require-checker.json';
 
     protected function configure(): void
@@ -243,15 +244,18 @@ class CheckCommand extends Command
         if (is_string($fileName) === false) {
             return new Options();
         }
+
         if (file_exists($fileName) === false) {
             if ($fileName === self::DEFAULT_CONFIG_PATH) {
                 return new Options();
-            } else {
-                throw new \InvalidArgumentException(sprintf(
+            }
+
+            throw new InvalidArgumentException(
+                sprintf(
                     'Configuration file [%s] does not exist.',
                     $fileName
-                ));
-            }
+                )
+            );
         }
 
         $config = JsonLoader::getData($fileName);

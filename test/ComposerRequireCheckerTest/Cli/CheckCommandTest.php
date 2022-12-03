@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
+use function chdir;
 use function dirname;
 use function file_put_contents;
 use function json_decode;
@@ -274,10 +275,8 @@ JSON
         $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
 
         chdir($baseDirectory);
-        $exitCode = $this->commandTester->execute([
-            'composer-json' =>  'composer.json',
-        ]);
-        $output = $this->commandTester->getDisplay();
+        $exitCode = $this->commandTester->execute(['composer-json' => 'composer.json']);
+        $output   = $this->commandTester->getDisplay();
 
         $this->assertNotEquals(0, $exitCode);
         $this->assertMatchesRegularExpression(
@@ -297,10 +296,8 @@ JSON
     public function testOverrideDefaultConfigPath(): void
     {
         $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
-        $root = vfsStream::setup();
-        vfsStream::create([
-            'config.json' => '{"scan-files": []}'
-        ]);
+        $root          = vfsStream::setup();
+        vfsStream::create(['config.json' => '{"scan-files": []}']);
 
         chdir($baseDirectory);
         $exitCode = $this->commandTester->execute([
@@ -331,7 +328,7 @@ JSON
 
         chdir($baseDirectory);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Configuration file [not-existent-config.json] does not exist.');
         $this->commandTester->execute([
             'composer-json' => 'composer.json',
