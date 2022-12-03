@@ -51,6 +51,7 @@ use function sprintf;
 class CheckCommand extends Command
 {
     public const NAME = 'check';
+    private const DEFAULT_CONFIG_PATH = 'composer-require-checker.json';
 
     protected function configure(): void
     {
@@ -62,7 +63,7 @@ class CheckCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'the config file to configure the checking options',
-                'composer-require-checker.json'
+                self::DEFAULT_CONFIG_PATH
             )
             ->addArgument(
                 'composer-json',
@@ -243,7 +244,14 @@ class CheckCommand extends Command
             return new Options();
         }
         if (file_exists($fileName) === false) {
-            return new Options();
+            if ($fileName === self::DEFAULT_CONFIG_PATH) {
+                return new Options();
+            } else {
+                throw new \InvalidArgumentException(sprintf(
+                    'Configuration file [%s] does not exist.',
+                    $fileName
+                ));
+            }
         }
 
         $config = JsonLoader::getData($fileName);
