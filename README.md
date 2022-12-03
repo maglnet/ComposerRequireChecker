@@ -84,6 +84,8 @@ extensions and internal symbols like `true` or `false` being undefined.
 bin/composer-require-checker check --config-file=path/to/config.json /path/to/your/project/composer.json
 ``` 
 
+> By default, it uses `composer-require-checker.json` if the file exists. 
+
 ### Scan Additional Files
 
 To scan files, that are not part of your autoload definition you may add glob patterns to the config file's `scan-files`
@@ -91,6 +93,7 @@ section.
 
 The following example configuration file would also scan the file `bin/console` and all files with `.php` extension within your `bin/` folder:
 
+`composer-require-checker.json`:
 ```json
 {
     "scan-files" : ["bin/console", "bin/*.php"]

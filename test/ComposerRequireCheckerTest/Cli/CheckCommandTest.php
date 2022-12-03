@@ -269,6 +269,62 @@ JSON
         );
     }
 
+    public function testDefaultConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+
+        chdir($baseDirectory);
+        $exitCode = $this->commandTester->execute([
+            'composer-json' =>  'composer.json',
+        ]);
+        $output = $this->commandTester->getDisplay();
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertMatchesRegularExpression(
+            '/The following 2 unknown symbols were found/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/Composer\\\\InstalledVersions/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/json_decode/s',
+            $output
+        );
+    }
+
+    public function testOverrideDefaultConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+        $root = vfsStream::setup();
+        vfsStream::create([
+            'config.json' => '{"scan-files": []}'
+        ]);
+
+        chdir($baseDirectory);
+        $exitCode = $this->commandTester->execute([
+            'composer-json' => 'composer.json',
+            '--config-file' => $root->getChild('config.json')->url(),
+        ]);
+
+        $output = $this->commandTester->getDisplay();
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertMatchesRegularExpression(
+            '/The following 1 unknown symbols were found/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/Composer\\\\InstalledVersions/s',
+            $output
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/json_decode/s',
+            $output
+        );
+    }
+
     /**
      * @requires PHP >= 8.1.0
      */

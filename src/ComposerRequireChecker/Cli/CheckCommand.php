@@ -61,7 +61,8 @@ class CheckCommand extends Command
                 'config-file',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'the config.json file to configure the checking options'
+                'the config file to configure the checking options',
+                'composer-require-checker.json'
             )
             ->addArgument(
                 'composer-json',
@@ -239,6 +240,9 @@ class CheckCommand extends Command
         $fileName = $input->getOption('config-file');
 
         if (is_string($fileName) === false) {
+            return new Options();
+        }
+        if (file_exists($fileName) === false) {
             return new Options();
         }
 
