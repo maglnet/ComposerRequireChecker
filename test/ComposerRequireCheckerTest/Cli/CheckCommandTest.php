@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
+use function chdir;
 use function dirname;
 use function file_put_contents;
 use function json_decode;
@@ -37,7 +38,7 @@ final class CheckCommandTest extends TestCase
 
     public function testExceptionIfComposerJsonIsNotAString(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->commandTester->execute([
             'composer-json' => ['this-is-a-array-as-input'],
@@ -46,14 +47,14 @@ final class CheckCommandTest extends TestCase
 
     public function testExceptionIfComposerJsonNotFound(): void
     {
-        self::expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $this->commandTester->execute(['composer-json' => 'this-will-not-be-found.json']);
     }
 
     public function testExceptionIfNoSymbolsFound(): void
     {
-        self::expectException(LogicException::class);
+        $this->expectException(LogicException::class);
 
         $this->commandTester->execute([
             'composer-json' => dirname(__DIR__, 2) . '/fixtures/noSymbols/composer.json',
@@ -267,6 +268,72 @@ JSON
             'There were no unknown symbols found.',
             $this->commandTester->getDisplay()
         );
+    }
+
+    public function testDefaultConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+
+        chdir($baseDirectory);
+        $exitCode = $this->commandTester->execute(['composer-json' => 'composer.json']);
+        $output   = $this->commandTester->getDisplay();
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertMatchesRegularExpression(
+            '/The following 2 unknown symbols were found/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/Composer\\\\InstalledVersions/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/json_decode/s',
+            $output
+        );
+    }
+
+    public function testOverrideDefaultConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+        $root          = vfsStream::setup();
+        vfsStream::create(['config.json' => '{"scan-files": []}']);
+
+        chdir($baseDirectory);
+        $exitCode = $this->commandTester->execute([
+            'composer-json' => 'composer.json',
+            '--config-file' => $root->getChild('config.json')->url(),
+        ]);
+
+        $output = $this->commandTester->getDisplay();
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertMatchesRegularExpression(
+            '/The following 1 unknown symbols were found/s',
+            $output
+        );
+        $this->assertMatchesRegularExpression(
+            '/Composer\\\\InstalledVersions/s',
+            $output
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/json_decode/s',
+            $output
+        );
+    }
+
+    public function testNotExistentConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+
+        chdir($baseDirectory);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configuration file [not-existent-config.json] does not exist.');
+        $this->commandTester->execute([
+            'composer-json' => 'composer.json',
+            '--config-file' => 'not-existent-config.json',
+        ]);
     }
 
     /**
