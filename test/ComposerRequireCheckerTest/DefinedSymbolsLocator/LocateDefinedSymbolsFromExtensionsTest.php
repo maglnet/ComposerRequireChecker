@@ -11,6 +11,8 @@ use function array_merge;
 use function count;
 use function in_array;
 
+use const PHP_VERSION_ID;
+
 final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 {
     private LocateDefinedSymbolsFromExtensions $locator;
@@ -68,5 +70,38 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 
         $combinedSymbols = $this->locator->__invoke(['Core', 'standard']);
         $this->assertSame(array_merge($coreSymbols, $standardSymbols), $combinedSymbols);
+    }
+
+    public function testDoesNotCollectAnySymbolsForTheRandomExtensionOnPhpVersionsLowerThan82(): void
+    {
+        if (PHP_VERSION_ID >= 80200) {
+            $this->markTestSkipped('This test is only relevant for PHP versions lower than 8.2');
+        }
+
+        $symbols = $this->locator->__invoke(['random']);
+
+        $this->assertEmpty($symbols);
+    }
+
+    public function testCollectsSymbolsForTheRandomExtensionOnPhpVersions82AndHigher(): void
+    {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('This test is only relevant for PHP versions 8.2 and higher');
+        }
+
+        $symbols = $this->locator->__invoke(['random']);
+
+        $this->assertNotEmpty($symbols);
+    }
+
+    public function testDoesNotStopCollectingSymbolsWhenSkippingTheRandomExtension(): void
+    {
+        if (PHP_VERSION_ID >= 80200) {
+            $this->markTestSkipped('This test is only relevant for PHP versions lower than 8.2');
+        }
+
+        $symbols = $this->locator->__invoke(['random', 'Core']);
+
+        $this->assertNotEmpty($symbols);
     }
 }
