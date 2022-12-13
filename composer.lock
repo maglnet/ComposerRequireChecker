@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "141849e298c9ef1c5d2f7cf589af93fb",
+    "content-hash": "078ee15a1089e14d7f708a36505d014a",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -2926,7 +2926,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.20"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.17"
             },
             "funding": [
                 {
@@ -2934,7 +2934,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-13T07:49:28+00:00"
+            "time": "2022-08-30T12:24:04+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -5214,5 +5214,8 @@
     "platform-dev": {
         "ext-zend-opcache": "*"
     },
-    "plugin-api-version": "2.2.0"
+    "platform-overrides": {
+        "php": "8.0.99"
+    },
+    "plugin-api-version": "2.3.0"
 }

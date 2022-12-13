@@ -47,6 +47,9 @@
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true,
+        "platform": {
+            "php": "8.0.99"
+        },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "infection/extension-installer": true
