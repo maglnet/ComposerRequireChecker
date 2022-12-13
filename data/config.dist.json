@@ -8,6 +8,7 @@
     "Phar",
     "Reflection",
     "SPL",
+    "random",
     "standard"
   ],
   "scan-files" : []
