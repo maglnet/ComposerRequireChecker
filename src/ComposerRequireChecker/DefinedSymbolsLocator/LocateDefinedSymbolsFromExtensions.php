@@ -38,6 +38,7 @@ class LocateDefinedSymbolsFromExtensions
         foreach ($extensionNames as $extensionName) {
             $extensionName = self::ALTERNATIVES[$extensionName] ?? $extensionName;
 
+            // @infection-ignore-all LessThan No point in testing this on 8.2.0 specifically
             if ($extensionName === 'random' && PHP_VERSION_ID < 80200) {
                 continue;
             }
