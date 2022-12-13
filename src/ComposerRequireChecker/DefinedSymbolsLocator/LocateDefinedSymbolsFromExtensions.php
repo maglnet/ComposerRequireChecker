@@ -11,6 +11,8 @@ use Throwable;
 use function array_keys;
 use function array_merge;
 
+use const PHP_VERSION_ID;
+
 class LocateDefinedSymbolsFromExtensions
 {
     /**
@@ -35,6 +37,9 @@ class LocateDefinedSymbolsFromExtensions
         $definedSymbols = [];
         foreach ($extensionNames as $extensionName) {
             $extensionName = self::ALTERNATIVES[$extensionName] ?? $extensionName;
+            if ($extensionName === 'random' && PHP_VERSION_ID < 80200) {
+                continue;
+            }
             try {
                 $extensionReflection = new ReflectionExtension($extensionName);
                 $definedSymbols      = array_merge(
