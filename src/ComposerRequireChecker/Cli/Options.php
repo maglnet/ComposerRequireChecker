@@ -50,6 +50,7 @@ class Options
         'Phar',
         'Reflection',
         'SPL',
+        'random',
         'standard',
     ];
 

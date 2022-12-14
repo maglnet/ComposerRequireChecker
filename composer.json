@@ -41,12 +41,15 @@
         "phing/phing": "^2.17.0",
         "phpstan/phpstan": "^1.2.0",
         "phpunit/phpunit": "^9.5.10",
-        "roave/infection-static-analysis-plugin": "1.13.x-dev as 1.13.0",
+        "roave/infection-static-analysis-plugin": "^1.23",
         "vimeo/psalm": "^4.15"
     },
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true,
+        "platform": {
+            "php": "8.0.99"
+        },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "infection/extension-installer": true
