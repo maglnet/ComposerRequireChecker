@@ -37,7 +37,7 @@
     "require-dev": {
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^9.0.0",
-        "mikey179/vfsstream": "^1.6.10",
+        "mikey179/vfsstream": "^1.6.11",
         "phing/phing": "^2.17.0",
         "phpstan/phpstan": "^1.2.0",
         "phpunit/phpunit": "^9.5.10",
