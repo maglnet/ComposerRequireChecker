@@ -41,7 +41,7 @@
         "phing/phing": "^2.17.0",
         "phpstan/phpstan": "^1.2.0",
         "phpunit/phpunit": "^9.5.10",
-        "roave/infection-static-analysis-plugin": "^1.25",
+        "roave/infection-static-analysis-plugin": "^1.23",
         "vimeo/psalm": "^4.15"
     },
     "config": {
