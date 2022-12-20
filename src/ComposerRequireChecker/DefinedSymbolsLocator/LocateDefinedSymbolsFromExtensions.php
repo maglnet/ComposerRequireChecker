@@ -49,7 +49,7 @@ class LocateDefinedSymbolsFromExtensions
                     $definedSymbols,
                     array_keys($extensionReflection->getConstants()),
                     array_keys($extensionReflection->getFunctions()),
-                    $extensionReflection->getClassNames()
+                    $extensionReflection->getClassNames(),
                 );
             } catch (Throwable $e) {
                 throw new UnknownExtension($e->getMessage());

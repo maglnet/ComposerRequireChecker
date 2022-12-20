@@ -52,7 +52,7 @@ final class CliJsonTest extends TestCase
                     'dummy' => ['ext-dummy', 'ext-other'],
                 ],
             ],
-            $actual
+            $actual,
         );
     }
 }

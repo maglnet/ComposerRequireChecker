@@ -13,13 +13,11 @@ use function implode;
 
 final class CliText implements ResultsWriter
 {
-    private OutputInterface $output;
     /** @var callable */
     private $writeCallable;
 
-    public function __construct(OutputInterface $output, ?callable $write = null)
+    public function __construct(private OutputInterface $output, callable|null $write = null)
     {
-        $this->output = $output;
         if ($write === null) {
             $write = static function (string $string) use ($output): void {
                 $output->write($string);

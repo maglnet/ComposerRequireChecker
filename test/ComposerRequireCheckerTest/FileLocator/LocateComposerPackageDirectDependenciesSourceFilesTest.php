@@ -14,9 +14,7 @@ use function iterator_to_array;
 use function reset;
 use function str_replace;
 
-/**
- * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles
- */
+/** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles */
 final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
     private LocateComposerPackageDirectDependenciesSourceFiles $locator;
@@ -177,9 +175,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     private function locate(string $composerJson): array
     {
         return iterator_to_array(($this->locator)($composerJson));

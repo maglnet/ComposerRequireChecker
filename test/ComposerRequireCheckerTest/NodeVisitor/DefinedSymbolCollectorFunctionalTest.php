@@ -45,7 +45,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['ComposerRequireCheckerTest\NodeVisitor\DefinedSymbolCollectorFunctionalTest'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
@@ -55,7 +55,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['foo'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
@@ -65,7 +65,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['Foo\foo'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
@@ -75,7 +75,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['foo', 'baz'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
@@ -85,25 +85,25 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['Foo\foo', 'Foo\baz'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
     public function testWillCollectDefinedConstDefinition(): void
     {
         $this->traverseStringAST(
-            'define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");'
+            'define("CONST_A", "MY_VALUE"); define("FooSpace\CONST_A", "BAR"); define($foo, "BAR");',
         );
 
         self::assertSameCollectedSymbols(
             ['CONST_A', 'FooSpace\CONST_A'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
     public function testWillNotCollectNamespacedDefineCalls(): void
     {
-        $this->traverseStringAST(<<<'php'
+        $this->traverseStringAST(<<<'PHP'
             namespace Foo {
         
             function define($bar, $baz)
@@ -113,18 +113,17 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         
             define("NOT_A_CONST", "NOT_SOMETHING");
             }
-php
-        );
+        PHP);
 
         self::assertNotContains(
             'NOT_A_CONST',
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
     public function testTraitAdaptionDefinition(): void
     {
-        $this->traverseStringAST(<<<'php'
+        $this->traverseStringAST(<<<'PHP'
             namespace Foo;
             
             trait BarTrait
@@ -140,33 +139,26 @@ php
                     test as public;
                 }
             }
-php
-        );
+        PHP);
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait', 'Foo\UseTrait'],
-            $this->collector->getDefinedSymbols()
+            $this->collector->getDefinedSymbols(),
         );
     }
 
-    /**
-     * @return array<Node>
-     */
+    /** @return array<Node> */
     private function traverseStringAST(string $phpSource): array
     {
         return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
     }
 
-    /**
-     * @return array<Node>
-     */
+    /** @return array<Node> */
     private function traverseClassAST(string $className): array
     {
-        return $this->traverser->traverse(
-            $this->parser->parse(
-                file_get_contents((new ReflectionClass($className))->getFileName())
-            )
-        );
+        return $this->traverser->traverse($this->parser->parse(
+            file_get_contents((new ReflectionClass($className))->getFileName()),
+        ));
     }
 
     /**

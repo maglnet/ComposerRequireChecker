@@ -16,9 +16,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots
- */
+/** @covers \ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots */
 final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateDefinedSymbolsFromASTRoots $locator;

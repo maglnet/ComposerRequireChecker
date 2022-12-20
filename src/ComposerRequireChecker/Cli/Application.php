@@ -18,8 +18,8 @@ class Application extends AbstractApplication
             sprintf(
                 '%s@%s',
                 (string) InstalledVersions::getPrettyVersion('maglnet/composer-require-checker'),
-                (string) InstalledVersions::getReference('maglnet/composer-require-checker')
-            )
+                (string) InstalledVersions::getReference('maglnet/composer-require-checker'),
+            ),
         );
 
         $check = new CheckCommand();

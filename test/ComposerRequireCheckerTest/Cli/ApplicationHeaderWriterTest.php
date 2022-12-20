@@ -9,9 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-/**
- * @covers \ComposerRequireChecker\Cli\ApplicationHeaderWriter
- */
+/** @covers \ComposerRequireChecker\Cli\ApplicationHeaderWriter */
 final class ApplicationHeaderWriterTest extends TestCase
 {
     public function testWithoutApplication(): void

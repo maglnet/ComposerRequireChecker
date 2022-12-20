@@ -53,22 +53,22 @@ final class LocateComposerPackageSourceFiles
 
         yield from $this->locateFilesInClassmapDefinitions(
             $this->getFilePaths($composerData['autoload']['classmap'] ?? [], $packageDir),
-            $blacklist
+            $blacklist,
         );
 
         yield from $this->locateFilesInFilesInFilesDefinitions(
             $this->getFilePaths($composerData['autoload']['files'] ?? [], $packageDir),
-            $blacklist
+            $blacklist,
         );
 
         yield from $this->locateFilesInPsr0Definitions(
             $this->getFilePaths($composerData['autoload']['psr-0'] ?? [], $packageDir),
-            $blacklist
+            $blacklist,
         );
 
         yield from $this->locateFilesInPsr4Definitions(
             $this->getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir),
-            $blacklist
+            $blacklist,
         );
     }
 
@@ -81,13 +81,11 @@ final class LocateComposerPackageSourceFiles
     {
         $flattened = array_reduce(
             $sourceDirs,
-            /**
-             * @param array|string $sourceDir
-             */
+            /** @param array|string $sourceDir */
             static function (array $sourceDirs, $sourceDir): array {
                 return array_merge($sourceDirs, (array) $sourceDir);
             },
-            []
+            [],
         );
 
         return array_values(
@@ -95,8 +93,8 @@ final class LocateComposerPackageSourceFiles
                 function (string $sourceDir) use ($packageDir) {
                     return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
                 },
-                $flattened
-            )
+                $flattened,
+            ),
         );
     }
 
@@ -109,7 +107,7 @@ final class LocateComposerPackageSourceFiles
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
      */
-    private function locateFilesInPsr0Definitions(array $locations, ?array $blacklist): Generator
+    private function locateFilesInPsr0Definitions(array $locations, array|null $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
@@ -118,7 +116,7 @@ final class LocateComposerPackageSourceFiles
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
      */
-    private function locateFilesInPsr4Definitions(array $locations, ?array $blacklist): Generator
+    private function locateFilesInPsr4Definitions(array $locations, array|null $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
@@ -127,7 +125,7 @@ final class LocateComposerPackageSourceFiles
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
      */
-    private function locateFilesInClassmapDefinitions(array $locations, ?array $blacklist): Generator
+    private function locateFilesInClassmapDefinitions(array $locations, array|null $blacklist): Generator
     {
         yield from $this->locateFilesInFilesInFilesDefinitions($locations, $blacklist);
     }
@@ -136,7 +134,7 @@ final class LocateComposerPackageSourceFiles
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
      */
-    private function locateFilesInFilesInFilesDefinitions(array $locations, ?array $blacklist): Generator
+    private function locateFilesInFilesInFilesDefinitions(array $locations, array|null $blacklist): Generator
     {
         foreach ($locations as $location) {
             if (is_file($location)) {
@@ -147,10 +145,8 @@ final class LocateComposerPackageSourceFiles
         }
     }
 
-    /**
-     * @param array<string>|null $blacklist
-     */
-    private function extractFilesFromDirectory(string $directory, ?array $blacklist): Generator
+    /** @param array<string>|null $blacklist */
+    private function extractFilesFromDirectory(string $directory, array|null $blacklist): Generator
     {
         yield from (new LocateAllFilesByExtension())->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);
     }

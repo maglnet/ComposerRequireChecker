@@ -14,9 +14,7 @@ use function count;
 use function sprintf;
 use function str_replace;
 
-/**
- * @covers \ComposerRequireChecker\FileLocator\LocateAllFilesByExtension
- */
+/** @covers \ComposerRequireChecker\FileLocator\LocateAllFilesByExtension */
 final class LocateAllFilesByExtensionTest extends TestCase
 {
     private LocateAllFilesByExtension $locator;
@@ -108,9 +106,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
         $this->assertContains($this->root->getChild('MyNamespaceA/Foo/FooClass.php')->url(), $foundFiles);
     }
 
-    /**
-     * @return array<string, array<array<string>>>
-     */
+    /** @return array<string, array<array<string>>> */
     public function provideBlacklists(): array
     {
         return [
@@ -151,7 +147,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
      *
      * @return array<string>
      */
-    private function locate(array $directories, string $fileExtension, ?array $blacklist): array
+    private function locate(array $directories, string $fileExtension, array|null $blacklist): array
     {
         $files = [];
         foreach (($this->locator)(new ArrayObject($directories), $fileExtension, $blacklist) as $file) {

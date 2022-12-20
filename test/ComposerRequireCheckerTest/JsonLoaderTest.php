@@ -9,9 +9,7 @@ use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \ComposerRequireChecker\JsonLoader
- */
+/** @covers \ComposerRequireChecker\JsonLoader */
 final class JsonLoaderTest extends TestCase
 {
     public function testHasErrorWithWrongPath(): void

@@ -28,9 +28,7 @@ use PhpParser\Node\Stmt\TraitUseAdaptation\Alias;
 use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \ComposerRequireChecker\NodeVisitor\UsedSymbolCollector
- */
+/** @covers \ComposerRequireChecker\NodeVisitor\UsedSymbolCollector */
 final class UsedSymbolCollectorTest extends TestCase
 {
     private UsedSymbolCollector $visitor;

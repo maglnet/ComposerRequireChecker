@@ -57,8 +57,8 @@ final class OptionsTest extends TestCase
 
         $optionsFromFile = new Options(
             json_decode(file_get_contents(
-                __DIR__ . '/../../../data/config.dist.json'
-            ), true)
+                __DIR__ . '/../../../data/config.dist.json',
+            ), true),
         );
 
         $this->assertEquals($options, $optionsFromFile);

@@ -13,9 +13,7 @@ use function array_key_exists;
 use function array_keys;
 use function dirname;
 
-/**
- * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
- */
+/** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
     public function __invoke(string $composerJsonPath): Generator
@@ -52,7 +50,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     {
         try {
             $installedData = JsonLoader::getData($vendorDir . '/composer/installed.json');
-        } catch (NotReadable $e) {
+        } catch (NotReadable) {
             $message = 'The composer dependencies have not been installed, run composer install/update first';
 
             throw new DependenciesNotInstalled($message);
