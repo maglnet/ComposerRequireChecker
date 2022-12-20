@@ -142,25 +142,25 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
     public function testUseTraitAdaptionAlias(): void
     {
-        $this->traverseStringAST(<<<'EOF'
-            <?php
-            
-            namespace Foo;
-            
-            trait BarTrait
+        $this->traverseStringAST(<<<'PHP'
+        <?php
+        
+        namespace Foo;
+        
+        trait BarTrait
+        {
+            protected function test()
             {
-                protected function test()
-                {
-                }
             }
-            
-            class UseTrait
-            {
-                use BarTrait {
-                    test as public;
-                }
+        }
+        
+        class UseTrait
+        {
+            use BarTrait {
+                test as public;
             }
-        EOF);
+        }
+        PHP);
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait'],
