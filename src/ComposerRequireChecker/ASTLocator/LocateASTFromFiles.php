@@ -18,13 +18,8 @@ use function sprintf;
 
 final class LocateASTFromFiles
 {
-    private Parser $parser;
-    private ?ErrorHandler $errorHandler;
-
-    public function __construct(Parser $parser, ?ErrorHandler $errorHandler)
+    public function __construct(private Parser $parser, private ErrorHandler|null $errorHandler)
     {
-        $this->parser       = $parser;
-        $this->errorHandler = $errorHandler;
     }
 
     /**

@@ -9,11 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class ApplicationHeaderWriter
 {
-    private ?AbstractApplication $application;
-
-    public function __construct(?AbstractApplication $application = null)
+    public function __construct(private AbstractApplication|null $application = null)
     {
-        $this->application = $application;
     }
 
     public function __invoke(OutputInterface $output): void

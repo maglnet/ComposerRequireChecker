@@ -8,9 +8,7 @@ use ComposerRequireChecker\Exception\FileParseFailed;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \ComposerRequireChecker\Exception\FileParseFailed
- */
+/** @covers \ComposerRequireChecker\Exception\FileParseFailed */
 final class FileParseFailedTest extends TestCase
 {
     public function testPreviousExceptionMessageIsRepresented(): void
@@ -22,7 +20,7 @@ final class FileParseFailedTest extends TestCase
         self::assertSame(0, $subject->getCode());
         self::assertSame(
             'Parsing the file [file] resulted in an error: Dummy Exception',
-            $subject->getMessage()
+            $subject->getMessage(),
         );
     }
 }

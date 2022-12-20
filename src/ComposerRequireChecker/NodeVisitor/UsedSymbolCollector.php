@@ -20,9 +20,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     {
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return list<string> */
     public function getCollectedSymbols(): array
     {
         return array_keys($this->collectedSymbols);

@@ -18,9 +18,7 @@ use RuntimeException;
 
 use function iterator_to_array;
 
-/**
- * @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles
- */
+/** @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles */
 final class LocateASTFromFilesTest extends TestCase
 {
     private LocateASTFromFiles $locator;
@@ -84,14 +82,14 @@ final class LocateASTFromFilesTest extends TestCase
         $files         = [
             $this->createFile(
                 'MyBadCode',
-                'this content is not relevant because the parser is mocked and always returns null'
+                'this content is not relevant because the parser is mocked and always returns null',
             ),
         ];
 
         $this->locate($files);
     }
 
-    private function createFile(string $path, ?string $content = null): string
+    private function createFile(string $path, string|null $content = null): string
     {
         return vfsStream::newFile($path)->at($this->root)->setContent($content)->url();
     }

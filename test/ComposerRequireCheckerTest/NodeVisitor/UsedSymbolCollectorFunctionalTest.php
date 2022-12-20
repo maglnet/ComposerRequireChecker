@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
@@ -59,7 +60,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'array',
                 'void',
             ],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -72,7 +73,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'My\ParameterType',
                 'array',
             ],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -85,7 +86,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
                 'My\ParameterType',
                 'array',
             ],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -95,7 +96,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['My\ReturnType'],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -105,7 +106,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['My\ReturnType'],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -115,7 +116,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['int'],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -125,7 +126,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             [],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
@@ -135,59 +136,51 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             ['My\PropertyType'],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
     public function testUseTraitAdaptionAlias(): void
     {
-        $this->traverseStringAST(<<<'EOF'
-            <?php
-            
-            namespace Foo;
-            
-            trait BarTrait
+        $this->traverseStringAST(<<<'PHP'
+        <?php
+        
+        namespace Foo;
+        
+        trait BarTrait
+        {
+            protected function test()
             {
-                protected function test()
-                {
-                }
             }
-            
-            class UseTrait
-            {
-                use BarTrait {
-                    test as public;
-                }
+        }
+        
+        class UseTrait
+        {
+            use BarTrait {
+                test as public;
             }
-            EOF
-        );
+        }
+        PHP);
 
         self::assertSameCollectedSymbols(
             ['Foo\BarTrait'],
-            $this->collector->getCollectedSymbols()
+            $this->collector->getCollectedSymbols(),
         );
     }
 
-    /**
-     * @return array<Node>
-     */
+    /** @return array<Stmt> */
     private function traverseStringAST(string $stringAST): array
     {
-        return $this->traverser->traverse(
-            $this->parser->parse(
-                $stringAST
-            )
-        );
+        return $this->traverser->traverse($this->parser->parse($stringAST));
     }
 
-    /**
-     * @return array<Node>
-     */
+    /** @return array<Stmt> */
     private function traverseClassAST(string $className): array
     {
-        return $this->traverseStringAST(
-            file_get_contents((new ReflectionClass($className))->getFileName())
-        );
+        return $this->traverseStringAST(file_get_contents(
+            (new ReflectionClass($className))
+                ->getFileName(),
+        ));
     }
 
     /**

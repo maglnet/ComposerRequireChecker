@@ -14,9 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
 
-/**
- * @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots
- */
+/** @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots */
 final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateUsedSymbolsFromASTRoots $locator;

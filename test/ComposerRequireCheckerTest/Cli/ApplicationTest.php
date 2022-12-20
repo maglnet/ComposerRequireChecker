@@ -27,7 +27,7 @@ final class ApplicationTest extends TestCase
     {
         self::assertStringContainsString(
             '<info>check</info>',
-            $this->application->getDefinition()->getOption('help')->getDescription()
+            $this->application->getDefinition()->getOption('help')->getDescription(),
         );
     }
 }

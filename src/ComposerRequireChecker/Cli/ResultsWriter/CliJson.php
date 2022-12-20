@@ -14,7 +14,6 @@ final class CliJson implements ResultsWriter
 {
     /** @var callable(string): void */
     private $writeCallable;
-    private string $applicationVersion;
     /** @var callable(): DateTimeImmutable */
     private $nowCallable;
 
@@ -22,11 +21,10 @@ final class CliJson implements ResultsWriter
      * @param callable(string): void        $write
      * @param callable(): DateTimeImmutable $now
      */
-    public function __construct(callable $write, string $applicationVersion, callable $now)
+    public function __construct(callable $write, private string $applicationVersion, callable $now)
     {
-        $this->writeCallable      = $write;
-        $this->applicationVersion = $applicationVersion;
-        $this->nowCallable        = $now;
+        $this->writeCallable = $write;
+        $this->nowCallable   = $now;
     }
 
     /**
@@ -48,8 +46,8 @@ final class CliJson implements ResultsWriter
                     ],
                     'unknown-symbols' => $unknownSymbols,
                 ],
-                JSON_THROW_ON_ERROR
-            )
+                JSON_THROW_ON_ERROR,
+            ),
         );
     }
 }

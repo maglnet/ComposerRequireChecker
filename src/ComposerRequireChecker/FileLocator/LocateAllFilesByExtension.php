@@ -26,16 +26,16 @@ final class LocateAllFilesByExtension
      *
      * @return Traversable<string>
      */
-    public function __invoke(Traversable $directories, string $fileExtension, ?array $blacklist): Traversable
+    public function __invoke(Traversable $directories, string $fileExtension, array|null $blacklist): Traversable
     {
         foreach ($directories as $directory) {
             yield from $this->filterFilesByExtension(
                 new RecursiveIteratorIterator(
                     new RecursiveDirectoryIterator($directory),
-                    RecursiveIteratorIterator::LEAVES_ONLY
+                    RecursiveIteratorIterator::LEAVES_ONLY,
                 ),
                 $fileExtension,
-                $blacklist
+                $blacklist,
             );
         }
     }
@@ -46,7 +46,7 @@ final class LocateAllFilesByExtension
      *
      * @return Traversable<string>
      */
-    private function filterFilesByExtension(Traversable $files, string $fileExtension, ?array $blacklist): Traversable
+    private function filterFilesByExtension(Traversable $files, string $fileExtension, array|null $blacklist): Traversable
     {
         $extensionMatcher = '/.*' . preg_quote($fileExtension) . '$/';
 
@@ -70,7 +70,7 @@ final class LocateAllFilesByExtension
      *
      * @return array<string>
      */
-    private function prepareBlacklistPatterns(?array $blacklistPaths): array
+    private function prepareBlacklistPatterns(array|null $blacklistPaths): array
     {
         if ($blacklistPaths === null) {
             return [];
@@ -84,8 +84,8 @@ final class LocateAllFilesByExtension
                 DIRECTORY_SEPARATOR,
                 preg_quote(
                     trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR),
-                    '{}'
-                )
+                    '{}',
+                ),
             );
             $path = str_replace('\\*\\*', '.+?', $path);
             $path = str_replace('\\*', '[^' . $dirSep . ']+?', $path);

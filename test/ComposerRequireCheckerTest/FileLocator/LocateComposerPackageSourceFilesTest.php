@@ -18,9 +18,7 @@ use function str_replace;
 
 use const JSON_THROW_ON_ERROR;
 
-/**
- * @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles
- */
+/** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles */
 final class LocateComposerPackageSourceFilesTest extends TestCase
 {
     private LocateComposerPackageSourceFiles $locator;
@@ -163,7 +161,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         vfsStream::create([
             'composer.json' => sprintf(
                 '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": %s}}',
-                $excludedPatternJson
+                $excludedPatternJson,
             ),
             'ClassA.php' => '<?php namespace MyNamespace; class ClassA {}',
             'tests' => ['ATest.php' => '<?php namespace MyNamespace; class ATest {}'],
@@ -184,9 +182,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         }
     }
 
-    /**
-     * @return array<string, array<array<string>>>
-     */
+    /** @return array<string, array<array<string>>> */
     public function provideExcludePattern(): array
     {
         return [
@@ -227,9 +223,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         ];
     }
 
-    /**
-     * @return string[]
-     */
+    /** @return string[] */
     private function files(string $composerJson): array
     {
         $composerData   = JsonLoader::getData($composerJson);

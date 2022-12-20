@@ -21,9 +21,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         $this->locator = new LocateDefinedSymbolsFromComposerRuntimeApi();
     }
 
-    /**
-     * @dataProvider provideComposerJsonWithUnsuitableComposerRuntimeApi
-     */
+    /** @dataProvider provideComposerJsonWithUnsuitableComposerRuntimeApi */
     public function testNoSymbols(string $composerJson): void
     {
         $symbols = $this->locate(json_decode($composerJson, true));
@@ -31,9 +29,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         self::assertEmpty($symbols);
     }
 
-    /**
-     * @dataProvider provideComposerJsonWithSuitableComposerRuntimeApi
-     */
+    /** @dataProvider provideComposerJsonWithSuitableComposerRuntimeApi */
     public function testInstalledVersionsSymbol(string $composerJson): void
     {
         $symbols = $this->locate(json_decode($composerJson, true));

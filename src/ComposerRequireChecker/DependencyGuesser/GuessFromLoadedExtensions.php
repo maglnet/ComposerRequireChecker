@@ -17,9 +17,9 @@ class GuessFromLoadedExtensions implements Guesser
     private array $loadedExtensions;
 
     /** @var string[]|null */
-    private ?array $coreExtensions = null;
+    private array|null $coreExtensions = null;
 
-    public function __construct(?Options $options = null)
+    public function __construct(Options|null $options = null)
     {
         $this->loadedExtensions = get_loaded_extensions();
         if (! ($options instanceof Options)) {
@@ -29,9 +29,7 @@ class GuessFromLoadedExtensions implements Guesser
         $this->coreExtensions = $options->getPhpCoreExtensions();
     }
 
-    /**
-     * @return Generator<string>
-     */
+    /** @return Generator<string> */
     public function __invoke(string $symbolName): Generator
     {
         $definedSymbolsFromExtensions = new LocateDefinedSymbolsFromExtensions();

@@ -31,9 +31,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         return parent::beforeTraverse($nodes);
     }
 
-    /**
-     * @return list<string>
-     */
+    /** @return list<string> */
     public function getDefinedSymbols(): array
     {
         return array_keys($this->definedSymbols);
@@ -137,9 +135,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         $this->recordDefinitionOfStringSymbol($node->args[0]->value->value);
     }
 
-    /**
-     * @psalm-param Node\Stmt\Function_|Node\Stmt\ClassLike|Node\Const_ $node
-     */
+    /** @psalm-param Node\Stmt\Function_|Node\Stmt\ClassLike|Node\Const_ $node */
     private function recordDefinitionOf(Node $node): void
     {
         $namespacedName = null;
@@ -153,8 +149,8 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
                     'Given node of type "%s" (defined at line %s)does not have an assigned "namespacedName" property: '
                     . 'did you pass it through a name resolver visitor?',
                     $node::class,
-                    $node->getLine()
-                )
+                    $node->getLine(),
+                ),
             );
         }
 

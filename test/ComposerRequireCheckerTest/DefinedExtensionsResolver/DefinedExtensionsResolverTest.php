@@ -11,9 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 use function reset;
 
-/**
- * @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver
- */
+/** @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver */
 final class DefinedExtensionsResolverTest extends TestCase
 {
     private DefinedExtensionsResolver $resolver;
