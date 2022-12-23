@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ac14850cb212186ebefdcff222bfb14",
+    "content-hash": "c405a8c6659e10b314318d051ac706ac",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -3401,16 +3401,16 @@
         },
         {
             "name": "roave/infection-static-analysis-plugin",
-            "version": "1.26.0",
+            "version": "1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/infection-static-analysis-plugin.git",
-                "reference": "63f3fe01f0d29409501a9999f60ef0602ddfb4cb"
+                "reference": "29963545d0a9978835f4c4d18d7c880c617294aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/63f3fe01f0d29409501a9999f60ef0602ddfb4cb",
-                "reference": "63f3fe01f0d29409501a9999f60ef0602ddfb4cb",
+                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/29963545d0a9978835f4c4d18d7c880c617294aa",
+                "reference": "29963545d0a9978835f4c4d18d7c880c617294aa",
                 "shasum": ""
             },
             "require": {
@@ -3421,8 +3421,8 @@
                 "vimeo/psalm": "^4.30.0 || ^5.0.0"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^10.0.0",
-                "phpunit/phpunit": "^9.5.26"
+                "doctrine/coding-standard": "^11.0.0",
+                "phpunit/phpunit": "^9.5.27"
             },
             "bin": [
                 "bin/roave-infection-static-analysis-plugin"
@@ -3446,9 +3446,9 @@
             "description": "Static analysis on top of mutation testing - prevents escaped mutants from being invalid according to static analysis",
             "support": {
                 "issues": "https://github.com/Roave/infection-static-analysis-plugin/issues",
-                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.26.0"
+                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.27.0"
             },
-            "time": "2022-11-30T16:04:59+00:00"
+            "time": "2022-12-22T10:30:15+00:00"
         },
         {
             "name": "sanmai/later",
