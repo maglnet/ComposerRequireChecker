@@ -25,7 +25,7 @@ final class DependencyGuesserTest extends TestCase
             $this->markTestSkipped('extension json is not available');
         }
 
-        $result = $this->guesser->__invoke('json_decode');
+        $result = iterator_to_array($this->guesser->__invoke('json_decode'));
         $this->assertNotEmpty($result);
         $this->assertContains('ext-json', $result);
     }
@@ -40,7 +40,7 @@ final class DependencyGuesserTest extends TestCase
     {
         $options       = new Options(['php-core-extensions' => ['SPL', 'something-else']]);
         $this->guesser = new DependencyGuesser($options);
-        $result        = $this->guesser->__invoke('RecursiveDirectoryIterator');
+        $result        = iterator_to_array($this->guesser->__invoke('RecursiveDirectoryIterator'));
         $this->assertNotEmpty($result);
         $this->assertContains('php', $result);
     }
