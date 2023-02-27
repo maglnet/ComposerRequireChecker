@@ -9,6 +9,7 @@ use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use PHPUnit\Framework\TestCase;
 
 use function extension_loaded;
+use function iterator_to_array;
 
 final class DependencyGuesserTest extends TestCase
 {
