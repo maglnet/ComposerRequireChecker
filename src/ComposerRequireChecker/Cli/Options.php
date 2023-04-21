@@ -44,6 +44,7 @@ class Options
         'Core',
         'date',
         'json',
+        'hash',
         'pcre',
         'Phar',
         'Reflection',
