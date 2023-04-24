@@ -28,7 +28,7 @@ final class CliJson implements ResultsWriter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function write(array $unknownSymbols): void
     {

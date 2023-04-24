@@ -27,7 +27,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeTraverse(array $nodes)
     {
@@ -37,7 +37,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function enterNode(Node $node)
     {

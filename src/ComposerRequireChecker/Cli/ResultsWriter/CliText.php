@@ -28,7 +28,7 @@ final class CliText implements ResultsWriter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function write(array $unknownSymbols): void
     {

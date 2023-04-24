@@ -22,7 +22,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function beforeTraverse(array $nodes)
     {
