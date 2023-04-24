@@ -27,9 +27,7 @@ final class CliJson implements ResultsWriter
         $this->nowCallable   = $now;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function write(array $unknownSymbols): void
     {
         $write = $this->writeCallable;
