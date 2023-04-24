@@ -27,9 +27,7 @@ final class CliText implements ResultsWriter
         $this->writeCallable = $write;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** @inheritDoc */
     public function write(array $unknownSymbols): void
     {
         if (! $unknownSymbols) {
