@@ -39,8 +39,7 @@ class Options
     /** @var array<string>  */
     private array $symbolWhitelist = self::PHP_LANGUAGE_TYPES;
 
-    /** @var array<string>  */
-    private array $phpCoreExtensions = [
+    private const PHP_CORE_EXTENSIONS = [
         'Core',
         'date',
         'json',
@@ -52,6 +51,9 @@ class Options
         'random',
         'standard',
     ];
+
+    /** @var array<string>  */
+    private array $phpCoreExtensions = self::PHP_CORE_EXTENSIONS;
 
     /**
      * @see https://github.com/webmozart/glob
@@ -104,7 +106,14 @@ class Options
     /** @param array<string> $phpCoreExtensions */
     public function setPhpCoreExtensions(array $phpCoreExtensions): void
     {
-        $this->phpCoreExtensions = $phpCoreExtensions;
+        /*
+         * Make sure the PHP core extensions are always included.
+         * If these are omitted the results can be pretty unexpected.
+         */
+        $this->phpCoreExtensions = array_unique(array_merge(
+            self::PHP_CORE_EXTENSIONS,
+            $phpCoreExtensions,
+        ));
     }
 
     /** @return array<string> a list of glob patterns for files that should be scanned in addition */

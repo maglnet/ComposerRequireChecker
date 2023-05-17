@@ -1,16 +1,5 @@
 {
   "symbol-whitelist" : [],
-  "php-core-extensions" : [
-    "Core",
-    "date",
-    "json",
-    "hash",
-    "pcre",
-    "Phar",
-    "Reflection",
-    "SPL",
-    "random",
-    "standard"
-  ],
+  "php-core-extensions" : [],
   "scan-files" : []
 }

@@ -19,7 +19,19 @@ final class OptionsTest extends TestCase
             'php-core-extensions' => ['something'],
         ]);
 
-        $this->assertSame(['something'], $options->getPhpCoreExtensions());
+        $this->assertSame([
+            'Core',
+            'date',
+            'json',
+            'hash',
+            'pcre',
+            'Phar',
+            'Reflection',
+            'SPL',
+            'random',
+            'standard',
+            'something',
+        ], $options->getPhpCoreExtensions());
     }
 
     public function testOptionsAcceptSymbolWhitelistAndFiltersDuplicates(): void
@@ -104,7 +116,21 @@ final class OptionsTest extends TestCase
             'bar',
         ], $options->getSymbolWhitelist());
 
-        self::assertSame(['one', 'two', 'three'], $options->getScanFiles());
-        self::assertSame(['ext-one', 'ext-two'], $options->getPhpCoreExtensions());
+        $this->assertSame(['one', 'two', 'three'], $options->getScanFiles());
+
+        $this->assertSame([
+            'Core',
+            'date',
+            'json',
+            'hash',
+            'pcre',
+            'Phar',
+            'Reflection',
+            'SPL',
+            'random',
+            'standard',
+            'ext-one',
+            'ext-two',
+        ], $options->getPhpCoreExtensions());
     }
 }
