@@ -47,6 +47,21 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
     }
 
+    public function testFromClassmapWithStrangePaths(): void
+    {
+        vfsStream::create([
+            'composer.json' => '{"autoload": {"classmap": ["/src/MyClassA.php", "MyClassB.php"]}}',
+            'src' => ['MyClassA.php' => '<?php class MyClassA {}'],
+            'MyClassB.php' => '<?php class MyClassB {}',
+        ]);
+
+        $files = $this->files($this->root->getChild('composer.json')->url());
+
+        $this->assertCount(2, $files);
+        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
+        $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
+    }
+
     public function testFromFiles(): void
     {
         vfsStream::create([

@@ -45,7 +45,7 @@ final class LocateFilesByGlobPatternTest extends TestCase
             ],
         ]);
 
-        $files = $this->files(['bin/console*.php'], $this->root->url());
+        $files = $this->files(['bin/console*.php'], $this->root->url() . '/');
         self::assertCount(2, $files);
         self::assertContains($this->root->getChild('bin/console.php')->url(), $files);
         self::assertContains($this->root->getChild('bin/console123.php')->url(), $files);

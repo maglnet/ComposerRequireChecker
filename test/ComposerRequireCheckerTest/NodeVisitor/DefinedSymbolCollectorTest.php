@@ -39,8 +39,10 @@ final class DefinedSymbolCollectorTest extends TestCase
 
     public function testExceptionWhenNoNamespaceDefined(): void
     {
+        $node    = new Class_('gedöns');
+        $message = 'Given node of type "' . Class_::class . '" (defined at line -1) does not have an assigned "namespacedName" property: did you pass it through a name resolver visitor?';
         $this->expectException(UnexpectedValueException::class);
-        $node = new Class_('gedöns');
+        $this->expectExceptionMessage($message);
         $this->collector->enterNode($node);
     }
 

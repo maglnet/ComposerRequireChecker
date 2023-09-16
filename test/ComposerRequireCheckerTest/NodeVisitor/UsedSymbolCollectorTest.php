@@ -65,6 +65,18 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Baz', $symbols);
     }
 
+    public function testInterfaceWithoutExtends(): void
+    {
+        $node          = new Interface_('Foo');
+        $node->extends = [null];
+
+        $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(0, $symbols);
+        $this->assertSame([], $symbols);
+    }
+
     public function testImplements(): void
     {
         $node             = new Class_('Foo');
@@ -216,6 +228,19 @@ final class UsedSymbolCollectorTest extends TestCase
         $this->assertContains('Bar', $symbols);
     }
 
+    public function testFunctionReturnTypeWithIdentifier(): void
+    {
+        $functionName     = new Name('foo');
+        $node             = new Function_($functionName);
+        $node->returnType = new Identifier('Bar');
+
+        $this->visitor->enterNode($node);
+
+        $symbols = $this->visitor->getCollectedSymbols();
+        $this->assertCount(1, $symbols);
+        $this->assertContains('Bar', $symbols);
+    }
+
     public function testMethodReturnType(): void
     {
         $functionName     = new Name('foo');
@@ -267,8 +292,9 @@ final class UsedSymbolCollectorTest extends TestCase
 
     public function testTraitUsePrecedenceAdaptation(): void
     {
-        $traitUseAdaption = new Precedence(new Name('Bar'), 'testMethod', [new Name('Baz')]);
-        $traitUse         = new TraitUse([new Name('Foo')], [$traitUseAdaption]);
+        $traitUseAdaption2 = new Precedence(new Name('Bar'), 'testMethod', [new Name('Baz')]);
+        $traitUseAdaption  = new Alias(null, 'testMethod2', Class_::MODIFIER_PUBLIC, null);
+        $traitUse          = new TraitUse([new Name('Foo')], [$traitUseAdaption, $traitUseAdaption2]);
 
         $this->visitor->enterNode($traitUse);
 
