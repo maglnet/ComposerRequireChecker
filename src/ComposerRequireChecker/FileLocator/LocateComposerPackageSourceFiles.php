@@ -100,6 +100,7 @@ final class LocateComposerPackageSourceFiles
 
     private function normalizePath(string $path): string
     {
+        // @infection-ignore-all UnwrapStrReplace False positive on Linux; this guards against Windows paths.
         return str_replace('\\', '/', $path);
     }
 

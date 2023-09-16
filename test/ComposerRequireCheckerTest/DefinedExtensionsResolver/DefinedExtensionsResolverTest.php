@@ -9,8 +9,6 @@ use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 
-use function reset;
-
 /** @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver */
 final class DefinedExtensionsResolverTest extends TestCase
 {
@@ -40,10 +38,10 @@ final class DefinedExtensionsResolverTest extends TestCase
             ->setContent('{"require":{"php":"^7.0"}}')
             ->url();
 
-        $extensions = ($this->resolver)($composerJson, ['ext-foo' => '*']);
+        $extensions = ($this->resolver)($composerJson, ['foo']);
 
         $this->assertCount(1, $extensions);
-        $this->assertSame('*', reset($extensions));
+        $this->assertContains('foo', $extensions);
     }
 
     public function testCoreExtensionsIn64Bit(): void
@@ -52,10 +50,10 @@ final class DefinedExtensionsResolverTest extends TestCase
             ->setContent('{"require":{"php-64bit":"^7.0"}}')
             ->url();
 
-        $extensions = ($this->resolver)($composerJson, ['ext-foo' => '*']);
+        $extensions = ($this->resolver)($composerJson, ['foo']);
 
         $this->assertCount(1, $extensions);
-        $this->assertSame('*', reset($extensions));
+        $this->assertContains('foo', $extensions);
     }
 
     public function testExtensionsAreReturned(): void
@@ -64,10 +62,39 @@ final class DefinedExtensionsResolverTest extends TestCase
             ->setContent('{"require":{"ext-zip":"*","ext-curl":"*"}}')
             ->url();
 
-        $extensions = ($this->resolver)($composerJson);
+        $extensions = ($this->resolver)($composerJson, ['foo']);
 
         $this->assertCount(2, $extensions);
         $this->assertContains('zip', $extensions);
         $this->assertContains('curl', $extensions);
+        $this->assertNotContains('foo', $extensions);
+    }
+
+    public function testExtensionsAreAddedWhenBothCoreAndExtensionsRequired(): void
+    {
+        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
+            ->setContent('{"require":{"php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}')
+            ->url();
+
+        $extensions = ($this->resolver)($composerJson, ['foo']);
+
+        $this->assertCount(3, $extensions);
+        $this->assertContains('foo', $extensions);
+        $this->assertContains('curl', $extensions);
+        $this->assertContains('zip', $extensions);
+    }
+
+    public function testExtensionsFoundWhenAfterOtherPackages(): void
+    {
+        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
+            ->setContent('{"require":{"maglnet/composer-require-checker":"*","php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}')
+            ->url();
+
+        $extensions = ($this->resolver)($composerJson, ['foo']);
+
+        $this->assertCount(3, $extensions);
+        $this->assertContains('foo', $extensions);
+        $this->assertContains('curl', $extensions);
+        $this->assertContains('zip', $extensions);
     }
 }
