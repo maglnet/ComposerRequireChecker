@@ -107,7 +107,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     }
 
     /** @return array<string, array<array<string>>> */
-    public function provideBlacklists(): array
+    public static function provideBlacklists(): array
     {
         return [
             'No blacklist' => [
