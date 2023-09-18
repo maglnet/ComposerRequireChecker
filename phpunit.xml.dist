@@ -5,10 +5,6 @@
     bootstrap="./vendor/autoload.php"
     cacheResultFile="build/.phpunit.result.cache"
     colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    verbose="true"
     stopOnFailure="false"
     processIsolation="false"
     backupGlobals="false"
@@ -16,9 +12,10 @@
   <testsuite name="ComposerRequireChecker tests">
     <directory>./test/ComposerRequireCheckerTest</directory>
   </testsuite>
-  <coverage includeUncoveredFiles="true">
+  <coverage includeUncoveredFiles="true" />
+  <source>
     <include>
       <directory suffix=".php">./src</directory>
     </include>
-  </coverage>
+  </source>
 </phpunit>
