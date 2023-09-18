@@ -183,7 +183,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     }
 
     /** @return array<string, array<array<string>>> */
-    public function provideExcludePattern(): array
+    public static function provideExcludePattern(): array
     {
         return [
             'No exclude pattern' => [
