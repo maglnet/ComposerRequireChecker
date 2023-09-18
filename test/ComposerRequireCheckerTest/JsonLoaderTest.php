@@ -9,7 +9,9 @@ use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
-use function file_exists;
+use function is_readable;
+
+use const PHP_OS_FAMILY;
 
 /** @covers \ComposerRequireChecker\JsonLoader */
 final class JsonLoaderTest extends TestCase
@@ -35,8 +37,8 @@ final class JsonLoaderTest extends TestCase
     public function testHasErrorWithUnreadableFile(): void
     {
         $path = '/etc/shadow';
-        if (! file_exists($path)) {
-            $this->markTestSkipped('This system does not have ' . $path);
+        if (PHP_OS_FAMILY !== 'Linux' || is_readable($path)) {
+            $this->markTestSkipped('This test relies on ' . $path . ' existing, but being unreadable.');
         }
 
         $this->expectException(NotReadable::class);
