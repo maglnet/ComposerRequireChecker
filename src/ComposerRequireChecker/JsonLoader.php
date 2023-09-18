@@ -53,7 +53,7 @@ class JsonLoader
             Assert::file($path);
             Assert::readable($path);
         } catch (InvalidArgumentException $exception) {
-            throw new NotReadable('unable to read ' . $path, 0, $exception);
+            throw new NotReadable('unable to read file: ' . $exception->getMessage(), 0, $exception);
         }
 
         $content = file_get_contents($path);
