@@ -9,6 +9,8 @@ use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
+use function file_exists;
+
 /** @covers \ComposerRequireChecker\JsonLoader */
 final class JsonLoaderTest extends TestCase
 {
@@ -16,6 +18,8 @@ final class JsonLoaderTest extends TestCase
     {
         $path = __DIR__ . '/wrong/path/non-existing-file.json';
         $this->expectException(NotReadable::class);
+        $this->expectExceptionMessage('unable to read file: The file "' . $path . '" does not exist.');
+        $this->expectExceptionCode(0);
         JsonLoader::getData($path);
     }
 
@@ -23,6 +27,30 @@ final class JsonLoaderTest extends TestCase
     {
         $path = __DIR__ . '/../fixtures/invalidJson';
         $this->expectException(InvalidJson::class);
+        $this->expectExceptionMessage('error parsing ' . $path . ': Syntax error');
+        $this->expectExceptionCode(0);
+        JsonLoader::getData($path);
+    }
+
+    public function testHasErrorWithUnreadableFile(): void
+    {
+        $path = '/etc/shadow';
+        if (! file_exists($path)) {
+            $this->markTestSkipped('This system does not have ' . $path);
+        }
+
+        $this->expectException(NotReadable::class);
+        $this->expectExceptionMessage('unable to read file: The path "' . $path . '" is not readable.');
+        $this->expectExceptionCode(0);
+        JsonLoader::getData($path);
+    }
+
+    public function testHasErrorWithDirectory(): void
+    {
+        $path = __DIR__;
+        $this->expectException(NotReadable::class);
+        $this->expectExceptionMessage('unable to read file: The path "' . $path . '" is not a file.');
+        $this->expectExceptionCode(0);
         JsonLoader::getData($path);
     }
 
@@ -30,7 +58,25 @@ final class JsonLoaderTest extends TestCase
     {
         $path = __DIR__ . '/../fixtures/validJsonNotAnArray.json';
         $this->expectException(InvalidJson::class);
+        $this->expectExceptionMessage('error parsing ' . $path . ': Expected an array.');
+        $this->expectExceptionCode(0);
         JsonLoader::getData($path);
+    }
+
+    public function testHasDataWithValidFileButExcessiveDepth(): void
+    {
+        $path = __DIR__ . '/../fixtures/validJsonExcessiveDepth.json';
+        $this->expectException(InvalidJson::class);
+        $this->expectExceptionMessage('error parsing ' . $path . ': Maximum stack depth exceeded');
+        $this->expectExceptionCode(0);
+        JsonLoader::getData($path);
+    }
+
+    public function testHasDataWithValidFileWithVeryLargeDepth(): void
+    {
+        $path = __DIR__ . '/../fixtures/validJsonVeryLargeDepth.json';
+        $data = JsonLoader::getData($path);
+        $this->assertEquals('bar', $data['foo'] ?? null);
     }
 
     public function testHasDataWithValidFile(): void
