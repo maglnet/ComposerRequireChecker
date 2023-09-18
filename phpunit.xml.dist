@@ -1,24 +1,20 @@
 <?xml version="1.0"?>
 <phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    bootstrap="./vendor/autoload.php"
-    cacheResultFile="build/.phpunit.result.cache"
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    verbose="true"
-    stopOnFailure="false"
-    processIsolation="false"
-    backupGlobals="false"
->
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+        bootstrap="./vendor/autoload.php"
+        colors="true"
+        stopOnFailure="false"
+        processIsolation="false"
+        backupGlobals="false" 
+        cacheDirectory=".phpunit.cache">
   <testsuite name="ComposerRequireChecker tests">
     <directory>./test/ComposerRequireCheckerTest</directory>
   </testsuite>
-  <coverage includeUncoveredFiles="true">
+  <coverage includeUncoveredFiles="true"/>
+  <source>
     <include>
       <directory suffix=".php">./src</directory>
     </include>
-  </coverage>
+  </source>
 </phpunit>
