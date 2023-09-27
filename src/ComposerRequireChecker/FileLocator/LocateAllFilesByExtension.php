@@ -79,14 +79,10 @@ final class LocateAllFilesByExtension
         $dirSep = preg_quote(DIRECTORY_SEPARATOR, '{}');
 
         foreach ($blacklistPaths as &$path) {
-            $path = preg_replace(
-                '{' . $dirSep . '+}',
-                DIRECTORY_SEPARATOR,
-                preg_quote(
-                    trim(str_replace('/', DIRECTORY_SEPARATOR, $path), DIRECTORY_SEPARATOR),
-                    '{}',
-                ),
-            );
+            $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+            $path = trim($path, DIRECTORY_SEPARATOR);
+            $path = preg_quote($path, '{}');
+            $path = preg_replace('{' . $dirSep . '+}', DIRECTORY_SEPARATOR, $path);
             $path = str_replace('\\*\\*', '.+?', $path);
             $path = str_replace('\\*', '[^' . $dirSep . ']+?', $path);
         }
