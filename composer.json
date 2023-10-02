@@ -39,7 +39,7 @@
         "doctrine/coding-standard": "^12.0.0",
         "mikey179/vfsstream": "^1.6.11",
         "phing/phing": "^2.17.4",
-        "phpstan/phpstan": "^1.10.36",
+        "phpstan/phpstan": "^1.10.37",
         "phpunit/phpunit": "^10.3.5",
         "roave/infection-static-analysis-plugin": "^1.33",
         "vimeo/psalm": "^5.15"
