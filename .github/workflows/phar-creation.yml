@@ -17,7 +17,7 @@ jobs:
               uses: "actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac" # v4
 
             - name: "Install PHP"
-              uses: "shivammathur/setup-php@2.27.1"
+              uses: "shivammathur/setup-php@2.28.0"
               with:
                   coverage: "none"
                   php-version: "8.1"
