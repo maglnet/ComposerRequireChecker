@@ -30,7 +30,7 @@
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
         "nikic/php-parser": "^4.17.1",
-        "symfony/console": "^6.4.0",
+        "symfony/console": "^6.4.1",
         "webmozart/assert": "^1.11.0",
         "webmozart/glob": "^4.6.0"
     },
@@ -39,9 +39,9 @@
         "doctrine/coding-standard": "^12.0.0",
         "mikey179/vfsstream": "^1.6.11",
         "phing/phing": "^2.17.4",
-        "phpstan/phpstan": "^1.10.46",
-        "phpunit/phpunit": "^10.4.2",
-        "roave/infection-static-analysis-plugin": "^1.33",
+        "phpstan/phpstan": "^1.10.47",
+        "phpunit/phpunit": "^10.5.1",
+        "roave/infection-static-analysis-plugin": "^1.34.0",
         "vimeo/psalm": "^5.16.0"
     },
     "config": {
