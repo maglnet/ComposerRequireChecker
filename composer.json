@@ -26,11 +26,11 @@
         }
     ],
     "require": {
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
+        "php": "~8.2.0 || ~8.3.0",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
         "nikic/php-parser": "^4.17.1",
-        "symfony/console": "^6.4.1",
+        "symfony/console": "^6.4.1 || ^7.0.1",
         "webmozart/assert": "^1.11.0",
         "webmozart/glob": "^4.6.0"
     },
@@ -48,7 +48,7 @@
         "optimize-autoloader": true,
         "sort-packages": true,
         "platform": {
-            "php": "8.1.99"
+            "php": "8.2.99"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
