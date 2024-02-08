@@ -57,8 +57,10 @@ If you haven't already setup your composer installation to support global requir
 If this is already done, run it like this:
 
 ```
-composer-require-checker check /path/to/your/project/composer.json
+composer-require-checker check composer.json
 ```
+
+The `composer.json` here refers to the root Composer manifest of your project.
 
 ### A note about Xdebug
 
