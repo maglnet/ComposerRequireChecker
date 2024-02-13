@@ -93,4 +93,13 @@ final class PharTest extends TestCase
         $this->assertStringContainsString('Configuration file [no-such-file] does not exist.', implode("\n", $output));
         $this->assertNotEquals(0, $return);
     }
+
+    public function testMissingDefaultConfiguration(): void
+    {
+        chdir(__DIR__ . '/../fixtures/noUnknownComposerSymbol');
+        exec(sprintf('%s check --config-file=%s 2>&1', $this->bin, 'composer-require-checker.json'), $output, $return);
+
+        $this->assertStringContainsString('Configuration file [composer-require-checker.json] does not exist.', implode("\n", $output));
+        $this->assertNotEquals(0, $return);
+    }
 }

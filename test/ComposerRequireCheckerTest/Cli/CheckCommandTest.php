@@ -279,12 +279,40 @@ JSON
         );
     }
 
+    /** This is the same as the next test, but with the default configuration file assumed */
     public function testDefaultConfigPath(): void
     {
         $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
 
         chdir($baseDirectory);
         $exitCode = $this->commandTester->execute(['composer-json' => 'composer.json']);
+        $output   = $this->commandTester->getDisplay();
+
+        $this->assertNotEquals(0, $exitCode);
+        $this->assertMatchesRegularExpression(
+            '/The following 2 unknown symbols were found/s',
+            $output,
+        );
+        $this->assertMatchesRegularExpression(
+            '/Composer\\\\InstalledVersions/s',
+            $output,
+        );
+        $this->assertMatchesRegularExpression(
+            '/json_decode/s',
+            $output,
+        );
+    }
+
+    /** This is the same as the previous test, but with the configuration file specified */
+    public function testDefaultConfigPathSpecified(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
+
+        chdir($baseDirectory);
+        $exitCode = $this->commandTester->execute([
+            'composer-json' => 'composer.json',
+            '--config-file' => 'composer-require-checker.json',
+        ]);
         $output   = $this->commandTester->getDisplay();
 
         $this->assertNotEquals(0, $exitCode);
@@ -346,6 +374,20 @@ JSON
         $this->commandTester->execute([
             'composer-json' => 'composer.json',
             '--config-file' => 'not-existent-config.json',
+        ]);
+    }
+
+    public function testNotExistentDefaultConfigPath(): void
+    {
+        $baseDirectory = dirname(__DIR__, 2) . '/fixtures/noUnknownSymbols/';
+
+        chdir($baseDirectory);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configuration file [composer-require-checker.json] does not exist.');
+        $this->commandTester->execute([
+            'composer-json' => 'composer.json',
+            '--config-file' => 'composer-require-checker.json',
         ]);
     }
 
