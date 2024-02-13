@@ -7,29 +7,31 @@ namespace ComposerRequireCheckerTest\ASTLocator;
 use ArrayObject;
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\Exception\FileParseFailed;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
+use function file_put_contents;
 use function iterator_to_array;
 
 /** @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles */
 final class LocateASTFromFilesTest extends TestCase
 {
     private LocateASTFromFiles $locator;
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), null);
-        $this->root    = vfsStream::setup();
+        $this->root    = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testLocate(): void
@@ -37,8 +39,8 @@ final class LocateASTFromFilesTest extends TestCase
         $files = [
             __DIR__ . '/.',
             __DIR__ . '/..',
-            $this->createFile('MyClassA', '<?php class MyClassA {}'),
-            $this->createFile('MyClassB', '<?php class MyClassB {}'),
+            $this->createFile('MyClassA.php', '<?php class MyClassA {}'),
+            $this->createFile('MyClassB.php', '<?php class MyClassB {}'),
         ];
 
         $roots = $this->locate($files);
@@ -48,11 +50,14 @@ final class LocateASTFromFilesTest extends TestCase
 
     public function testFailOnParseError(): void
     {
-        $this->expectException(FileParseFailed::class);
-        $this->expectExceptionMessageMatches('/\[vfs:\/\/root\/MyBadCode\]/');
         $files = [
-            $this->createFile('MyBadCode', '<?php this causes a parse error'),
+            $this->createFile('MyBadCode.php', '<?php this causes a parse error'),
         ];
+
+        $filePath = $files[0];
+
+        $this->expectException(FileParseFailed::class);
+        $this->expectExceptionMessage('[' . $filePath . ']');
 
         $this->locate($files);
     }
@@ -62,7 +67,7 @@ final class LocateASTFromFilesTest extends TestCase
         $collectingErrorHandler = new Collecting();
         $this->locator          = new LocateASTFromFiles(new Php7(new Lexer()), $collectingErrorHandler);
         $files                  = [
-            $this->createFile('MyBadCode', '<?php this causes a parse error'),
+            $this->createFile('MyBadCode.php', '<?php this causes a parse error'),
         ];
 
         $roots = $this->locate($files);
@@ -81,7 +86,7 @@ final class LocateASTFromFilesTest extends TestCase
         $this->locator = new LocateASTFromFiles($parserMock, null);
         $files         = [
             $this->createFile(
-                'MyBadCode',
+                'MyBadCode.php',
                 'this content is not relevant because the parser is mocked and always returns null',
             ),
         ];
@@ -91,7 +96,10 @@ final class LocateASTFromFilesTest extends TestCase
 
     private function createFile(string $path, string|null $content = null): string
     {
-        return vfsStream::newFile($path)->at($this->root)->setContent($content)->url();
+        $fullPath = $this->root->path($path);
+        file_put_contents($fullPath, $content);
+
+        return $fullPath;
     }
 
     /**

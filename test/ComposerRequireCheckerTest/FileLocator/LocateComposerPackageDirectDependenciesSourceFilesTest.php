@@ -6,144 +6,109 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\Exception\DependenciesNotInstalled;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
+use function file_exists;
+use function file_put_contents;
 use function iterator_to_array;
 use function reset;
 use function str_replace;
+
+use const DIRECTORY_SEPARATOR;
 
 /** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles */
 final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
     private LocateComposerPackageDirectDependenciesSourceFiles $locator;
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateComposerPackageDirectDependenciesSourceFiles();
-        $this->root    = vfsStream::setup();
+        $this->root    = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testNoDependencies(): void
     {
-        vfsStream::create([
-            'composer.json' => '{}',
-            'vendor' => [
-                'composer' => ['installed.json' => '{"packages":[]}'],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{}');
+        file_put_contents($this->path('vendor/composer/installed.json'), '{"packages":[]}');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(0, $files);
     }
 
     public function testNoInstalledJson(): void
     {
-        vfsStream::create([
-            'composer.json' => '{}',
-            'vendor' => [
-                'composer' => [],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{}');
+        $this->path('vendor/composer');
 
         $this->expectException(DependenciesNotInstalled::class);
-        $this->locate($this->root->getChild('composer.json')->url());
+        $this->locate($this->path('composer.json'));
     }
 
     public function testSingleDependency(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
-            'vendor' => [
-                'composer' => ['installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
-                'foo' => [
-                    'bar' => [
-                        'src' => ['MyClass.php' => ''],
-                    ],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
+        file_put_contents($this->path('vendor/composer/installed.json'), '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}');
+        file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(1, $files);
 
-        $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile   = str_replace('\\', '/', reset($files));
+        $expectedFile = $this->path('vendor/foo/bar/src/MyClass.php');
+        $actualFile   = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, reset($files));
         $this->assertSame($expectedFile, $actualFile);
     }
 
     public function testVendorDirsWithoutComposerFilesAreIgnored(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"require": {"foo/bar": "^1.0"}}',
-            'vendor' => [
-                'composer' => ['installed.json' => '{"packages":[]}'],
-                'foo' => [
-                    'bar' => [
-                        'src' => ['MyClass.php' => ''],
-                    ],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"require": {"foo/bar": "^1.0"}}');
+        file_put_contents($this->path('vendor/composer/installed.json'), '{"packages":[]}');
+        file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(0, $files);
     }
 
     public function testVendorConfigSettingIsBeingUsed(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"require":{"foo/bar": "^1.0"},"config":{"vendor-dir":"alternate-vendor"}}',
-            'alternate-vendor' => [
-                'composer' => ['installed.json' => '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
-                'foo' => [
-                    'bar' => [
-                        'src' => ['MyClass.php' => ''],
-                    ],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"},"config":{"vendor-dir":"alternate-vendor"}}');
+        file_put_contents($this->path('alternate-vendor/composer/installed.json'), '{"packages":[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}');
+        file_put_contents($this->path('alternate-vendor/foo/bar/src/MyClass.php'), '');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(1, $files);
 
-        $expectedFile = $this->root->getChild('alternate-vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile   = str_replace('\\', '/', reset($files));
+        $expectedFile = $this->path('alternate-vendor/foo/bar/src/MyClass.php');
+        $actualFile   = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, reset($files));
         $this->assertSame($expectedFile, $actualFile);
     }
 
     public function testInstalledJsonUsedAsFallback(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
-            'vendor' => [
-                'composer' => ['installed.json' => '{"packages": [{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}'],
-                'foo' => [
-                    'bar' => [
-                        'src' => ['MyClass.php' => ''],
-                    ],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
+        file_put_contents($this->path('vendor/composer/installed.json'), '{"packages": [{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}');
+        file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(1, $files);
 
-        $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile   = str_replace('\\', '/', reset($files));
+        $expectedFile = $this->path('vendor/foo/bar/src/MyClass.php');
+        $actualFile   = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, reset($files));
         $this->assertSame($expectedFile, $actualFile);
 
         // Ensure we didn't leave our temporary composer.json lying around
-        $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
+        $this->assertFalse(file_exists($this->path('vendor/foo/bar/composer.json')));
     }
 
     /**
@@ -151,33 +116,32 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
      */
     public function testOldInstalledJsonUsedAsFallback(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"require":{"foo/bar": "^1.0"}}',
-            'vendor' => [
-                'composer' => ['installed.json' => '[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]'],
-                'foo' => [
-                    'bar' => [
-                        'src' => ['MyClass.php' => ''],
-                    ],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
+        file_put_contents($this->path('vendor/composer/installed.json'), '[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]');
+        file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
 
-        $files = $this->locate($this->root->getChild('composer.json')->url());
+        $files = $this->locate($this->path('composer.json'));
 
         $this->assertCount(1, $files);
 
-        $expectedFile = $this->root->getChild('vendor/foo/bar/src/MyClass.php')->url();
-        $actualFile   = str_replace('\\', '/', reset($files));
+        $expectedFile = $this->path('vendor/foo/bar/src/MyClass.php');
+        $actualFile   = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, reset($files));
         $this->assertSame($expectedFile, $actualFile);
 
         // Ensure we didn't leave our temporary composer.json lying around
-        $this->assertFalse($this->root->hasChild('vendor/foo/bar/composer.json'));
+        $this->assertFalse(file_exists($this->path('vendor/foo/bar/composer.json')));
     }
 
     /** @return string[] */
     private function locate(string $composerJson): array
     {
         return iterator_to_array(($this->locator)($composerJson));
+    }
+
+    private function path(string $path): string
+    {
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+        return $this->root->path($path);
     }
 }

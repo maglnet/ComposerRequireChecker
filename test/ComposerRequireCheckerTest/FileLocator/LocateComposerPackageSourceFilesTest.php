@@ -6,161 +6,140 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\JsonLoader;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 use function count;
 use function dirname;
+use function file_put_contents;
 use function json_encode;
 use function sprintf;
 use function str_replace;
 
+use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 
 /** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles */
 final class LocateComposerPackageSourceFilesTest extends TestCase
 {
     private LocateComposerPackageSourceFiles $locator;
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateComposerPackageSourceFiles();
-        $this->root    = vfsStream::setup();
+        $this->root    = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testFromClassmap(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}',
-            'src' => ['MyClassA.php' => '<?php class MyClassA {}'],
-            'MyClassB.php' => '<?php class MyClassB {}',
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"classmap": ["src/MyClassA.php", "MyClassB.php"]}}');
+        file_put_contents($this->path('src/MyClassA.php'), '<?php class MyClassA {}');
+        file_put_contents($this->path('MyClassB.php'), '<?php class MyClassB {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(2, $files);
-        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
-        $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
+        $this->assertContains($this->path('src/MyClassA.php'), $files);
+        $this->assertContains($this->path('MyClassB.php'), $files);
     }
 
     public function testFromClassmapWithStrangePaths(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"classmap": ["/src/MyClassA.php", "MyClassB.php"]}}',
-            'src' => ['MyClassA.php' => '<?php class MyClassA {}'],
-            'MyClassB.php' => '<?php class MyClassB {}',
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"classmap": ["/src/MyClassA.php", "MyClassB.php"]}}');
+        file_put_contents($this->path('src/MyClassA.php'), '<?php class MyClassA {}');
+        file_put_contents($this->path('MyClassB.php'), '<?php class MyClassB {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(2, $files);
-        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
-        $this->assertContains($this->root->getChild('MyClassB.php')->url(), $files);
+        $this->assertContains($this->path('src/MyClassA.php'), $files);
+        $this->assertContains($this->path('MyClassB.php'), $files);
     }
 
     public function testFromFiles(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"files": ["foo.php"]}}',
-            'foo.php' => '<?php class MyClass {}',
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"files": ["foo.php"]}}');
+        file_put_contents($this->path('foo.php'), '<?php class MyClass {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(1, $files);
-        $this->assertContains($this->root->getChild('foo.php')->url(), $files);
+        $this->assertContains($this->path('foo.php'), $files);
     }
 
     public function testFromPsr0(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-0": ["src"]}}',
-            'src' => [
-                'MyNamespace' => ['MyClass.php' => '<?php namespace MyNamespace; class MyClass {}'],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"psr-0": ["src"]}}');
+        file_put_contents($this->path('src/MyNamespace/MyClass.php'), '<?php namespace MyNamespace; class MyClass {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(1, $files);
-        $this->assertContains($this->root->getChild('src/MyNamespace/MyClass.php')->url(), $files);
+        $this->assertContains($this->path('src/MyNamespace/MyClass.php'), $files);
     }
 
     public function testFromPsr4(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": "src"}}}',
-            'src' => ['MyClass.php' => '<?php namespace MyNamespace; class MyClass {}'],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"psr-4": {"MyNamespace\\\\": "src"}}}');
+        file_put_contents($this->path('src/MyClass.php'), '<?php namespace MyNamespace; class MyClass {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(1, $files);
-        $this->assertContains($this->root->getChild('src/MyClass.php')->url(), $files);
+        $this->assertContains($this->path('src/MyClass.php'), $files);
     }
 
     public function testFromPsr0WithMultipleDirectories(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-0": {"MyNamespace\\\\": ["src", "lib"]}}}',
-            'src' => ['MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}']],
-            'lib' => ['MyNamespace' => ['MyClassB.php' => '<?php namespace MyNamespace; class MyClassB {}']],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"psr-0": {"MyNamespace\\\\": ["src", "lib"]}}}');
+        file_put_contents($this->path('src/MyNamespace/MyClassA.php'), '<?php namespace MyNamespace; class MyClassA {}');
+        file_put_contents($this->path('lib/MyNamespace/MyClassB.php'), '<?php namespace MyNamespace; class MyClassB {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(2, $files);
-        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
-        $this->assertContains($this->root->getChild('lib/MyNamespace/MyClassB.php')->url(), $files);
+        $this->assertContains($this->path('src/MyNamespace/MyClassA.php'), $files);
+        $this->assertContains($this->path('lib/MyNamespace/MyClassB.php'), $files);
     }
 
     public function testFromPsr4WithMultipleDirectories(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src", "lib"]}}}',
-            'src' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
-            'lib' => ['MyClassB.php' => '<?php namespace MyNamespace; class MyClassB {}'],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src", "lib"]}}}');
+        file_put_contents($this->path('src/MyClassA.php'), '<?php namespace MyNamespace; class MyClassA {}');
+        file_put_contents($this->path('lib/MyClassB.php'), '<?php namespace MyNamespace; class MyClassB {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(2, $files);
-        $this->assertContains($this->root->getChild('src/MyClassA.php')->url(), $files);
-        $this->assertContains($this->root->getChild('lib/MyClassB.php')->url(), $files);
+        $this->assertContains($this->path('src/MyClassA.php'), $files);
+        $this->assertContains($this->path('lib/MyClassB.php'), $files);
     }
 
     public function testFromPsr4WithNestedDirectory(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src/MyNamespace"]}}}',
-            'src' => [
-                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src/MyNamespace"]}}}');
+        file_put_contents($this->path('src/MyNamespace/MyClassA.php'), '<?php namespace MyNamespace; class MyClassA {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(1, $files);
-        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
+        $this->assertContains($this->path('src/MyNamespace/MyClassA.php'), $files);
     }
 
     public function testFromPsr4WithNestedDirectoryAlternativeDirectorySeparator(): void
     {
-        vfsStream::create([
-            'composer.json' => '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src\\\\MyNamespace"]}}}',
-            'src' => [
-                'MyNamespace' => ['MyClassA.php' => '<?php namespace MyNamespace; class MyClassA {}'],
-            ],
-        ]);
+            file_put_contents($this->path('composer.json'), '{"autoload": {"psr-4": {"MyNamespace\\\\": ["src\\\\MyNamespace"]}}}');
+            file_put_contents($this->path('src/MyNamespace/MyClassA.php'), '<?php namespace MyNamespace; class MyClassA {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(1, $files);
-        $this->assertContains($this->root->getChild('src/MyNamespace/MyClassA.php')->url(), $files);
+        $this->assertContains($this->path('src/MyNamespace/MyClassA.php'), $files);
     }
 
     /**
@@ -173,27 +152,18 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     {
         $excludedPatternJson = json_encode($excludedPattern, JSON_THROW_ON_ERROR);
 
-        vfsStream::create([
-            'composer.json' => sprintf(
-                '{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": %s}}',
-                $excludedPatternJson,
-            ),
-            'ClassA.php' => '<?php namespace MyNamespace; class ClassA {}',
-            'tests' => ['ATest.php' => '<?php namespace MyNamespace; class ATest {}'],
-            'foo' => [
-                'Bar' => ['BTest.php' => '<?php namespace MyNamespace; class BTest {}'],
-                'src' => [
-                    'ClassB.php' => '<?php namespace MyNamespace; class ClassB {}',
-                    'Bar' => ['CTest.php' => '<?php namespace MyNamespace; class CTest {}'],
-                ],
-            ],
-        ]);
+        file_put_contents($this->path('composer.json'), sprintf('{"autoload": {"psr-4": {"MyNamespace\\\\": ""}, "exclude-from-classmap": %s}}', $excludedPatternJson));
+        file_put_contents($this->path('ClassA.php'), '<?php namespace MyNamespace; class ClassA {}');
+        file_put_contents($this->path('tests/ATest.php'), '<?php namespace MyNamespace; class ATest {}');
+        file_put_contents($this->path('foo/Bar/BTest.php'), '<?php namespace MyNamespace; class BTest {}');
+        file_put_contents($this->path('foo/src/ClassB.php'), '<?php namespace MyNamespace; class ClassB {}');
+        file_put_contents($this->path('foo/src/Bar/CTest.php'), '<?php namespace MyNamespace; class CTest {}');
 
-        $files = $this->files($this->root->getChild('composer.json')->url());
+        $files = $this->files($this->path('composer.json'));
 
         $this->assertCount(count($expectedFiles), $files);
         foreach ($expectedFiles as $expectedFile) {
-            $this->assertContains($this->root->getChild($expectedFile)->url(), $files);
+            $this->assertContains($this->path($expectedFile), $files);
         }
     }
 
@@ -245,9 +215,16 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         $files          = [];
         $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
-            $files[] = str_replace('\\', '/', $file);
+            $files[] = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $file);
         }
 
         return $files;
+    }
+
+    private function path(string $path): string
+    {
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+        return $this->root->path($path);
     }
 }
