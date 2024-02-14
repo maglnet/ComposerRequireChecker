@@ -35,16 +35,16 @@ final class PharTest extends TestCase
             if ($return !== 0) {
                 ob_end_flush();
 
-                throw new RuntimeException('Command `' . $command . '` failed with exit code ' . $return);
+                throw new RuntimeException('Command `' . $command . '` failed with exit code ' . $return . "\n" . implode("\n", $output));
             }
 
             ob_clean();
         };
         $workingDirectory = getcwd();
         chdir(dirname(__DIR__, 2));
-        $doExec('composer install');
+        $doExec('composer --no-interaction install --no-progress --no-suggest');
         $doExec(PHP_BINARY . ' -d phar.readonly=0 vendor/bin/phing phar-build');
-        $doExec('composer install');
+        $doExec('composer --no-interaction install --no-progress --no-suggest');
         self::$bin = PHP_BINARY . ' ' . getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'composer-require-checker.phar';
         chdir($workingDirectory);
     }
