@@ -42,9 +42,9 @@ final class PharTest extends TestCase
         };
         $workingDirectory = getcwd();
         chdir(dirname(__DIR__, 2));
-        $doExec('composer --no-interaction install --no-progress --no-suggest');
+        $doExec('composer --no-interaction install --no-progress');
         $doExec(PHP_BINARY . ' -d phar.readonly=0 vendor/bin/phing phar-build');
-        $doExec('composer --no-interaction install --no-progress --no-suggest');
+        $doExec('composer --no-interaction install --no-progress');
         self::$bin = PHP_BINARY . ' ' . getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'composer-require-checker.phar';
         chdir($workingDirectory);
     }
