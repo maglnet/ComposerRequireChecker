@@ -28,8 +28,12 @@
     <!-- ============================================  -->
     <target name="run-test">
         <php returnProperty="php-executable" expression="PHP_BINARY" level="debug"/>
-        <exec command="${php-executable} vendor/phpunit/phpunit/phpunit" passthru="true" checkreturn="true"/>
-        <exec command="${php-executable} bin/composer-require-checker.php" passthru="true" checkreturn="true"/>
+        <exec executable="${php-executable}" checkreturn="true" passthru="true">
+            <arg line="vendor/phpunit/phpunit/phpunit"/>
+        </exec>
+        <exec executable="${php-executable}" checkreturn="true" passthru="true">
+            <arg line="bin/composer-require-checker.php"/>
+        </exec>
     </target>
 
     <!-- ============================================  -->
@@ -37,7 +41,9 @@
     <!-- ============================================  -->
     <target name="phar-prepare-dependencies">
         <!--install dependencies without development requirements-->
-        <exec command="composer install --no-dev -o" passthru="true" checkreturn="true"/>
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg line="--no-interaction install --no-dev --optimize-autoloader"/>
+        </exec>
     </target>
 
     <!-- ============================================  -->
