@@ -65,5 +65,12 @@ jobs:
               if: ${{ matrix.dependencies == 'locked' }}
               run: "composer install --no-interaction --no-progress --no-suggest"
 
+            - name: "Compile PHAR"
+              run: |
+                php -d phar.readonly=0 vendor/bin/phing phar-build
+                # We re-run 'composer install' here as phing runs 'composer install --no-dev'.
+                # Using 'install' (not 'update' with flags) here is correct as the previous update re-wrote wrote the lock file.
+                composer --no-interaction install --no-progress
+
             - name: "Tests"
               run: "vendor/bin/phpunit --coverage-clover=clover.xml --coverage-text"
