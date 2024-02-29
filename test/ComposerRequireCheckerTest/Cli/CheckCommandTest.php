@@ -70,13 +70,14 @@ final class CheckCommandTest extends TestCase
         $this->assertSame(Command::FAILURE, $this->commandTester->getStatusCode());
         $display = $this->commandTester->getDisplay();
 
-        $this->assertStringContainsString('The following 6 unknown symbols were found:', $display);
+        $this->assertStringContainsString('The following 7 unknown symbols were found:', $display);
         $this->assertStringContainsString('Doctrine\Common\Collections\ArrayCollection', $display);
         $this->assertStringContainsString('Example\Library\Dependency', $display);
         $this->assertStringContainsString('FILTER_VALIDATE_URL', $display);
         $this->assertStringContainsString('filter_var', $display);
         $this->assertStringContainsString('Foo\Bar\Baz', $display);
         $this->assertStringContainsString('libxml_clear_errors', $display);
+        $this->assertStringContainsString('Vendor\UnknownAttribute ', $display);
     }
 
     public function testInvalidOutputOptionValue(): void
@@ -111,6 +112,7 @@ final class CheckCommandTest extends TestCase
                 'filter_var' => ['ext-filter'],
                 'Foo\Bar\Baz' => [],
                 'libxml_clear_errors' => ['ext-libxml'],
+                'Vendor\UnknownAttribute' => [],
             ],
             $actual['unknown-symbols'],
         );
@@ -341,6 +343,19 @@ JSON
     {
         $this->commandTester->execute([
             'composer-json' => dirname(__DIR__, 2) . '/fixtures/noUnknownEnumSymbols/composer.json',
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay(),
+        );
+    }
+
+    public function testNoUnknownAttributeSymbolsFound(): void
+    {
+        $this->commandTester->execute([
+            'composer-json' => dirname(__DIR__, 2) . '/fixtures/noUnknownAttributeSymbols/composer.json',
         ]);
 
         self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
