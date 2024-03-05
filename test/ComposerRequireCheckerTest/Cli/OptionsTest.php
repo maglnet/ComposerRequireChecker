@@ -46,6 +46,11 @@ final class OptionsTest extends TestCase
             'object',
             'mixed',
             'never',
+            'AllowDynamicProperties',
+            'Attribute',
+            'Override',
+            'ReturnTypeWillChange',
+            'SensitiveParameter',
             'foo',
             'bar',
         ], $options->getSymbolWhitelist());
@@ -100,6 +105,11 @@ final class OptionsTest extends TestCase
             'object',
             'mixed',
             'never',
+            'AllowDynamicProperties',
+            'Attribute',
+            'Override',
+            'ReturnTypeWillChange',
+            'SensitiveParameter',
             'foo',
             'bar',
         ], $options->getSymbolWhitelist());

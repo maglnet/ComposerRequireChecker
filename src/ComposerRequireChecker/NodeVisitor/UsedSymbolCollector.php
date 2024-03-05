@@ -47,6 +47,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordConstantFetchUsage($node);
         $this->recordTraitUsage($node);
         $this->recordPropertyTypeUsage($node);
+        $this->recordAttributeUsage($node);
 
         return parent::enterNode($node);
     }
@@ -202,6 +203,15 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         }
 
         $this->recordUsageOf($node->type);
+    }
+
+    private function recordAttributeUsage(Node $node): void
+    {
+        if (! $node instanceof Node\Attribute) {
+            return;
+        }
+
+        $this->recordUsageOf($node->name);
     }
 
     private function recordUsageOf(Node\Name $symbol): void

@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli;
 
+use AllowDynamicProperties;
+use Attribute;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use InvalidArgumentException;
+use Override;
+use ReturnTypeWillChange;
+use SensitiveParameter;
 
 use function array_merge;
 use function array_unique;
@@ -36,8 +41,16 @@ class Options
         'never',
     ];
 
+    private const PHP_ATTRIBUTES = [
+        AllowDynamicProperties::class,
+        Attribute::class,
+        Override::class,
+        ReturnTypeWillChange::class,
+        SensitiveParameter::class,
+    ];
+
     /** @var array<string>  */
-    private array $symbolWhitelist = self::PHP_LANGUAGE_TYPES;
+    private array $symbolWhitelist;
 
     /** @var array<string>  */
     private array $phpCoreExtensions = [
@@ -63,6 +76,8 @@ class Options
     /** @param array<string, mixed> $options */
     public function __construct(array $options = [])
     {
+        $this->symbolWhitelist = array_merge(self::PHP_LANGUAGE_TYPES, self::PHP_ATTRIBUTES);
+
         /** @var mixed $option */
         foreach ($options as $key => $option) {
             $methodName = 'set' . $this->getCamelCase($key);
@@ -97,6 +112,7 @@ class Options
          */
         $this->symbolWhitelist = array_unique(array_merge(
             self::PHP_LANGUAGE_TYPES,
+            self::PHP_ATTRIBUTES,
             $symbolWhitelist,
         ));
     }
