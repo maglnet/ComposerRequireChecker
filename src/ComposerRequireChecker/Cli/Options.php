@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli;
 
+use AllowDynamicProperties;
+use Attribute;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use InvalidArgumentException;
+use Override;
+use ReturnTypeWillChange;
+use SensitiveParameter;
 
 use function array_merge;
 use function array_unique;
@@ -37,11 +42,11 @@ class Options
     ];
 
     private const PHP_ATTRIBUTES = [
-        'AllowDynamicProperties',
-        'Attribute',
-        'Override',
-        'ReturnTypeWillChange',
-        'SensitiveParameter',
+        AllowDynamicProperties::class,
+        Attribute::class,
+        Override::class,
+        ReturnTypeWillChange::class,
+        SensitiveParameter::class,
     ];
 
     /** @var array<string>  */
