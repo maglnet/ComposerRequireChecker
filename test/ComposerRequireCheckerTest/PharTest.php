@@ -62,7 +62,7 @@ final class PharTest extends TestCase
     {
         $path = __DIR__ . '/../fixtures/unknownSymbols/composer.json';
         exec(sprintf('%s check %s 2>&1', $this->bin, $path), $output, $return);
-        $this->assertStringContainsString('The following 6 unknown symbols were found', implode("\n", $output));
+        $this->assertStringContainsString('The following 7 unknown symbols were found', implode("\n", $output));
         $this->assertNotEquals(0, $return);
     }
 
