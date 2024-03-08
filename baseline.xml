@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.2.1@ea9cb72143b77e7520c52fa37290bd8d8bc88fd9">
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
   <file src="src/ComposerRequireChecker/Cli/CheckCommand.php">
-    <MixedArgumentTypeCoercion occurrences="2"/>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[(new ComposeGenerators())->__invoke(
+                        $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                        $getPackageSourceFiles($composerData, dirname($composerJson)),
+                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson),
+                    )]]></code>
+      <code><![CDATA[(new ComposeGenerators())->__invoke(
+                    $getPackageSourceFiles($composerData, dirname($composerJson)),
+                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                )]]></code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/ComposerRequireChecker/DependencyGuesser/GuessFromLoadedExtensions.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$this->coreExtensions]]></code>
+    </RiskyTruthyFalsyComparison>
+  </file>
+  <file src="src/ComposerRequireChecker/FileLocator/LocateAllFilesByExtension.php">
+    <RiskyTruthyFalsyComparison>
+      <code><![CDATA[$blacklist]]></code>
+    </RiskyTruthyFalsyComparison>
   </file>
 </files>
