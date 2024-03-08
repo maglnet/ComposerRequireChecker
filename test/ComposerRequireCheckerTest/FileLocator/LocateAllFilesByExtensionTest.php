@@ -6,26 +6,31 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 use function count;
+use function file_put_contents;
 use function sprintf;
 use function str_replace;
+use function touch;
+
+use const DIRECTORY_SEPARATOR;
 
 /** @covers \ComposerRequireChecker\FileLocator\LocateAllFilesByExtension */
 final class LocateAllFilesByExtensionTest extends TestCase
 {
     private LocateAllFilesByExtension $locator;
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->locator = new LocateAllFilesByExtension();
-        $this->root    = vfsStream::setup();
+        $this->root    = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testLocateFromNoDirectories(): void
@@ -37,44 +42,52 @@ final class LocateAllFilesByExtensionTest extends TestCase
 
     public function testLocateFromASingleDirectory(): void
     {
-        $dir   = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
+        $dir   = $this->path('MyNamespaceA');
         $files = [];
         for ($i = 0; $i < 3; $i++) {
-            $files[] = vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
+            $fileName = sprintf('MyClass%d.php', $i);
+            $filePath = $dir . DIRECTORY_SEPARATOR . $fileName;
+            touch($filePath);
+            $files[] = $filePath;
         }
 
-        $foundFiles = $this->locate([$dir->url()], '.php', null);
+        $foundFiles = $this->locate([$dir], '.php', null);
+        $foundFiles = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $foundFiles);
 
         $this->assertCount(count($files), $foundFiles);
         foreach ($files as $file) {
-            $this->assertContains($file->url(), str_replace('\\', '/', $foundFiles));
+            $this->assertContains($file, $foundFiles);
         }
     }
 
     public function testLocateWithFilenameBlackList(): void
     {
-        $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
+        $dir = $this->path('MyNamespaceA');
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile(sprintf('MyClass%d.php', $i))->at($dir);
+            $fileName = sprintf('MyClass%d.php', $i);
+            $filePath = $dir . DIRECTORY_SEPARATOR . $fileName;
+            touch($filePath);
+            $files[] = $filePath;
         }
 
-        $foundFiles = $this->locate([$dir->url()], '.php', ['MyClass6']);
+        $foundFiles = $this->locate([$dir], '.php', ['MyClass6']);
 
         $this->assertCount(9, $foundFiles);
-        $this->assertNotContains(vfsStream::url('MyClass6.php'), $foundFiles);
+        $this->assertNotContains($this->path('MyClass6.php'), $foundFiles);
     }
 
     public function testLocateWithDirectoryBlackList(): void
     {
-        $dir = vfsStream::newDirectory('MyNamespaceA')->at($this->root);
+        $dir = $this->path('MyNamespaceA');
         for ($i = 0; $i < 10; $i++) {
-            vfsStream::newFile(sprintf('Directory%d/MyClass.php', $i))->at($dir);
+            $filePath = $this->path(sprintf('MyNamespaceA/Directory%d/MyClass.php', $i));
+            touch($filePath);
         }
 
-        $foundFiles = $this->locate([$dir->url()], '.php', ['Directory5/']);
+        $foundFiles = $this->locate([$dir], '.php', ['Directory5/']);
 
         $this->assertCount(9, $foundFiles);
-        $this->assertNotContains(vfsStream::url('Directory5/MyClass.php'), $foundFiles);
+        $this->assertNotContains($this->path('MyNamespaceA/Directory5/MyClass.php'), $foundFiles);
     }
 
     /**
@@ -85,25 +98,19 @@ final class LocateAllFilesByExtensionTest extends TestCase
      */
     public function testLocateWithBlackList(array $blacklist, array $expectedFiles): void
     {
-        $this->root = vfsStream::create([
-            'MyNamespaceA' => [
-                'MyClass.php' => '<?php class MyClass {}',
-                'Foo' => [
-                    'FooClass.php' => '<?php class FooCalls {}',
-                    'Bar' => ['BarClass.php' => '<?php class BarClass {}'],
-                ],
-                'Bar' => ['AnotherBarClass.php' => '<?php class AnotherBarClass {}'],
-            ],
-        ]);
+        file_put_contents($this->path('MyNamespaceA/MyClass.php'), '<?php class MyClass {}');
+        file_put_contents($this->path('MyNamespaceA/Foo/FooClass.php'), '<?php class FooCalls {}');
+        file_put_contents($this->path('MyNamespaceA/Foo/Bar/BarClass.php'), '<?php class BarClass {}');
+        file_put_contents($this->path('MyNamespaceA/Bar/AnotherBarClass.php'), '<?php class AnotherBarClass {}');
 
-        $foundFiles = $this->locate([$this->root->url()], '.php', $blacklist);
+        $foundFiles = $this->locate([$this->root->path()], '.php', $blacklist);
 
         $this->assertCount(count($expectedFiles), $foundFiles);
         foreach ($expectedFiles as $file) {
-            $this->assertContains($this->root->getChild($file)->url(), $foundFiles);
+            $this->assertContains($this->path($file), $foundFiles);
         }
 
-        $this->assertContains($this->root->getChild('MyNamespaceA/Foo/FooClass.php')->url(), $foundFiles);
+        $this->assertContains($this->path('MyNamespaceA/Foo/FooClass.php'), $foundFiles);
     }
 
     /** @return array<string, array<array<string>>> */
@@ -151,9 +158,16 @@ final class LocateAllFilesByExtensionTest extends TestCase
     {
         $files = [];
         foreach (($this->locator)(new ArrayObject($directories), $fileExtension, $blacklist) as $file) {
-            $files[] = str_replace('\\', '/', $file);
+            $files[] = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $file);
         }
 
         return $files;
+    }
+
+    private function path(string $path): string
+    {
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+        return $this->root->path($path);
     }
 }

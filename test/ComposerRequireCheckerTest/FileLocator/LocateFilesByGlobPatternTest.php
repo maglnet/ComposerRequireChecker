@@ -5,50 +5,81 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
+
+use function array_map;
+use function realpath;
+use function str_replace;
+use function touch;
+
+use const DIRECTORY_SEPARATOR;
 
 final class LocateFilesByGlobPatternTest extends TestCase
 {
     private LocateFilesByGlobPattern $locator;
 
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();
-        $this->root    = vfsStream::setup();
+        $this->root    = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testSimpleGlobPattern(): void
     {
-        vfsStream::create([
-            'bin' => [
-                'console' => '',
-                'not-console' => '',
-            ],
-        ]);
+        touch($this->path('bin/console.php'));
+        touch($this->path('bin/not-console.php'));
 
-        $files = $this->files(['bin/console'], $this->root->url());
+        $files = $this->files(['bin/console.php'], $this->root->path());
         self::assertCount(1, $files);
-        self::assertContains($this->root->getChild('bin/console')->url(), $files);
+        self::assertContains($this->path('bin/console.php'), $files);
     }
 
     public function testGlobPattern(): void
     {
-        vfsStream::create([
-            'bin' => [
-                'console.php' => '',
-                'console123.php' => '',
-                'not-console' => '',
-            ],
-        ]);
+        touch($this->path('bin/console.php'));
+        touch($this->path('bin/console123.php'));
+        touch($this->path('bin/not-console.php'));
 
-        $files = $this->files(['bin/console*.php'], $this->root->url() . '/');
+        $files = $this->files(['bin/console*.php'], $this->root->path() . '/');
+        $files = array_map('realpath', $files);
+
         self::assertCount(2, $files);
-        self::assertContains($this->root->getChild('bin/console.php')->url(), $files);
-        self::assertContains($this->root->getChild('bin/console123.php')->url(), $files);
+        self::assertContains(realpath($this->path('bin/console.php')), $files);
+        self::assertContains(realpath($this->path('bin/console123.php')), $files);
+    }
+
+    public function testNoMatchesEmptyDirectoryEmptyGlob(): void
+    {
+        $files = $this->files([], $this->root->path() . '/');
+
+        self::assertCount(0, $files);
+    }
+
+    public function testNoMatchesEmptyDirectory(): void
+    {
+        $files = $this->files(['bin/console*.php'], $this->root->path() . '/');
+
+        self::assertCount(0, $files);
+    }
+
+    public function testNoDoubleDirectorySeparator(): void
+    {
+        touch($this->path('bin/console.php'));
+        touch($this->path('bin/console123.php'));
+        touch($this->path('bin/not-console.php'));
+
+        $files = $this->files(['bin/console*.php'], $this->root->path() . '/');
+
+        foreach ($files as $file) {
+            $this->assertStringNotContainsString(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, $file);
+        }
+
+        self::assertCount(2, $files);
     }
 
     /**
@@ -61,9 +92,16 @@ final class LocateFilesByGlobPatternTest extends TestCase
         $files          = [];
         $filesGenerator = ($this->locator)($globPatterns, $dir);
         foreach ($filesGenerator as $file) {
-            $files[] = $file;
+            $files[] = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $file);
         }
 
         return $files;
+    }
+
+    private function path(string $path): string
+    {
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
+        return $this->root->path($path);
     }
 }

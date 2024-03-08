@@ -8,3 +8,4 @@
 /phpmd.xml
 /phpunit.xml
 /.phpcs-cache
+/.phpunit.cache

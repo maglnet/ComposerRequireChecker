@@ -5,27 +5,31 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedExtensionsResolver;
 
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
-use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
+
+use function file_put_contents;
 
 /** @covers \ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver */
 final class DefinedExtensionsResolverTest extends TestCase
 {
     private DefinedExtensionsResolver $resolver;
-    private vfsStreamDirectory $root;
+    private TemporaryDirectory $root;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->resolver = new DefinedExtensionsResolver();
-        $this->root     = vfsStream::setup();
+
+        $this->root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
     }
 
     public function testNoExtensions(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)->setContent('{}')->url();
+        $composerJson = $this->createComposerJson('{}');
 
         $extensions = ($this->resolver)($composerJson);
 
@@ -34,9 +38,7 @@ final class DefinedExtensionsResolverTest extends TestCase
 
     public function testCoreExtensions(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"php":"^7.0"}}')
-            ->url();
+        $composerJson = $this->createComposerJson('{"require":{"php":"^7.0"}}');
 
         $extensions = ($this->resolver)($composerJson, ['foo']);
 
@@ -46,9 +48,7 @@ final class DefinedExtensionsResolverTest extends TestCase
 
     public function testCoreExtensionsIn64Bit(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"php-64bit":"^7.0"}}')
-            ->url();
+        $composerJson = $this->createComposerJson('{"require":{"php-64bit":"^7.0"}}');
 
         $extensions = ($this->resolver)($composerJson, ['foo']);
 
@@ -58,9 +58,7 @@ final class DefinedExtensionsResolverTest extends TestCase
 
     public function testExtensionsAreReturned(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"ext-zip":"*","ext-curl":"*"}}')
-            ->url();
+        $composerJson = $this->createComposerJson('{"require":{"ext-zip":"*","ext-curl":"*"}}');
 
         $extensions = ($this->resolver)($composerJson, ['foo']);
 
@@ -72,9 +70,7 @@ final class DefinedExtensionsResolverTest extends TestCase
 
     public function testExtensionsAreAddedWhenBothCoreAndExtensionsRequired(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}')
-            ->url();
+        $composerJson = $this->createComposerJson('{"require":{"php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}');
 
         $extensions = ($this->resolver)($composerJson, ['foo']);
 
@@ -86,9 +82,9 @@ final class DefinedExtensionsResolverTest extends TestCase
 
     public function testExtensionsFoundWhenAfterOtherPackages(): void
     {
-        $composerJson = vfsStream::newFile('composer.json')->at($this->root)
-            ->setContent('{"require":{"maglnet/composer-require-checker":"*","php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}')
-            ->url();
+        $composerJson = $this->createComposerJson(
+            '{"require":{"maglnet/composer-require-checker":"*","php":"~8.2.0","ext-zip":"*","ext-curl":"*"}}',
+        );
 
         $extensions = ($this->resolver)($composerJson, ['foo']);
 
@@ -96,5 +92,13 @@ final class DefinedExtensionsResolverTest extends TestCase
         $this->assertContains('foo', $extensions);
         $this->assertContains('curl', $extensions);
         $this->assertContains('zip', $extensions);
+    }
+
+    private function createComposerJson(string $content): string
+    {
+        $fullPath = $this->root->path('composer.json');
+        file_put_contents($fullPath, $content);
+
+        return $fullPath;
     }
 }

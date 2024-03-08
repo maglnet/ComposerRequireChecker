@@ -7,8 +7,8 @@ namespace ComposerRequireCheckerTest\Cli;
 use ComposerRequireChecker\Cli\Application;
 use InvalidArgumentException;
 use LogicException;
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -175,20 +175,25 @@ final class CheckCommandTest extends TestCase
 
     public function testWithAdditionalSourceFiles(): void
     {
-        $root = vfsStream::setup();
-        vfsStream::create([
-            'config.json' => <<<'JSON'
+        $root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        $configFilePath = $root->path('config.json');
+        file_put_contents(
+            $configFilePath,
+            <<<'JSON'
 {
     "scan-files": ["src/ComposerRequireChecker/Cli/CheckCommand.php"]
 }
 JSON
             ,
-        ]);
+        );
 
         $this->commandTester->execute([
             // that's our own composer.json
             'composer-json' => dirname(__DIR__, 3) . '/composer.json',
-            '--config-file' => $root->getChild('config.json')->url(),
+            '--config-file' => $configFilePath,
         ]);
 
         $this->assertMatchesRegularExpression(
@@ -199,15 +204,17 @@ JSON
 
     public function testSourceFileThatUsesDevDependency(): void
     {
-        $root = vfsStream::setup();
-        vfsStream::create(
-            ['config.json' => '{"scan-files":["test/ComposerRequireCheckerTest/Cli/CheckCommandTest.php"]}'],
-        );
+        $root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        $configFilePath = $root->path('config.json');
+        file_put_contents($configFilePath, '{"scan-files":["test/ComposerRequireCheckerTest/Cli/CheckCommandTest.php"]}');
 
         $exitCode = $this->commandTester->execute([
             // that's our own composer.json
             'composer-json' => dirname(__DIR__, 3) . '/composer.json',
-            '--config-file' => $root->getChild('config.json')->url(),
+            '--config-file' => $configFilePath,
         ]);
 
         $this->assertNotEquals(0, $exitCode);
@@ -298,13 +305,17 @@ JSON
     public function testOverrideDefaultConfigPath(): void
     {
         $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
-        $root          = vfsStream::setup();
-        vfsStream::create(['config.json' => '{"scan-files": []}']);
+        $root          = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        $configFilePath = $root->path('config.json');
+        file_put_contents($configFilePath, '{"scan-files":[]}');
 
         chdir($baseDirectory);
         $exitCode = $this->commandTester->execute([
             'composer-json' => 'composer.json',
-            '--config-file' => $root->getChild('config.json')->url(),
+            '--config-file' => $configFilePath,
         ]);
 
         $output = $this->commandTester->getDisplay();
