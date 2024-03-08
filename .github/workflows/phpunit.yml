@@ -5,8 +5,6 @@ name: "PHPUnit tests"
 on:
     pull_request:
     push:
-        branches:
-            - "master"
 
 jobs:
     phpunit:
