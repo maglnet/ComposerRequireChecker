@@ -6,6 +6,7 @@ test export-ignore
 .gitignore export-ignore
 baseline.xml export-ignore
 build.xml export-ignore
+composer.lock export-ignore
 infection.json.dist export-ignore
 phpcs.xml.dist export-ignore
 phpstan.neon export-ignore
