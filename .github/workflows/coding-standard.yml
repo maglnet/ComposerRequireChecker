@@ -5,8 +5,6 @@ name: "Check Coding Standards"
 on:
     pull_request:
     push:
-        branches:
-            - "master"
 
 jobs:
     coding-standards:
