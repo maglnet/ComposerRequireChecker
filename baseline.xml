@@ -1,6 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.2.1@ea9cb72143b77e7520c52fa37290bd8d8bc88fd9">
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
   <file src="src/ComposerRequireChecker/Cli/CheckCommand.php">
-    <MixedArgumentTypeCoercion occurrences="2"/>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[(new ComposeGenerators())->__invoke(
+                        $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                        $getPackageSourceFiles($composerData, dirname($composerJson)),
+                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson),
+                    )]]></code>
+      <code><![CDATA[(new ComposeGenerators())->__invoke(
+                    $getPackageSourceFiles($composerData, dirname($composerJson)),
+                    $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
+                )]]></code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/ComposerRequireChecker/Exception/InvalidInputFile.php">
+    <UnusedClass>
+      <code><![CDATA[InvalidInputFile]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/ComposerRequireChecker/NodeVisitor/DefinedSymbolCollector.php">
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[Node]]></code>
+    </PossiblyUnusedReturnValue>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/ASTLocator/LocateASTFromFilesTest.php">
+    <PossiblyNullArgument>
+      <code><![CDATA[$content]]></code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/Cli/OptionsTest.php">
+    <MixedArgument>
+      <code><![CDATA[json_decode(file_get_contents(
+                __DIR__ . '/../../../data/config.dist.json',
+            ), true)]]></code>
+    </MixedArgument>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/DefinedSymbolsLocator/LocateDefinedSymbolsFromASTRootsTest.php">
+    <InvalidArgument>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[[$roots]]]></code>
+      <code><![CDATA[new ArrayObject($roots)]]></code>
+    </InvalidArgument>
+    <RedundantCondition>
+      <code><![CDATA[assertIsArray]]></code>
+      <code><![CDATA[assertIsArray]]></code>
+      <code><![CDATA[assertIsArray]]></code>
+      <code><![CDATA[assertIsArray]]></code>
+      <code><![CDATA[assertIsArray]]></code>
+      <code><![CDATA[assertIsArray]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/DefinedSymbolsLocator/LocateDefinedSymbolsFromComposerRuntimeApiTest.php">
+    <MixedArgument>
+      <code><![CDATA[json_decode($composerJson, true)]]></code>
+      <code><![CDATA[json_decode($composerJson, true)]]></code>
+    </MixedArgument>
+    <MixedInferredReturnType>
+      <code><![CDATA[Generator]]></code>
+      <code><![CDATA[Generator]]></code>
+    </MixedInferredReturnType>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/DefinedSymbolsLocator/LocateDefinedSymbolsFromExtensionsTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA['ComposerRequireChecker\Exception\UnknownExtension']]></code>
+    </ArgumentTypeCoercion>
+    <RedundantCondition>
+      <code><![CDATA[assertIsArray]]></code>
+    </RedundantCondition>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/FileLocator/LocateAllFilesByExtensionTest.php">
+    <MixedArrayAssignment>
+      <code><![CDATA[$files[]]]></code>
+    </MixedArrayAssignment>
+    <PossiblyUndefinedVariable>
+      <code><![CDATA[$files]]></code>
+    </PossiblyUndefinedVariable>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/FileLocator/LocateComposerPackageDirectDependenciesSourceFilesTest.php">
+    <MixedReturnTypeCoercion>
+      <code><![CDATA[iterator_to_array(($this->locator)($composerJson))]]></code>
+      <code><![CDATA[string[]]]></code>
+    </MixedReturnTypeCoercion>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/FileLocator/LocateComposerPackageSourceFilesTest.php">
+    <InternalClass>
+      <code><![CDATA[JsonLoader::getData($composerJson)]]></code>
+    </InternalClass>
+    <InternalMethod>
+      <code><![CDATA[JsonLoader::getData($composerJson)]]></code>
+    </InternalMethod>
+    <InvalidReturnStatement>
+      <code><![CDATA[$files]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code><![CDATA[string[]]]></code>
+    </InvalidReturnType>
+    <MixedArgument>
+      <code><![CDATA[$file]]></code>
+    </MixedArgument>
+    <MixedAssignment>
+      <code><![CDATA[$file]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/JsonLoaderTest.php">
+    <InternalClass>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+    </InternalClass>
+    <InternalMethod>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+      <code><![CDATA[JsonLoader::getData($path)]]></code>
+    </InternalMethod>
+    <InvalidArrayOffset>
+      <code><![CDATA[$data['foo']]]></code>
+    </InvalidArrayOffset>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/NodeVisitor/DefinedSymbolCollectorFunctionalTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$className]]></code>
+    </ArgumentTypeCoercion>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->parser->parse(
+            file_get_contents((new ReflectionClass($className))->getFileName()),
+        )]]></code>
+      <code><![CDATA[$this->parser->parse('<?php ' . $phpSource)]]></code>
+    </PossiblyNullArgument>
+    <UnusedReturnValue>
+      <code><![CDATA[array<Node>]]></code>
+      <code><![CDATA[array<Node>]]></code>
+    </UnusedReturnValue>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/NodeVisitor/DefinedSymbolCollectorTest.php">
+    <ImplicitToStringCast>
+      <code><![CDATA[new Name('CONST_A')]]></code>
+      <code><![CDATA[new Name('CONST_B')]]></code>
+    </ImplicitToStringCast>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/NodeVisitor/UsedSymbolCollectorFunctionalTest.php">
+    <ArgumentTypeCoercion>
+      <code><![CDATA[$className]]></code>
+    </ArgumentTypeCoercion>
+    <LessSpecificReturnStatement>
+      <code><![CDATA[$this->traverser->traverse($this->parser->parse($stringAST))]]></code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType>
+      <code><![CDATA[array<Stmt>]]></code>
+    </MoreSpecificReturnType>
+    <PossiblyNullArgument>
+      <code><![CDATA[$this->parser->parse($stringAST)]]></code>
+    </PossiblyNullArgument>
+    <UnusedReturnValue>
+      <code><![CDATA[array<Stmt>]]></code>
+    </UnusedReturnValue>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/NodeVisitor/UsedSymbolCollectorTest.php">
+    <ImplicitToStringCast>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA[$functionName]]></code>
+    </ImplicitToStringCast>
+    <InvalidPropertyAssignmentValue>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA[$functionName]]></code>
+      <code><![CDATA['Bar']]></code>
+      <code><![CDATA[[null]]]></code>
+    </InvalidPropertyAssignmentValue>
+  </file>
+  <file src="test/ComposerRequireCheckerTest/UsedSymbolsLocator/LocateUsedSymbolsFromASTRootsTest.php">
+    <InvalidArgument>
+      <code><![CDATA[[$ast1, $ast2]]]></code>
+      <code><![CDATA[[[$node]]]]></code>
+      <code><![CDATA[new ArrayObject($asts)]]></code>
+    </InvalidArgument>
   </file>
 </files>

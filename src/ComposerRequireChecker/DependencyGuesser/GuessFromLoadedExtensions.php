@@ -16,8 +16,8 @@ class GuessFromLoadedExtensions implements Guesser
     /** @var array<string> */
     private array $loadedExtensions;
 
-    /** @var string[]|null */
-    private array|null $coreExtensions = null;
+    /** @var string[] */
+    private array $coreExtensions = [];
 
     public function __construct(Options|null $options = null)
     {
@@ -39,7 +39,7 @@ class GuessFromLoadedExtensions implements Guesser
                 continue;
             }
 
-            if ($this->coreExtensions && in_array($extensionName, $this->coreExtensions, true)) {
+            if (in_array($extensionName, $this->coreExtensions, true)) {
                 yield 'php';
             }
 
