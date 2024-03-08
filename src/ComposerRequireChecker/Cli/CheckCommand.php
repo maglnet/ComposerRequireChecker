@@ -39,7 +39,6 @@ use function array_merge;
 use function assert;
 use function count;
 use function dirname;
-use function file_exists;
 use function gettype;
 use function in_array;
 use function is_string;
@@ -62,7 +61,6 @@ class CheckCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'the config file to configure the checking options',
-                self::DEFAULT_CONFIG_PATH,
             )
             ->addArgument(
                 'composer-json',
@@ -234,23 +232,24 @@ class CheckCommand extends Command
      */
     private function getCheckOptions(InputInterface $input): Options
     {
-        $fileName = $input->getOption('config-file');
+        $configFileArgument = $input->getOption('config-file');
+        assert(is_string($configFileArgument) || $configFileArgument === null);
 
-        if (is_string($fileName) === false) {
-            return new Options();
-        }
-
-        if (file_exists($fileName) === false) {
-            if ($fileName === self::DEFAULT_CONFIG_PATH) {
+        if (is_string($configFileArgument)) {
+            $fileName = realpath($configFileArgument);
+            if ($fileName === false) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Configuration file [%s] does not exist.',
+                        $configFileArgument,
+                    ),
+                );
+            }
+        } else {
+            $fileName = realpath(self::DEFAULT_CONFIG_PATH);
+            if ($fileName === false) {
                 return new Options();
             }
-
-            throw new InvalidArgumentException(
-                sprintf(
-                    'Configuration file [%s] does not exist.',
-                    $fileName,
-                ),
-            );
         }
 
         $config = JsonLoader::getData($fileName);
