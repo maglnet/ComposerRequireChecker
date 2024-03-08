@@ -51,8 +51,10 @@ final class LocateAllFilesByExtension
 
         $blacklistMatcher = '{(' . implode('|', $this->prepareBlacklistPatterns($blacklist)) . ')}';
 
+        $blacklistProvided = $blacklist !== null && $blacklist !== [];
+
         foreach ($files as $file) {
-            if ($blacklist && preg_match($blacklistMatcher, $file->getPathname())) {
+            if ($blacklistProvided && preg_match($blacklistMatcher, $file->getPathname())) {
                 continue;
             }
 
