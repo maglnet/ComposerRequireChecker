@@ -5,8 +5,6 @@ name: "Static Analysis by Require-Checker"
 on:
     pull_request:
     push:
-        branches:
-            - "master"
 
 jobs:
     static-analysis-require-checker:
