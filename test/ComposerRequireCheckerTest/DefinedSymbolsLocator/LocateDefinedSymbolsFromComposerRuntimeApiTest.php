@@ -37,6 +37,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         self::assertContains('Composer\InstalledVersions', $symbols);
     }
 
+    /** @return Generator<array-key, array<array-key, string>> */
     public static function provideComposerJsonWithUnsuitableComposerRuntimeApi(): Generator
     {
         yield 'Caret major minor' => ['composerJson' => '{ "require": { "composer-runtime-api": "^1.0" } }'];
@@ -45,6 +46,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         yield 'Equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": "=1" } }'];
     }
 
+    /** @return Generator<array-key, array<array-key, string>> */
     public static function provideComposerJsonWithSuitableComposerRuntimeApi(): Generator
     {
         yield 'Caret major minor' => ['composerJson' => '{ "require": { "composer-runtime-api": "^2.0" } }'];

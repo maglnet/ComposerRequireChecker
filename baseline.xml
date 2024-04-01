@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
+<files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
   <file src="src/ComposerRequireChecker/Cli/CheckCommand.php">
     <MixedArgumentTypeCoercion>
       <code><![CDATA[(new ComposeGenerators())->__invoke(
@@ -59,10 +59,6 @@
       <code><![CDATA[json_decode($composerJson, true)]]></code>
       <code><![CDATA[json_decode($composerJson, true)]]></code>
     </MixedArgument>
-    <MixedInferredReturnType>
-      <code><![CDATA[Generator]]></code>
-      <code><![CDATA[Generator]]></code>
-    </MixedInferredReturnType>
   </file>
   <file src="test/ComposerRequireCheckerTest/DefinedSymbolsLocator/LocateDefinedSymbolsFromExtensionsTest.php">
     <ArgumentTypeCoercion>
