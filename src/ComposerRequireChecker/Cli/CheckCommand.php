@@ -195,7 +195,7 @@ class CheckCommand extends Command
                 $resultsWriter = new CliJson(
                     $outputWrapper,
                     $application?->getVersion() ?? 'Unknown version',
-                    static fn () => new DateTimeImmutable()
+                    static fn () => new DateTimeImmutable(),
                 );
                 break;
             case 'text':

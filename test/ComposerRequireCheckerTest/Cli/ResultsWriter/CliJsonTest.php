@@ -26,7 +26,7 @@ final class CliJsonTest extends TestCase
                 $this->output .= $string;
             },
             '0.0.1',
-            static fn () => new DateTimeImmutable('@0')
+            static fn () => new DateTimeImmutable('@0'),
         );
     }
 
