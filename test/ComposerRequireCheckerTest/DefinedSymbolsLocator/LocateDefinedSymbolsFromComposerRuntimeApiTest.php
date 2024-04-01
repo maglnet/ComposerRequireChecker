@@ -37,22 +37,24 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         self::assertContains('Composer\InstalledVersions', $symbols);
     }
 
+    /** @return Generator<array-key, array<array-key, string>> */
     public static function provideComposerJsonWithUnsuitableComposerRuntimeApi(): Generator
     {
-        yield ['{ "require": { "composer-runtime-api": "^1.0" } }'];
-        yield ['{ "require": { "composer-runtime-api": "^1" } }'];
-        yield ['{ "require": { "composer-runtime-api": "~1" } }'];
-        yield ['{ "require": { "composer-runtime-api": "=1" } }'];
+        yield 'Caret major minor' => ['composerJson' => '{ "require": { "composer-runtime-api": "^1.0" } }'];
+        yield 'Caret major' => ['composerJson' => '{ "require": { "composer-runtime-api": "^1" } }'];
+        yield 'Tilde major' => ['composerJson' => '{ "require": { "composer-runtime-api": "~1" } }'];
+        yield 'Equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": "=1" } }'];
     }
 
+    /** @return Generator<array-key, array<array-key, string>> */
     public static function provideComposerJsonWithSuitableComposerRuntimeApi(): Generator
     {
-        yield ['{ "require": { "composer-runtime-api": "^2.0" } }'];
-        yield ['{ "require": { "composer-runtime-api": "^2" } }'];
-        yield ['{ "require": { "composer-runtime-api": "~2" } }'];
-        yield ['{ "require": { "composer-runtime-api": ">=2" } }'];
-        yield ['{ "require": { "composer-runtime-api": "=2" } }'];
-        yield ['{ "require": { "composer-runtime-api": ">2" } }'];
+        yield 'Caret major minor' => ['composerJson' => '{ "require": { "composer-runtime-api": "^2.0" } }'];
+        yield 'Caret major' => ['composerJson' => '{ "require": { "composer-runtime-api": "^2" } }'];
+        yield 'Tilde major' => ['composerJson' => '{ "require": { "composer-runtime-api": "~2" } }'];
+        yield 'Greater equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": ">=2" } }'];
+        yield 'Equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": "=2" } }'];
+        yield 'Greater major' => ['composerJson' => '{ "require": { "composer-runtime-api": ">2" } }'];
     }
 
     /**
