@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7afe4e7a34adee07ecb2bfdbb3ffa0b0",
+    "content-hash": "f656970ae53ca5e43dd0f1e88dc8eb3b",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -3195,16 +3195,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.22",
+            "version": "10.5.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "8afb89b399b17c2ce2618015bdc9f81a117c5ee1"
+                "reference": "12826591cc32fa0959b7e7577a90c3f527e377b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8afb89b399b17c2ce2618015bdc9f81a117c5ee1",
-                "reference": "8afb89b399b17c2ce2618015bdc9f81a117c5ee1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/12826591cc32fa0959b7e7577a90c3f527e377b2",
+                "reference": "12826591cc32fa0959b7e7577a90c3f527e377b2",
                 "shasum": ""
             },
             "require": {
@@ -3276,7 +3276,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.22"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.23"
             },
             "funding": [
                 {
@@ -3292,7 +3292,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-19T05:29:34+00:00"
+            "time": "2024-06-20T07:29:28+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
