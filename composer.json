@@ -43,7 +43,7 @@
         "psalm/plugin-phpunit": "^0.19.0",
         "roave/infection-static-analysis-plugin": "^1.35.0",
         "spatie/temporary-directory": "^2.2.1",
-        "vimeo/psalm": "^5.26.0"
+        "vimeo/psalm": "^5.26.1"
     },
     "config": {
         "optimize-autoloader": true,
