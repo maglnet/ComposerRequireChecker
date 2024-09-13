@@ -39,7 +39,7 @@
         "doctrine/coding-standard": "^12.0.0",
         "phing/phing": "^2.17.4",
         "phpstan/phpstan": "^1.12.3",
-        "phpunit/phpunit": "^10.5.33",
+        "phpunit/phpunit": "^10.5.34",
         "psalm/plugin-phpunit": "^0.19.0",
         "roave/infection-static-analysis-plugin": "^1.35.0",
         "spatie/temporary-directory": "^2.2.1",
