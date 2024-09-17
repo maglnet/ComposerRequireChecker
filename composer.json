@@ -29,7 +29,7 @@
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
-        "nikic/php-parser": "^4.19.1",
+        "nikic/php-parser": "^4.19.2",
         "symfony/console": "^6.4.1 || ^7.0.1",
         "webmozart/assert": "^1.11.0",
         "webmozart/glob": "^4.7.0"
