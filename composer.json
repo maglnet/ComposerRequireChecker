@@ -6,7 +6,7 @@
         "composer",
         "dependency",
         "cli",
-        "analysis",
+        "static analysis",
         "requirements",
         "imports",
         "require"
