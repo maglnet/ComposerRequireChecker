@@ -24,14 +24,14 @@ class JsonLoader
      * @param non-empty-string $path
      * @param TypeInterface<T> $type
      *
-     * @return T
+     * @return T of mixed
      *
      * @throws InvalidJson
      * @throws File\Exception\NotFoundException
      *
      * @template T
      */
-    public static function getData(string $path, TypeInterface $type): array
+    public static function getData(string $path, TypeInterface $type): mixed
     {
         try {
             return Json\typed(

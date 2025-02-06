@@ -11,7 +11,7 @@ final class ComposeGenerators
     /**
      * @param  Traversable<TKey, TValue> ...$generators
      *
-     * @return Traversable<int, TValue>
+     * @return Traversable<TKey, TValue>
      *
      * @template TKey
      * @template TValue

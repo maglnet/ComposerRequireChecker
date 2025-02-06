@@ -38,6 +38,7 @@
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^13.0.1",
         "phing/phing": "^3.0.1",
+        "php-standard-library/phpstan-extension": "^2.0",
         "php-standard-library/psalm-plugin": "^2.3",
         "phpstan/phpstan": "^2.1.19",
         "phpunit/phpunit": "^11.5.27",

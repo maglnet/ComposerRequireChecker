@@ -10,7 +10,6 @@ use Psl\Type;
 
 use function array_map;
 use function array_merge;
-use function array_reduce;
 use function array_values;
 use function is_dir;
 use function is_file;
@@ -27,19 +26,19 @@ use function str_replace;
  *                 psr-4?: array<string, string|list<string>>
  *             }
  * @psalm-type ComposerPackageData = array{
- *                 name: non-empty-string,
- *                 require?: array<non-empty-string, non-empty-string>,
+ *                 name: string,
+ *                 require?: array<string, string>,
  *                 autoload?: ComposerAutoload,
  *                 config?: ComposerConfig
  *             }
  * @psalm-type InstalledComposerPackageData = array{
- *                  name: non-empty-string,
- *                  require?: array<non-empty-string, non-empty-string>,
+ *                  name: string,
+ *                  require?: array<string, string>,
  *                  autoload?: ComposerAutoload
  *              }
  * @psalm-type ComposerData = array{
- *                 name?: non-empty-string,
- *                 require?: array<non-empty-string, non-empty-string>,
+ *                 name?: string,
+ *                 require?: array<string, string>,
  *                 autoload?: ComposerAutoload,
  *                 config?: ComposerConfig,
  *                 packages?: list<ComposerPackageData>
@@ -89,21 +88,12 @@ final class LocateComposerPackageSourceFiles
      */
     private function getFilePaths(array $sourceDirs, string $packageDir): array
     {
-        $flattened = array_reduce(
-            $sourceDirs,
-            /** @param array|string $sourceDir */
-            static function (array $sourceDirs, $sourceDir): array {
-                return array_merge($sourceDirs, (array) $sourceDir);
-            },
-            [],
-        );
-
         return array_values(
             array_map(
-                function (string $sourceDir) use ($packageDir) {
+                function (string $sourceDir) use ($packageDir): string {
                     return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
                 },
-                $flattened,
+                self::flattenPsrPaths($sourceDirs),
             ),
         );
     }
@@ -140,8 +130,6 @@ final class LocateComposerPackageSourceFiles
      * @param array<string|list<string>> $paths
      *
      * @return array<string>
-     *
-     * @pure
      */
     private static function flattenPsrPaths(array $paths): array
     {
@@ -208,8 +196,8 @@ final class LocateComposerPackageSourceFiles
         ], true);
 
         $package = Type\shape([
-            'name' => Type\non_empty_string(),
-            'require' => Type\optional(Type\dict(Type\non_empty_string(), Type\non_empty_string())),
+            'name' => Type\string(),
+            'require' => Type\optional(Type\dict(Type\string(), Type\string())),
             'autoload' => Type\optional($autoload),
         ]);
 
@@ -240,17 +228,15 @@ final class LocateComposerPackageSourceFiles
         ], true);
 
         $package = Type\shape([
-            'name' => Type\non_empty_string(),
-            'require' => Type\optional(Type\dict(Type\non_empty_string(), Type\non_empty_string())),
+            'name' => Type\string(),
+            'require' => Type\optional(Type\dict(Type\string(), Type\string())),
             'autoload' => Type\optional($autoload),
             'config' => Type\optional($composerConfig),
         ]);
 
-        // 'Psl\Type\TypeInterface<array{autoload?: array{'exclude-from-classmap'?: list<string>, 'psr-0'?: array<string, list<string>|string>, 'psr-4'?: array<string, list<string>|string>, classmap?: list<string>, files?: list<string>}, config?: array{'vendor-dir'?: string}, name?: non-empty-string, packages?: list<array{autoload?: array{'exclude-from-classmap'?: list<string>, 'psr-0'?: array<string, list<string>|string>, 'psr-4'?: array<string, list<string>|string>, classmap?: list<string>, files?: list<string>}, config?: array{'vendor-dir'?: string}, name: non-empty-string, require?: array<non-empty-string, non-empty-string>}>, require?: array<non-empty-string, non-empty-string>}>'
-        // 'Psl\Type\TypeInterface<array{autoload?: array{'exclude-from-classmap'?: list<string>, 'psr-0'?: array<string, list<string>|string>, 'psr-4'?: array<string, list<string>|string>, classmap?: list<string>, files?: list<string>}, config?: array{'vendor-dir'?: string}, name?: non-empty-string, packages?: list<array{autoload?: array{'exclude-from-classmap'?: list<string>, 'psr-0'?: array<string, list<string>|string>, 'psr-4'?: array<string, list<string>|string>, classmap?: list<string>, files?: list<string>}, config?: array{'vendor-dir'?: string}, name: non-empty-string, require?: array{'vendor-dir'?: string}}>, require?: array<non-empty-string, non-empty-string>}>'
         return Type\shape([
-            'name' => Type\optional(Type\non_empty_string()),
-            'require' => Type\optional(Type\dict(Type\non_empty_string(), Type\non_empty_string())),
+            'name' => Type\optional(Type\string()),
+            'require' => Type\optional(Type\dict(Type\string(), Type\string())),
             'autoload' => Type\optional($autoload),
             'config' => Type\optional($composerConfig),
             'packages' => Type\optional(Type\vec($package)),
