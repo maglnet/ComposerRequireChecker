@@ -15,9 +15,10 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Trait_;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots */
+#[CoversClass(LocateDefinedSymbolsFromASTRoots::class)]
 final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateDefinedSymbolsFromASTRoots $locator;
@@ -32,9 +33,7 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
     public function testNoRoots(): void
     {
-        $symbols = $this->locate([]);
-
-        $this->assertCount(0, $symbols);
+        $this->assertCount(0, $this->locate([]));
     }
 
     public function testBasicLocateClass(): void
@@ -47,7 +46,6 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertIsArray($symbols);
         $this->assertCount(3, $symbols);
 
         $this->assertContains('MyClassA', $symbols);
@@ -64,7 +62,6 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertIsArray($symbols);
         $this->assertCount(2, $symbols);
 
         $this->assertContains('myFunctionA', $symbols);
@@ -81,7 +78,6 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 
         $symbols = $this->locate([$roots]);
 
-        $this->assertIsArray($symbols);
         $this->assertCount(3, $symbols);
 
         $this->assertContains('MyTraitA', $symbols);
@@ -95,10 +91,7 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
             new Class_(null),
         ];
 
-        $symbols = $this->locate([$roots]);
-
-        $this->assertIsArray($symbols);
-        $this->assertCount(0, $symbols);
+        $this->assertCount(0, $this->locate([$roots]));
     }
 
     public function testBasicLocateDefineCalls(): void
@@ -110,10 +103,7 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
             ]),
         ];
 
-        $symbols = $this->locate([$roots]);
-
-        $this->assertIsArray($symbols);
-        $this->assertCount(1, $symbols);
+        $this->assertCount(1, $this->locate([$roots]));
     }
 
     public function testBasicDoNotLocateNamespacedDefineCalls(): void
@@ -125,14 +115,11 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
             ]),
         ];
 
-        $symbols = $this->locate([$roots]);
-
-        $this->assertIsArray($symbols);
-        $this->assertCount(0, $symbols);
+        $this->assertCount(0, $this->locate([$roots]));
     }
 
     /**
-     * @param array<Node> $roots
+     * @param array<array<Node>> $roots
      *
      * @return array<string>
      */

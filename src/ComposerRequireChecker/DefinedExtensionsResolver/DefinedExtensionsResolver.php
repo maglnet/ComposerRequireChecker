@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedExtensionsResolver;
 
+use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\JsonLoader;
+use Psl\Type;
+
 use function array_keys;
 use function array_merge;
-use function assert;
-use function file_get_contents;
-use function is_string;
-use function json_decode;
 use function str_starts_with;
 use function substr;
 
@@ -22,11 +22,11 @@ class DefinedExtensionsResolver
      */
     public function __invoke(string $composerJson, array $phpCoreExtensions = []): array
     {
-        $composerJsonContents = file_get_contents($composerJson);
-        assert(is_string($composerJsonContents));
-
-        /** @var array<string, string> $requires */
-        $requires = json_decode($composerJsonContents, true)['require'] ?? [];
+        $requires = JsonLoader::getData(
+            Type\non_empty_string()
+                ->coerce($composerJson),
+            LocateComposerPackageSourceFiles::composerDataType(),
+        )['require'] ?? [];
 
         $extensions           = [];
         $addPhpCoreExtensions = false;

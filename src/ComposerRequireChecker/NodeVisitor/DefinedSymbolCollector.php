@@ -38,7 +38,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     #[Override]
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node)
     {
         $this->recordClassDefinition($node);
         $this->recordEnumDefinition($node);

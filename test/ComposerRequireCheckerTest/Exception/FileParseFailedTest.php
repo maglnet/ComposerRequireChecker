@@ -6,9 +6,10 @@ namespace ComposerRequireCheckerTest\Exception;
 
 use ComposerRequireChecker\Exception\FileParseFailed;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/** @covers \ComposerRequireChecker\Exception\FileParseFailed */
+#[CoversClass(FileParseFailed::class)]
 final class FileParseFailedTest extends TestCase
 {
     public function testPreviousExceptionMessageIsRepresented(): void

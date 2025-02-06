@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use Override;
+use ComposerRequireChecker\Exception\UnknownExtension;
 use PHPUnit\Framework\TestCase;
 
 use function array_merge;
@@ -24,7 +25,7 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 
     public function testThrowsExceptionForUnknownExtension(): void
     {
-        $this->expectException('ComposerRequireChecker\Exception\UnknownExtension');
+        $this->expectException(UnknownExtension::class);
         $this->locator->__invoke(['unknown_extension_name']);
     }
 
@@ -32,7 +33,6 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
     {
         $symbols = $this->locator->__invoke(['Core']);
         $this->assertGreaterThan(1, count($symbols));
-        $this->assertIsArray($symbols);
     }
 
     public function testSymbolsContainConstants(): void

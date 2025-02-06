@@ -11,11 +11,12 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
 
-/** @covers \ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots */
+#[CoversClass(LocateUsedSymbolsFromASTRoots::class)]
 final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateUsedSymbolsFromASTRoots $locator;
@@ -68,13 +69,16 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
         $this->assertNotFalse($yetAnotherThingContent);
         $ast2 = $parser->parse($yetAnotherThingContent);
 
+        self::assertNotNull($ast1);
+        self::assertNotNull($ast2);
+
         $symbols = $this->locate([$ast1, $ast2]);
 
         $this->assertSame($expectedSymbols, $symbols);
     }
 
     /**
-     * @param array<Node> $asts
+     * @param array<array<Node>> $asts
      *
      * @return array<string>
      */

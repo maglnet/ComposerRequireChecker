@@ -9,7 +9,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
-use function json_decode;
 
 final class OptionsTest extends TestCase
 {
@@ -63,9 +62,22 @@ final class OptionsTest extends TestCase
         $fileContent = file_get_contents(__DIR__ . '/../../../data/config.dist.json');
         $this->assertNotFalse($fileContent);
 
-        $optionsFromFile = new Options(
-            json_decode($fileContent, true),
-        );
+        $optionsFromFile = new Options([
+            'symbol-whitelist'    => [],
+            'php-core-extensions' => [
+                'Core',
+                'date',
+                'json',
+                'hash',
+                'pcre',
+                'Phar',
+                'Reflection',
+                'SPL',
+                'random',
+                'standard',
+            ],
+            'scan-files'          => [],
+        ]);
 
         $this->assertEquals($options, $optionsFromFile);
     }

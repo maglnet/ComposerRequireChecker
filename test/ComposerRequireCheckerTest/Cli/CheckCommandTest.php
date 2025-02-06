@@ -18,12 +18,9 @@ use function chdir;
 use function dirname;
 use function file_put_contents;
 use function json_decode;
-use function unlink;
-use function version_compare;
 
 use const JSON_THROW_ON_ERROR;
 use const PHP_EOL;
-use const PHP_VERSION;
 
 final class CheckCommandTest extends TestCase
 {
@@ -194,7 +191,7 @@ JSON
 
         $this->commandTester->execute([
             // that's our own composer.json
-            'composer-json' => dirname(__DIR__, 3) . '/composer.json',
+            'composer-json' => __DIR__ . '/../../../composer.json',
             '--config-file' => $configFilePath,
         ]);
 
@@ -237,22 +234,6 @@ JSON
             'There were no unknown symbols found.',
             $this->commandTester->getDisplay(),
         );
-    }
-
-    public function testReservedKeywordInPhp8DoesNotThrowExceptionInPhp7(): void
-    {
-        if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
-            self::markTestSkipped('This test does not work in PHP8');
-        }
-
-        $baseDir = dirname(__DIR__, 2) . '/fixtures/noUnknownSymbols/';
-        $tmpFile = $baseDir . 'src/Match.php';
-        file_put_contents($tmpFile, '<?php class Match { }');
-
-        $this->commandTester->execute(['composer-json' => $baseDir . 'composer.json']);
-
-        unlink($tmpFile);
-        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
     }
 
     public function testUnknownComposerSymbolFound(): void
@@ -393,7 +374,6 @@ JSON
         ]);
     }
 
-    /** @requires PHP >= 8.1.0 */
     public function testNoUnknownEnumSymbolsFound(): void
     {
         $this->commandTester->execute([

@@ -6,22 +6,21 @@ namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
 use Override;
-use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use Psl\File;
 use ReflectionClass;
 
 use function array_diff;
-use function file_get_contents;
 
-/**
- * @coversNothing
- * @group functional
- */
+#[CoversNothing]
+#[Group('functional')]
 final class DefinedSymbolCollectorFunctionalTest extends TestCase
 {
     private DefinedSymbolCollector $collector;
@@ -149,19 +148,23 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         );
     }
 
-    /** @return array<Node> */
-    private function traverseStringAST(string $phpSource): array
+    private function traverseStringAST(string $phpSource): void
     {
-        return $this->traverser->traverse($this->parser->parse('<?php ' . $phpSource));
+        $parsed = $this->parser->parse('<?php ' . $phpSource);
+
+        self::assertNotNull($parsed);
+
+        $this->traverser->traverse($parsed);
     }
 
-    /** @return array<Node> */
-    private function traverseClassAST(string $className): array
+    /** @param class-string $className */
+    private function traverseClassAST(string $className): void
     {
-        $fileContent = file_get_contents((new ReflectionClass($className))->getFileName());
-        $this->assertNotFalse($fileContent);
+        $parsed = $this->parser->parse(File\read((new ReflectionClass($className))->getFileName()));
 
-        return $this->traverser->traverse($this->parser->parse($fileContent));
+        self::assertNotNull($parsed);
+
+        $this->traverser->traverse($parsed);
     }
 
     /**

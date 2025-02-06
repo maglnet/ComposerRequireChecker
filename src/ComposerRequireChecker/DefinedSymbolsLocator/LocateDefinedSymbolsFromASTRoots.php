@@ -17,9 +17,11 @@ use function array_values;
 final class LocateDefinedSymbolsFromASTRoots
 {
     /**
-     * @param Traversable<int, array<Node>> $ASTs a series of AST roots
+     * @param Traversable<TKey, array<Node>> $ASTs a series of AST roots
      *
      * @return list<string> all the found symbols
+     *
+     * @template TKey
      */
     public function __invoke(Traversable $ASTs): array
     {

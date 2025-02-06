@@ -7,6 +7,7 @@ namespace ComposerRequireCheckerTest\FileLocator;
 use ComposerRequireChecker\Exception\DependenciesNotInstalled;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use Override;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -18,7 +19,7 @@ use function str_replace;
 
 use const DIRECTORY_SEPARATOR;
 
-/** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles */
+#[CoversClass(LocateComposerPackageDirectDependenciesSourceFiles::class)]
 final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestCase
 {
     private LocateComposerPackageDirectDependenciesSourceFiles $locator;
@@ -107,31 +108,6 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
     {
         file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
         file_put_contents($this->path('vendor/composer/installed.json'), '{"packages": [{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]}');
-        file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
-
-        $files = $this->locate($this->path('composer.json'));
-
-        $this->assertCount(1, $files);
-
-        $expectedFile = $this->path('vendor/foo/bar/src/MyClass.php');
-
-        $firstFile = reset($files);
-        $this->assertNotFalse($firstFile);
-
-        $actualFile = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $firstFile);
-        $this->assertSame($expectedFile, $actualFile);
-
-        // Ensure we didn't leave our temporary composer.json lying around
-        $this->assertFalse(file_exists($this->path('vendor/foo/bar/composer.json')));
-    }
-
-    /**
-     * https://github.com/composer/composer/pull/7999
-     */
-    public function testOldInstalledJsonUsedAsFallback(): void
-    {
-        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
-        file_put_contents($this->path('vendor/composer/installed.json'), '[{"name": "foo/bar", "autoload":{"psr-4":{"":"src"}}}]');
         file_put_contents($this->path('vendor/foo/bar/src/MyClass.php'), '');
 
         $files = $this->locate($this->path('composer.json'));

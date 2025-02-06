@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\ApplicationHeaderWriter;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-/** @covers \ComposerRequireChecker\Cli\ApplicationHeaderWriter */
+#[CoversClass(ApplicationHeaderWriter::class)]
 final class ApplicationHeaderWriterTest extends TestCase
 {
     public function testWithoutApplication(): void

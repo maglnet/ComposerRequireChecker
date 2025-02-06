@@ -5,22 +5,27 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\FileLocator;
 
 use ComposerRequireChecker\Exception\DependenciesNotInstalled;
-use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\JsonLoader;
 use Generator;
+use Psl\File\Exception\NotFoundException;
+use Psl\Filesystem;
+use Psl\Type;
 
 use function array_key_exists;
 use function array_keys;
-use function dirname;
 
-/** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
+/**
+ * @psalm-import-type ComposerAutoload from LocateComposerPackageSourceFiles
+ * @psalm-import-type InstalledComposerData from LocateComposerPackageSourceFiles
+ */
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
+    /** @return Generator<string> */
     public function __invoke(string $composerJsonPath): Generator
     {
-        $packageDir = dirname($composerJsonPath);
-
-        $composerJson    = JsonLoader::getData($composerJsonPath);
+        $path            = Type\non_empty_string()->coerce($composerJsonPath);
+        $packageDir      = Filesystem\get_directory($path);
+        $composerJson    = JsonLoader::getData($path, LocateComposerPackageSourceFiles::composerDataType());
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
         $vendorDirs      = [];
 
@@ -35,22 +40,25 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke($installedPackages[$vendorName], $vendorDir);
+            yield from (new LocateComposerPackageSourceFiles())->__invoke(['autoload' => $installedPackages[$vendorName]], $vendorDir);
         }
     }
 
     /**
      * Lookup each vendor package's composer.json info from installed.json
      *
-     * @return array<string, ComposerData> Keys are the package name and value is the composer.json as an array
+     * @return array<string, ComposerAutoload> Keys are the package name and value is the composer.json as an array
      *
      * @throws DependenciesNotInstalled When composer install/update has not been run.
      */
     private function getInstalledPackages(string $vendorDir): array
     {
         try {
-            $installedData = JsonLoader::getData($vendorDir . '/composer/installed.json');
-        } catch (NotReadable) {
+            $installedData = JsonLoader::getData(
+                $vendorDir . '/composer/installed.json',
+                LocateComposerPackageSourceFiles::installedDataType(),
+            );
+        } catch (NotFoundException) {
             $message = 'The composer dependencies have not been installed, run composer install/update first';
 
             throw new DependenciesNotInstalled($message);
@@ -58,12 +66,8 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $installedPackages = [];
 
-        /** @var array<ComposerData> $packages */
-        $packages = $installedData['packages'] ?? $installedData;
-
-        foreach ($packages as $vendorJson) {
-            $vendorName                     = $vendorJson['name'];
-            $installedPackages[$vendorName] = $vendorJson;
+        foreach ($installedData['packages'] ?? [] as $vendorJson) {
+            $installedPackages[$vendorJson['name']] = $vendorJson['autoload'] ?? [];
         }
 
         return $installedPackages;

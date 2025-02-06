@@ -13,7 +13,6 @@ use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromCompose
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use ComposerRequireChecker\Exception\InvalidJson;
-use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
@@ -26,6 +25,8 @@ use LogicException;
 use Override;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
+use Psl\Filesystem;
+use Psl\Type;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,13 +37,10 @@ use function array_combine;
 use function array_diff;
 use function array_map;
 use function array_merge;
-use function assert;
 use function count;
 use function dirname;
 use function gettype;
-use function in_array;
 use function is_string;
-use function realpath;
 use function sprintf;
 
 /** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
@@ -87,16 +85,16 @@ class CheckCommand extends Command
     #[Override]
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        if ($input->getOption('output') === null) {
-            return;
-        }
-
-        $optionValue = $input->getOption('output');
-        assert(is_string($optionValue));
-
-        if (! in_array($optionValue, ['text', 'json'])) {
+        try {
+            Type\union(
+                Type\null(),
+                Type\literal_scalar('text'),
+                Type\literal_scalar('json'),
+            )->coerce($input->getOption('output'));
+        } catch (Type\Exception\CoercionException $failedCoercion) {
             throw new InvalidArgumentException(
                 'Option "output" must be either of value "json", "text" or omitted altogether',
+                previous: $failedCoercion,
             );
         }
     }
@@ -104,7 +102,20 @@ class CheckCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('output') !== null) {
+        try {
+            $option = Type\union(
+                Type\null(),
+                Type\literal_scalar('text'),
+                Type\literal_scalar('json'),
+            )->coerce($input->getOption('output'));
+        } catch (Type\Exception\CoercionException $failedCoercion) {
+            throw new InvalidArgumentException(
+                'Option "output" must be either of value "json", "text" or omitted altogether',
+                previous: $failedCoercion,
+            );
+        }
+
+        if ($option !== null) {
             $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
@@ -119,13 +130,13 @@ class CheckCommand extends Command
             ));
         }
 
-        $composerJson = realpath($composerJsonArgument);
+        $composerJson = Filesystem\canonicalize($composerJsonArgument);
 
-        if ($composerJson === false) {
+        if ($composerJson === null) {
             throw new InvalidArgumentException(sprintf('file not found: [%s]', $composerJsonArgument));
         }
 
-        $composerData = $this->getComposerData($composerJson);
+        $composerData = JsonLoader::getData($composerJson, LocateComposerPackageSourceFiles::composerDataType());
 
         $options = $this->getCheckOptions($input);
 
@@ -192,7 +203,7 @@ class CheckCommand extends Command
             }
         };
 
-        switch ($input->getOption('output')) {
+        switch ($option) {
             case 'json':
                 $application   = $this->getApplication();
                 $resultsWriter = new CliJson(
@@ -229,18 +240,15 @@ class CheckCommand extends Command
         return (int) (bool) $unknownSymbols;
     }
 
-    /**
-     * @throws InvalidJson
-     * @throws NotReadable
-     */
+    /** @throws InvalidJson */
     private function getCheckOptions(InputInterface $input): Options
     {
-        $configFileArgument = $input->getOption('config-file');
-        assert(is_string($configFileArgument) || $configFileArgument === null);
+        $configFileArgument = Type\union(Type\null(), Type\non_empty_string())
+            ->coerce($input->getOption('config-file'));
 
         if (is_string($configFileArgument)) {
-            $fileName = realpath($configFileArgument);
-            if ($fileName === false) {
+            $fileName = Filesystem\canonicalize($configFileArgument);
+            if ($fileName === null) {
                 throw new InvalidArgumentException(
                     sprintf(
                         'Configuration file [%s] does not exist.',
@@ -249,28 +257,16 @@ class CheckCommand extends Command
                 );
             }
         } else {
-            $fileName = realpath(self::DEFAULT_CONFIG_PATH);
-            if ($fileName === false) {
+            $fileName = Filesystem\canonicalize(self::DEFAULT_CONFIG_PATH);
+            if ($fileName === null) {
                 return new Options();
             }
         }
 
-        $config = JsonLoader::getData($fileName);
-
-        return new Options($config);
-    }
-
-    /**
-     * @return array<array-key, mixed>
-     * @psalm-return ComposerData
-     *
-     * @throws InvalidJson
-     * @throws NotReadable
-     */
-    private function getComposerData(string $jsonFile): array
-    {
-        // JsonLoader throws an exception if it cannot load the file
-        return JsonLoader::getData($jsonFile);
+        return new Options(JsonLoader::getData(
+            $fileName,
+            Type\dict(Type\string(), Type\mixed()),
+        ));
     }
 
     private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles

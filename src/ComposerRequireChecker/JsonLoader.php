@@ -5,61 +5,41 @@ declare(strict_types=1);
 namespace ComposerRequireChecker;
 
 use ComposerRequireChecker\Exception\InvalidJson;
-use ComposerRequireChecker\Exception\NotReadable;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
-use InvalidArgumentException;
-use Throwable;
-use Webmozart\Assert\Assert;
-
-use function assert;
-use function file_get_contents;
-use function is_string;
-use function json_decode;
-
-use const JSON_THROW_ON_ERROR;
+use Psl\File;
+use Psl\Json;
+use Psl\Type\TypeInterface;
 
 /**
  * @internal
  *
  * @psalm-import-type ComposerData from LocateComposerPackageSourceFiles
+ *
+ * @psalm-internal ComposerRequireCheckerTest
+ * @psalm-internal ComposerRequireChecker
  */
 class JsonLoader
 {
     /**
-     * @return array<array-key, mixed>
-     * @psalm-return ComposerData
+     * @param non-empty-string $path
+     * @param TypeInterface<T> $type
+     *
+     * @return T
      *
      * @throws InvalidJson
-     * @throws NotReadable
+     * @throws File\Exception\NotFoundException
+     *
+     * @template T
      */
-    public static function getData(string $path): array
-    {
-        $content = self::getFileContentFromPath($path);
-
-        try {
-            $decodedData = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-            Assert::isArray($decodedData);
-        } catch (Throwable $exception) {
-            throw new InvalidJson('error parsing ' . $path . ': ' . $exception->getMessage(), 0, $exception);
-        }
-
-        /** @psalm-var ComposerData $decodedData */
-        return $decodedData;
-    }
-
-    private static function getFileContentFromPath(string $path): string
+    public static function getData(string $path, TypeInterface $type): array
     {
         try {
-            Assert::file($path);
-            Assert::readable($path);
-        } catch (InvalidArgumentException $exception) {
-            throw new NotReadable('unable to read file: ' . $exception->getMessage(), 0, $exception);
+            return Json\typed(
+                File\read($path),
+                $type,
+            );
+        } catch (Json\Exception\DecodeException $previous) {
+            throw new InvalidJson('error parsing ' . $path . ': ' . $previous->getMessage(), 0, $previous);
         }
-
-        $content = file_get_contents($path);
-
-        assert(is_string($content));
-
-        return $content;
     }
 }
