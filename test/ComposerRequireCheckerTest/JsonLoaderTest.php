@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest;
 
 use ComposerRequireChecker\Exception\InvalidJson;
-use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +42,7 @@ final class JsonLoaderTest extends TestCase
     {
         $path = __DIR__ . '/../../composer.json';
 
-        $loaded = JsonLoader::getData($path, LocateComposerPackageSourceFiles::composerDataType());
+        $loaded = JsonLoader::getData($path, JsonLoader::composerDataType());
 
         self::assertEquals('maglnet/composer-require-checker', $loaded['name'] ?? null);
     }

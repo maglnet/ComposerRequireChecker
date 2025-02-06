@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
-use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\JsonLoader;
 use Psl\Regex;
 
-/** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
+/** @psalm-import-type ComposerData from JsonLoader */
 final class LocateDefinedSymbolsFromComposerRuntimeApi
 {
     /**

@@ -6,7 +6,7 @@ namespace ComposerRequireChecker\Cli;
 
 use AllowDynamicProperties;
 use Attribute;
-use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\JsonLoader;
 use InvalidArgumentException;
 use Override;
 use ReturnTypeWillChange;
@@ -18,7 +18,7 @@ use function method_exists;
 use function str_replace;
 use function ucwords;
 
-/** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
+/** @psalm-import-type ComposerData from JsonLoader */
 class Options
 {
     private const PHP_LANGUAGE_TYPES = [

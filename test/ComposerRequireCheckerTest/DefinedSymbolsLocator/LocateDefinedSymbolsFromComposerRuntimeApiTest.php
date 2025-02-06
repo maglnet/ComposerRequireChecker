@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
-use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
+use ComposerRequireChecker\JsonLoader;
 use Generator;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -30,7 +30,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
     {
         self::assertEmpty(($this->locator)(Json\typed(
             $composerJson,
-            LocateComposerPackageSourceFiles::composerDataType(),
+            JsonLoader::composerDataType(),
         )));
     }
 
@@ -40,7 +40,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
     {
         self::assertContains(
             'Composer\InstalledVersions',
-            ($this->locator)(Json\typed($composerJson, LocateComposerPackageSourceFiles::composerDataType())),
+            ($this->locator)(Json\typed($composerJson, JsonLoader::composerDataType())),
         );
     }
 

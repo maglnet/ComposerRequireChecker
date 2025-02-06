@@ -43,7 +43,7 @@ use function gettype;
 use function is_string;
 use function sprintf;
 
-/** @psalm-import-type ComposerData from LocateComposerPackageSourceFiles */
+/** @psalm-import-type ComposerData from JsonLoader */
 class CheckCommand extends Command
 {
     public const NAME                 = 'check';
@@ -136,7 +136,7 @@ class CheckCommand extends Command
             throw new InvalidArgumentException(sprintf('file not found: [%s]', $composerJsonArgument));
         }
 
-        $composerData = JsonLoader::getData($composerJson, LocateComposerPackageSourceFiles::composerDataType());
+        $composerData = JsonLoader::getData($composerJson, JsonLoader::composerDataType());
 
         $options = $this->getCheckOptions($input);
 

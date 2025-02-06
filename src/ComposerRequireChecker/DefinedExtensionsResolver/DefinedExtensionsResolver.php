@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedExtensionsResolver;
 
-use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\JsonLoader;
 use Psl\Type;
 
@@ -25,7 +24,7 @@ class DefinedExtensionsResolver
         $requires = JsonLoader::getData(
             Type\non_empty_string()
                 ->coerce($composerJson),
-            LocateComposerPackageSourceFiles::composerDataType(),
+            JsonLoader::composerDataType(),
         )['require'] ?? [];
 
         $extensions           = [];

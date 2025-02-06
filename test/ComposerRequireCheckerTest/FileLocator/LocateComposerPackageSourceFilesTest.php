@@ -222,7 +222,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
      */
     private function files(string $composerJson): array
     {
-        $composerData   = JsonLoader::getData($composerJson, LocateComposerPackageSourceFiles::composerDataType());
+        $composerData   = JsonLoader::getData($composerJson, JsonLoader::composerDataType());
         $files          = [];
         $filesGenerator = $this->locator->__invoke($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {

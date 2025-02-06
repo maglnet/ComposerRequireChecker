@@ -15,8 +15,8 @@ use function array_key_exists;
 use function array_keys;
 
 /**
- * @psalm-import-type ComposerAutoload from LocateComposerPackageSourceFiles
- * @psalm-import-type InstalledComposerData from LocateComposerPackageSourceFiles
+ * @psalm-import-type ComposerAutoload from JsonLoader
+ * @psalm-import-type InstalledComposerData from JsonLoader
  */
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
@@ -25,7 +25,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
     {
         $path            = Type\non_empty_string()->coerce($composerJsonPath);
         $packageDir      = Filesystem\get_directory($path);
-        $composerJson    = JsonLoader::getData($path, LocateComposerPackageSourceFiles::composerDataType());
+        $composerJson    = JsonLoader::getData($path, JsonLoader::composerDataType());
         $configVendorDir = $composerJson['config']['vendor-dir'] ?? 'vendor';
         $vendorDirs      = [];
 
@@ -56,7 +56,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
         try {
             $installedData = JsonLoader::getData(
                 $vendorDir . '/composer/installed.json',
-                LocateComposerPackageSourceFiles::installedDataType(),
+                JsonLoader::installedDataType(),
             );
         } catch (NotFoundException) {
             $message = 'The composer dependencies have not been installed, run composer install/update first';
