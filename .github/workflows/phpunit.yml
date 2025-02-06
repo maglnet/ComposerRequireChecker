@@ -37,6 +37,7 @@ jobs:
                   coverage: "pcov"
                   php-version: "${{ matrix.php-version }}"
                   ini-values: memory_limit=-1
+                  extensions: mbstring, bcmath, intl, sodium
 
             - name: Get Composer cache directory
               id: composer-cache
