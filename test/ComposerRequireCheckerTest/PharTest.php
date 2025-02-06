@@ -72,7 +72,7 @@ final class PharTest extends TestCase
 
     public function testInvalidConfiguration(): void
     {
-        $path = __DIR__ . '/../fixtures/validJson.json';
+        $path = __DIR__ . '/../fixtures/invalidJson.json';
         exec(sprintf('%s check %s 2>&1', $this->bin, $path), $output, $return);
         $this->assertStringContainsString('dependencies have not been installed', implode("\n", $output));
         $this->assertNotEquals(0, $return);
