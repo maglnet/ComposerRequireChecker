@@ -26,6 +26,9 @@ jobs:
                 operating-system:
                     - "ubuntu-latest"
                     - "windows-latest"
+                exclude:
+                  - dependencies: "lowest"
+                    php-version: "8.4"
 
         steps:
             - name: "Checkout"
