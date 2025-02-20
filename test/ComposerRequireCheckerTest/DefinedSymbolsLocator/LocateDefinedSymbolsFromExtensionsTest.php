@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function array_merge;
@@ -15,6 +16,7 @@ final class LocateDefinedSymbolsFromExtensionsTest extends TestCase
 {
     private LocateDefinedSymbolsFromExtensions $locator;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->locator = new LocateDefinedSymbolsFromExtensions();

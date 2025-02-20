@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest;
 
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function exec;
@@ -17,6 +18,7 @@ final class BinaryTest extends TestCase
 {
     private string $bin;
 
+    #[Override]
     protected function setUp(): void
     {
         if (strpos(PHP_OS, 'WIN') === 0) {

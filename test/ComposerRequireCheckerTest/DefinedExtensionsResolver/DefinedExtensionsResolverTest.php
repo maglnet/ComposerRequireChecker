@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedExtensionsResolver;
 
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -16,6 +17,7 @@ final class DefinedExtensionsResolverTest extends TestCase
     private DefinedExtensionsResolver $resolver;
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

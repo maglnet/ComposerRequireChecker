@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use Override;
 use PhpParser\Modifiers;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
@@ -34,6 +35,7 @@ final class UsedSymbolCollectorTest extends TestCase
 {
     private UsedSymbolCollector $visitor;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

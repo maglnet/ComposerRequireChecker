@@ -23,6 +23,7 @@ use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use LogicException;
+use Override;
 use PhpParser\ErrorHandler\Collecting as CollectingErrorHandler;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Command\Command;
@@ -50,6 +51,7 @@ class CheckCommand extends Command
     public const NAME                 = 'check';
     private const DEFAULT_CONFIG_PATH = 'composer-require-checker.json';
 
+    #[Override]
     protected function configure(): void
     {
         $this
@@ -82,6 +84,7 @@ class CheckCommand extends Command
             );
     }
 
+    #[Override]
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         if ($input->getOption('output') === null) {
@@ -98,6 +101,7 @@ class CheckCommand extends Command
         }
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('output') !== null) {

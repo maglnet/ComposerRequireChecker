@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -21,6 +22,7 @@ final class LocateDefinedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateDefinedSymbolsFromASTRoots $locator;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

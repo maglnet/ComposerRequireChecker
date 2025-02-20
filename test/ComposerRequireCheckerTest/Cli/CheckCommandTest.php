@@ -7,6 +7,7 @@ namespace ComposerRequireCheckerTest\Cli;
 use ComposerRequireChecker\Cli\Application;
 use InvalidArgumentException;
 use LogicException;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Symfony\Component\Console\Command\Command;
@@ -28,6 +29,7 @@ final class CheckCommandTest extends TestCase
 {
     private CommandTester $commandTester;
 
+    #[Override]
     protected function setUp(): void
     {
         $application = new Application();

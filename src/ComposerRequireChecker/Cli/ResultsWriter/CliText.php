@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\Cli\ResultsWriter;
 
+use Override;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,6 +30,7 @@ final class CliText implements ResultsWriter
     }
 
     /** @inheritDoc */
+    #[Override]
     public function write(array $unknownSymbols): void
     {
         if (! $unknownSymbols) {

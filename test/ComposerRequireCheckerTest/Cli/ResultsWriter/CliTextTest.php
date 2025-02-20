@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\Cli\ResultsWriter;
 
 use ComposerRequireChecker\Cli\ResultsWriter\CliText;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,6 +17,7 @@ final class CliTextTest extends TestCase
     private CliText $writer;
     private BufferedOutput $output;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

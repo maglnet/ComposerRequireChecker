@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\Cli\ResultsWriter;
 
 use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
 use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function json_decode;
@@ -17,6 +18,7 @@ final class CliJsonTest extends TestCase
     private CliJson $writer;
     private string $output = '';
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

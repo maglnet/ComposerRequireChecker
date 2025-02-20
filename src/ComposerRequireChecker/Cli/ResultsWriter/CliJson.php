@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\Cli\ResultsWriter;
 
 use DateTimeImmutable;
+use Override;
 
 use function json_encode;
 
@@ -28,6 +29,7 @@ final class CliJson implements ResultsWriter
     }
 
     /** @inheritDoc */
+    #[Override]
     public function write(array $unknownSymbols): void
     {
         $write = $this->writeCallable;

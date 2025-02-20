@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\JsonLoader;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -25,6 +26,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
     private LocateComposerPackageSourceFiles $locator;
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

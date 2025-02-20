@@ -7,6 +7,7 @@ namespace ComposerRequireChecker\DependencyGuesser;
 use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use Generator;
+use Override;
 
 use function get_loaded_extensions;
 use function in_array;
@@ -30,6 +31,7 @@ class GuessFromLoadedExtensions implements Guesser
     }
 
     /** @return Generator<string> */
+    #[Override]
     public function __invoke(string $symbolName): Generator
     {
         $definedSymbolsFromExtensions = new LocateDefinedSymbolsFromExtensions();
