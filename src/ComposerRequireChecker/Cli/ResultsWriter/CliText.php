@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function count;
 use function implode;
+use function sprintf;
 
 final class CliText implements ResultsWriter
 {
@@ -36,7 +37,7 @@ final class CliText implements ResultsWriter
             return;
         }
 
-        $this->output->writeln('The following ' . count($unknownSymbols) . ' unknown symbols were found:');
+        $this->output->writeln(sprintf('The following %d unknown symbols were found:', count($unknownSymbols)));
 
         $tableOutput = new BufferedOutput();
         $table       = new Table($tableOutput);

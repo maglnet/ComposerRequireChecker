@@ -144,13 +144,13 @@ class CheckCommand extends Command
             (new LocateDefinedSymbolsFromComposerRuntimeApi())->__invoke($composerData),
         );
 
-        $this->verbose('found ' . count($definedVendorSymbols) . ' symbols.', $output, true);
+        $this->verbose(sprintf('found %d symbols.', count($definedVendorSymbols)), $output, true);
 
         $this->verbose('Collecting defined extension symbols... ', $output);
         $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
             (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions()),
         );
-        $this->verbose('found ' . count($definedExtensionSymbols) . ' symbols.', $output, true);
+        $this->verbose(sprintf('found %d symbols.', count($definedExtensionSymbols)), $output, true);
 
         $this->verbose('Collecting used symbols... ', $output);
         $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
@@ -161,7 +161,7 @@ class CheckCommand extends Command
                 ),
             ),
         );
-        $this->verbose('found ' . count($usedSymbols) . ' symbols.', $output, true);
+        $this->verbose(sprintf('found %d symbols.', count($usedSymbols)), $output, true);
 
         if (! count($usedSymbols)) {
             throw new LogicException('There were no symbols found, please check your configuration.');
