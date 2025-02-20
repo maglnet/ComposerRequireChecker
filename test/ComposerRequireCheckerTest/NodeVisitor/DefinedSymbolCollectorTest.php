@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
+use Override;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Identifier;
@@ -28,6 +29,7 @@ final class DefinedSymbolCollectorTest extends TestCase
 
     private NodeTraverserInterface $traverser;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();

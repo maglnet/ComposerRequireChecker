@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\Exception\DependenciesNotInstalled;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -23,6 +24,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
     private LocateComposerPackageDirectDependenciesSourceFiles $locator;
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

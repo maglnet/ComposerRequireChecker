@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\UsedSymbolCollector;
+use Override;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
@@ -29,6 +30,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
     private NodeTraverserInterface $traverser;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->collector = new UsedSymbolCollector();
@@ -45,6 +47,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
 
         self::assertSameCollectedSymbols(
             [
+                'Override',
                 'ComposerRequireChecker\NodeVisitor\UsedSymbolCollector',
                 'PHPUnit\Framework\TestCase',
                 'PhpParser\NodeTraverser',
@@ -144,16 +147,16 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
     {
         $this->traverseStringAST(<<<'PHP'
         <?php
-        
+
         namespace Foo;
-        
+
         trait BarTrait
         {
             protected function test()
             {
             }
         }
-        
+
         class UseTrait
         {
             use BarTrait {

@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DependencyGuesser;
 
 use ComposerRequireChecker\Cli\Options;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function extension_loaded;
@@ -15,6 +16,7 @@ final class DependencyGuesserTest extends TestCase
 {
     private DependencyGuesser $guesser;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->guesser = new DependencyGuesser();

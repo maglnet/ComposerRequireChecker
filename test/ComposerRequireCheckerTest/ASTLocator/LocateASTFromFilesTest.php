@@ -7,6 +7,7 @@ namespace ComposerRequireCheckerTest\ASTLocator;
 use ArrayObject;
 use ComposerRequireChecker\ASTLocator\LocateASTFromFiles;
 use ComposerRequireChecker\Exception\FileParseFailed;
+use Override;
 use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
@@ -24,6 +25,7 @@ final class LocateASTFromFilesTest extends TestCase
     private LocateASTFromFiles $locator;
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

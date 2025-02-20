@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\FileLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\FileLocator\LocateAllFilesByExtension;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -23,6 +24,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
     private LocateAllFilesByExtension $locator;
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

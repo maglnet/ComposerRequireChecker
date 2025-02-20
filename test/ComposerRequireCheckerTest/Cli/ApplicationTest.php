@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\Cli;
 
 use ComposerRequireChecker\Cli\Application;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
@@ -12,6 +13,7 @@ final class ApplicationTest extends TestCase
 {
     private Application $application;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->application = new Application();

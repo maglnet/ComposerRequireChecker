@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\FileLocator;
 
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
@@ -21,6 +22,7 @@ final class LocateFilesByGlobPatternTest extends TestCase
 
     private TemporaryDirectory $root;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();

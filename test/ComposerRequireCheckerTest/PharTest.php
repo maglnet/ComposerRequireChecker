@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest;
 
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function chdir;
@@ -23,6 +24,7 @@ final class PharTest extends TestCase
     private string $bin;
     private string $oldWorkingDirectory;
 
+    #[Override]
     protected function setUp(): void
     {
         $phar = realpath(dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'composer-require-checker.phar');
@@ -35,6 +37,7 @@ final class PharTest extends TestCase
         $this->bin                 = PHP_BINARY . ' ' . escapeshellarg($phar);
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         if ($this->oldWorkingDirectory === getcwd()) {

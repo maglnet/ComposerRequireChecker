@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\UsedSymbolsLocator;
 
 use ArrayObject;
 use ComposerRequireChecker\UsedSymbolsLocator\LocateUsedSymbolsFromASTRoots;
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -19,6 +20,7 @@ final class LocateUsedSymbolsFromASTRootsTest extends TestCase
 {
     private LocateUsedSymbolsFromASTRoots $locator;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

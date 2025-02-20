@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\NodeVisitor;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use ReflectionProperty;
@@ -22,6 +23,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     }
 
     /** @inheritDoc */
+    #[Override]
     public function beforeTraverse(array $nodes)
     {
         $this->definedSymbols = [];
@@ -35,6 +37,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
         return array_keys($this->definedSymbols);
     }
 
+    #[Override]
     public function enterNode(Node $node): Node
     {
         $this->recordClassDefinition($node);

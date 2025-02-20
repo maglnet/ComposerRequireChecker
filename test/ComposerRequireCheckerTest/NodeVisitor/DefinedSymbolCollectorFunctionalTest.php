@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\NodeVisitor;
 
 use ComposerRequireChecker\NodeVisitor\DefinedSymbolCollector;
+use Override;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
@@ -29,6 +30,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
 
     private NodeTraverserInterface $traverser;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
@@ -105,12 +107,12 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     {
         $this->traverseStringAST(<<<'PHP'
             namespace Foo {
-        
+
             function define($bar, $baz)
             {
                 return;
             }
-        
+
             define("NOT_A_CONST", "NOT_SOMETHING");
             }
         PHP);
@@ -125,14 +127,14 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     {
         $this->traverseStringAST(<<<'PHP'
             namespace Foo;
-            
+
             trait BarTrait
             {
                 protected function test()
                 {
                 }
             }
-            
+
             class UseTrait
             {
                 use BarTrait {

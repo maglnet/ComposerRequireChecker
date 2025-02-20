@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
 use Generator;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function json_decode;
@@ -14,6 +15,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
 {
     private LocateDefinedSymbolsFromComposerRuntimeApi $locator;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
