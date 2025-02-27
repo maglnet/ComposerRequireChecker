@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98c211fb2bd2aa4c50cdb39a2be3710c",
+    "content-hash": "b2f2b253b76a9ee6e89f3c12dd4283fd",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -2677,16 +2677,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.29.10",
+            "version": "0.29.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "cac7d20e5d286a37488527e477f5a695a9d7a44c"
+                "reference": "dfe9cf6e65545881c7d21343c494cc8a1fdbfb80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/cac7d20e5d286a37488527e477f5a695a9d7a44c",
-                "reference": "cac7d20e5d286a37488527e477f5a695a9d7a44c",
+                "url": "https://api.github.com/repos/infection/infection/zipball/dfe9cf6e65545881c7d21343c494cc8a1fdbfb80",
+                "reference": "dfe9cf6e65545881c7d21343c494cc8a1fdbfb80",
                 "shasum": ""
             },
             "require": {
@@ -2708,12 +2708,12 @@
                 "php": "^8.2",
                 "sanmai/later": "^0.1.1",
                 "sanmai/pipeline": "^5.1 || ^6",
-                "sebastian/diff": "^3.0.2 || ^4.0 || ^5.0 || ^6.0",
-                "shish/safe": "^2.6",
-                "symfony/console": "^5.4 || ^6.0 || ^7.0",
-                "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
-                "symfony/finder": "^5.4 || ^6.0 || ^7.0",
-                "symfony/process": "^5.4 || ^6.0 || ^7.0",
+                "sebastian/diff": "^3.0.2 || ^4.0 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/console": "^6.4 || ^7.0",
+                "symfony/filesystem": "^6.4 || ^7.0",
+                "symfony/finder": "^6.4 || ^7.0",
+                "symfony/process": "^6.4 || ^7.0",
+                "thecodingmachine/safe": "^v3.0",
                 "webmozart/assert": "^1.11"
             },
             "conflict": {
@@ -2733,7 +2733,7 @@
                 "phpunit/phpunit": "^10.5",
                 "rector/rector": "^1.0",
                 "sidz/phpstan-rules": "^0.4",
-                "symfony/yaml": "^5.4 || ^6.0 || ^7.0"
+                "symfony/yaml": "^6.4 || ^7.0"
             },
             "bin": [
                 "bin/infection"
@@ -2789,7 +2789,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.29.10"
+                "source": "https://github.com/infection/infection/tree/0.29.12"
             },
             "funding": [
                 {
@@ -2801,7 +2801,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-12-17T19:11:10+00:00"
+            "time": "2025-02-17T18:25:11+00:00"
         },
         {
             "name": "infection/mutator",
@@ -4024,23 +4024,23 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "11.0.8",
+            "version": "11.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "418c59fd080954f8c4aa5631d9502ecda2387118"
+                "reference": "14d63fbcca18457e49c6f8bebaa91a87e8e188d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/418c59fd080954f8c4aa5631d9502ecda2387118",
-                "reference": "418c59fd080954f8c4aa5631d9502ecda2387118",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/14d63fbcca18457e49c6f8bebaa91a87e8e188d7",
+                "reference": "14d63fbcca18457e49c6f8bebaa91a87e8e188d7",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "ext-xmlwriter": "*",
-                "nikic/php-parser": "^5.3.1",
+                "nikic/php-parser": "^5.4.0",
                 "php": ">=8.2",
                 "phpunit/php-file-iterator": "^5.1.0",
                 "phpunit/php-text-template": "^4.0.1",
@@ -4052,7 +4052,7 @@
                 "theseer/tokenizer": "^1.2.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "^11.5.0"
+                "phpunit/phpunit": "^11.5.2"
             },
             "suggest": {
                 "ext-pcov": "PHP extension that provides line coverage",
@@ -4090,7 +4090,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/11.0.8"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/11.0.9"
             },
             "funding": [
                 {
@@ -4098,7 +4098,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-11T12:34:27+00:00"
+            "time": "2025-02-25T13:26:39+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -4347,16 +4347,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.8",
+            "version": "11.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c9bd61aab12f0fc5e82ecfe621ff518a1d1f1049"
+                "reference": "d5df2b32d729562ff8db634678d71085ee579006"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c9bd61aab12f0fc5e82ecfe621ff518a1d1f1049",
-                "reference": "c9bd61aab12f0fc5e82ecfe621ff518a1d1f1049",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d5df2b32d729562ff8db634678d71085ee579006",
+                "reference": "d5df2b32d729562ff8db634678d71085ee579006",
                 "shasum": ""
             },
             "require": {
@@ -4366,7 +4366,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.12.1",
+                "myclabs/deep-copy": "^1.13.0",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=8.2",
@@ -4428,7 +4428,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.8"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.10"
             },
             "funding": [
                 {
@@ -4444,7 +4444,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-18T06:26:59+00:00"
+            "time": "2025-02-25T06:11:48+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -4738,29 +4738,32 @@
         },
         {
             "name": "roave/infection-static-analysis-plugin",
-            "version": "1.36.0",
+            "version": "1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/infection-static-analysis-plugin.git",
-                "reference": "5c05ce3c6f1e2aef6e975a179d229d654bf595ce"
+                "reference": "062af2a493b570346f6cbbae378e1d69bc4194bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/5c05ce3c6f1e2aef6e975a179d229d654bf595ce",
-                "reference": "5c05ce3c6f1e2aef6e975a179d229d654bf595ce",
+                "url": "https://api.github.com/repos/Roave/infection-static-analysis-plugin/zipball/062af2a493b570346f6cbbae378e1d69bc4194bb",
+                "reference": "062af2a493b570346f6cbbae378e1d69bc4194bb",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.2",
-                "infection/infection": "0.29.10",
+                "infection/infection": "0.29.12",
                 "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
                 "sanmai/later": "^0.1.4",
-                "vimeo/psalm": "^6.0"
+                "vimeo/psalm": "^6.8.8"
+            },
+            "conflict": {
+                "symfony/polyfill-php84": "<1.30.0"
             },
             "require-dev": {
                 "azjezz/psl": "^3.2",
                 "doctrine/coding-standard": "^12.0.0",
-                "phpunit/phpunit": "^11.5.3",
+                "phpunit/phpunit": "^11.5.10",
                 "psalm/plugin-phpunit": "^0.19.2"
             },
             "bin": [
@@ -4785,9 +4788,9 @@
             "description": "Static analysis on top of mutation testing - prevents escaped mutants from being invalid according to static analysis",
             "support": {
                 "issues": "https://github.com/Roave/infection-static-analysis-plugin/issues",
-                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.36.0"
+                "source": "https://github.com/Roave/infection-static-analysis-plugin/tree/1.37.0"
             },
-            "time": "2025-01-27T02:18:13+00:00"
+            "time": "2025-02-27T18:02:45+00:00"
         },
         {
             "name": "sanmai/later",
@@ -5845,157 +5848,6 @@
             "time": "2024-10-09T05:16:32+00:00"
         },
         {
-            "name": "shish/safe",
-            "version": "v2.6.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/shish/safe.git",
-                "reference": "482e6227330a70b21c1c9e9301cc99b5658ccb89"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/shish/safe/zipball/482e6227330a70b21c1c9e9301cc99b5658ccb89",
-                "reference": "482e6227330a70b21c1c9e9301cc99b5658ccb89",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">= 8.2"
-            },
-            "replace": {
-                "thecodingmachine/safe": "2.5.0"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^1",
-                "phpunit/phpunit": "^10.0 || ^11.0",
-                "squizlabs/php_codesniffer": "^3",
-                "thecodingmachine/phpstan-strict-rules": "^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "deprecated/apc.php",
-                    "deprecated/array.php",
-                    "deprecated/datetime.php",
-                    "deprecated/libevent.php",
-                    "deprecated/misc.php",
-                    "deprecated/password.php",
-                    "deprecated/mssql.php",
-                    "deprecated/stats.php",
-                    "deprecated/strings.php",
-                    "lib/special_cases.php",
-                    "deprecated/mysqli.php",
-                    "generated/apache.php",
-                    "generated/apcu.php",
-                    "generated/array.php",
-                    "generated/bzip2.php",
-                    "generated/calendar.php",
-                    "generated/classobj.php",
-                    "generated/com.php",
-                    "generated/cubrid.php",
-                    "generated/curl.php",
-                    "generated/datetime.php",
-                    "generated/dir.php",
-                    "generated/eio.php",
-                    "generated/errorfunc.php",
-                    "generated/exec.php",
-                    "generated/fileinfo.php",
-                    "generated/filesystem.php",
-                    "generated/filter.php",
-                    "generated/fpm.php",
-                    "generated/ftp.php",
-                    "generated/funchand.php",
-                    "generated/gettext.php",
-                    "generated/gnupg.php",
-                    "generated/hash.php",
-                    "generated/ibase.php",
-                    "generated/ibmDb2.php",
-                    "generated/iconv.php",
-                    "generated/image.php",
-                    "generated/imap.php",
-                    "generated/info.php",
-                    "generated/inotify.php",
-                    "generated/json.php",
-                    "generated/ldap.php",
-                    "generated/libxml.php",
-                    "generated/lzf.php",
-                    "generated/mailparse.php",
-                    "generated/mbstring.php",
-                    "generated/misc.php",
-                    "generated/mysql.php",
-                    "generated/network.php",
-                    "generated/oci8.php",
-                    "generated/opcache.php",
-                    "generated/openssl.php",
-                    "generated/outcontrol.php",
-                    "generated/pcntl.php",
-                    "generated/pcre.php",
-                    "generated/pgsql.php",
-                    "generated/posix.php",
-                    "generated/ps.php",
-                    "generated/pspell.php",
-                    "generated/readline.php",
-                    "generated/rnp.php",
-                    "generated/rpminfo.php",
-                    "generated/rrd.php",
-                    "generated/sem.php",
-                    "generated/session.php",
-                    "generated/shmop.php",
-                    "generated/sockets.php",
-                    "generated/sodium.php",
-                    "generated/solr.php",
-                    "generated/spl.php",
-                    "generated/sqlsrv.php",
-                    "generated/ssdeep.php",
-                    "generated/ssh2.php",
-                    "generated/stream.php",
-                    "generated/strings.php",
-                    "generated/swoole.php",
-                    "generated/uodbc.php",
-                    "generated/uopz.php",
-                    "generated/url.php",
-                    "generated/var.php",
-                    "generated/xdiff.php",
-                    "generated/xml.php",
-                    "generated/xmlrpc.php",
-                    "generated/yaml.php",
-                    "generated/yaz.php",
-                    "generated/zip.php",
-                    "generated/zlib.php"
-                ],
-                "classmap": [
-                    "lib/DateTime.php",
-                    "lib/DateTimeImmutable.php",
-                    "lib/Exceptions/",
-                    "deprecated/Exceptions/",
-                    "generated/Exceptions/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "PHP core functions that throw exceptions instead of returning FALSE on error (a less-abandoned fork of thecodingmachine/safe)",
-            "support": {
-                "issues": "https://github.com/shish/safe/issues",
-                "source": "https://github.com/shish/safe/tree/v2.6.4"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/OskarStark",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/shish",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/staabm",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-12-18T13:36:07+00:00"
-        },
-        {
             "name": "slevomat/coding-standard",
             "version": "8.15.0",
             "source": {
@@ -6533,16 +6385,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.2.0",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d34b22ba9390ec19d2dd966c40aa9e8462f27a7e"
+                "reference": "d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d34b22ba9390ec19d2dd966c40aa9e8462f27a7e",
-                "reference": "d34b22ba9390ec19d2dd966c40aa9e8462f27a7e",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf",
+                "reference": "d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf",
                 "shasum": ""
             },
             "require": {
@@ -6574,7 +6426,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.2.0"
+                "source": "https://github.com/symfony/process/tree/v7.2.4"
             },
             "funding": [
                 {
@@ -6590,7 +6442,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-11-06T14:24:19+00:00"
+            "time": "2025-02-05T08:33:46+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -6665,6 +6517,145 @@
             "time": "2025-01-07T12:55:42+00:00"
         },
         {
+            "name": "thecodingmachine/safe",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thecodingmachine/safe.git",
+                "reference": "22ffad3248982a784f9870a37aeb2e522bd19645"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/22ffad3248982a784f9870a37aeb2e522bd19645",
+                "reference": "22ffad3248982a784f9870a37aeb2e522bd19645",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpstan/phpstan": "^2",
+                "phpunit/phpunit": "^10",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/special_cases.php",
+                    "generated/apache.php",
+                    "generated/apcu.php",
+                    "generated/array.php",
+                    "generated/bzip2.php",
+                    "generated/calendar.php",
+                    "generated/classobj.php",
+                    "generated/com.php",
+                    "generated/cubrid.php",
+                    "generated/curl.php",
+                    "generated/datetime.php",
+                    "generated/dir.php",
+                    "generated/eio.php",
+                    "generated/errorfunc.php",
+                    "generated/exec.php",
+                    "generated/fileinfo.php",
+                    "generated/filesystem.php",
+                    "generated/filter.php",
+                    "generated/fpm.php",
+                    "generated/ftp.php",
+                    "generated/funchand.php",
+                    "generated/gettext.php",
+                    "generated/gmp.php",
+                    "generated/gnupg.php",
+                    "generated/hash.php",
+                    "generated/ibase.php",
+                    "generated/ibmDb2.php",
+                    "generated/iconv.php",
+                    "generated/image.php",
+                    "generated/imap.php",
+                    "generated/info.php",
+                    "generated/inotify.php",
+                    "generated/json.php",
+                    "generated/ldap.php",
+                    "generated/libxml.php",
+                    "generated/lzf.php",
+                    "generated/mailparse.php",
+                    "generated/mbstring.php",
+                    "generated/misc.php",
+                    "generated/mysql.php",
+                    "generated/mysqli.php",
+                    "generated/network.php",
+                    "generated/oci8.php",
+                    "generated/opcache.php",
+                    "generated/openssl.php",
+                    "generated/outcontrol.php",
+                    "generated/pcntl.php",
+                    "generated/pcre.php",
+                    "generated/pgsql.php",
+                    "generated/posix.php",
+                    "generated/ps.php",
+                    "generated/pspell.php",
+                    "generated/readline.php",
+                    "generated/rnp.php",
+                    "generated/rpminfo.php",
+                    "generated/rrd.php",
+                    "generated/sem.php",
+                    "generated/session.php",
+                    "generated/shmop.php",
+                    "generated/sockets.php",
+                    "generated/sodium.php",
+                    "generated/solr.php",
+                    "generated/spl.php",
+                    "generated/sqlsrv.php",
+                    "generated/ssdeep.php",
+                    "generated/ssh2.php",
+                    "generated/stream.php",
+                    "generated/strings.php",
+                    "generated/swoole.php",
+                    "generated/uodbc.php",
+                    "generated/uopz.php",
+                    "generated/url.php",
+                    "generated/var.php",
+                    "generated/xdiff.php",
+                    "generated/xml.php",
+                    "generated/xmlrpc.php",
+                    "generated/yaml.php",
+                    "generated/yaz.php",
+                    "generated/zip.php",
+                    "generated/zlib.php"
+                ],
+                "classmap": [
+                    "lib/DateTime.php",
+                    "lib/DateTimeImmutable.php",
+                    "lib/Exceptions/",
+                    "generated/Exceptions/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
+            "support": {
+                "issues": "https://github.com/thecodingmachine/safe/issues",
+                "source": "https://github.com/thecodingmachine/safe/tree/v3.0.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/shish",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/staabm",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-19T19:23:00+00:00"
+        },
+        {
             "name": "theseer/tokenizer",
             "version": "1.2.3",
             "source": {
@@ -6716,16 +6707,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.8.4",
+            "version": "6.8.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "7ee919229d510c5834af3112072f4b12cd7bb51a"
+                "reference": "1361cd33008feb3ae2b4a93f1860e14e538ec8c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7ee919229d510c5834af3112072f4b12cd7bb51a",
-                "reference": "7ee919229d510c5834af3112072f4b12cd7bb51a",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/1361cd33008feb3ae2b4a93f1860e14e538ec8c2",
+                "reference": "1361cd33008feb3ae2b4a93f1860e14e538ec8c2",
                 "shasum": ""
             },
             "require": {
@@ -6830,7 +6821,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-02-20T10:00:51+00:00"
+            "time": "2025-02-25T17:34:39+00:00"
         }
     ],
     "aliases": [],
