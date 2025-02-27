@@ -16,8 +16,12 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
-    
+
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>
+
+    <issueHandlers>
+        <ClassMustBeFinal errorLevel="suppress" />
+    </issueHandlers>
 </psalm>
