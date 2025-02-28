@@ -38,12 +38,12 @@
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^12.0.0",
         "phing/phing": "^3.0.1",
-        "phpstan/phpstan": "^2.1.5",
-        "phpunit/phpunit": "^11.5.7",
+        "phpstan/phpstan": "^2.1.6",
+        "phpunit/phpunit": "^11.5.10",
         "psalm/plugin-phpunit": "^0.19.2",
-        "roave/infection-static-analysis-plugin": "^1.36.0",
+        "roave/infection-static-analysis-plugin": "^1.37.0",
         "spatie/temporary-directory": "^2.3.0",
-        "vimeo/psalm": "^6.5.1"
+        "vimeo/psalm": "^6.8.8"
     },
     "config": {
         "optimize-autoloader": true,
