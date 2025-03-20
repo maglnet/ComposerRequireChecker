@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf497eb047764be8d003e0e7cfc319e0",
+    "content-hash": "cbd247a439ffc7972fb2e0cef72cd4f2",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -4448,16 +4448,16 @@
         },
         {
             "name": "psalm/plugin-phpunit",
-            "version": "0.19.2",
+            "version": "0.19.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-phpunit.git",
-                "reference": "7b7a5cde988f83ccdbdf3ebaecd88192e01c5eb1"
+                "reference": "07dbf9fec23a694f2c095d8e2d44ccd6992afe38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/7b7a5cde988f83ccdbdf3ebaecd88192e01c5eb1",
-                "reference": "7b7a5cde988f83ccdbdf3ebaecd88192e01c5eb1",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/07dbf9fec23a694f2c095d8e2d44ccd6992afe38",
+                "reference": "07dbf9fec23a694f2c095d8e2d44ccd6992afe38",
                 "shasum": ""
             },
             "require": {
@@ -4465,12 +4465,13 @@
                 "composer/semver": "^1.4 || ^2.0 || ^3.0",
                 "ext-simplexml": "*",
                 "php": ">=8.1",
-                "vimeo/psalm": "dev-master || ^6"
+                "vimeo/psalm": "dev-master || ^6 || ^7"
             },
             "conflict": {
                 "phpunit/phpunit": "<7.5"
             },
             "require-dev": {
+                "behat/gherkin": "~4.11.0",
                 "codeception/codeception": "^4.0.3",
                 "php": "^7.3 || ^8.0",
                 "phpunit/phpunit": "^7.5 || ^8.0 || ^9.0",
@@ -4502,9 +4503,9 @@
             "description": "Psalm plugin for PHPUnit",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-phpunit/issues",
-                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/0.19.2"
+                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/0.19.3"
             },
-            "time": "2025-01-26T11:39:17+00:00"
+            "time": "2025-03-20T11:21:58+00:00"
         },
         {
             "name": "psr/http-factory",
@@ -6707,16 +6708,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.9.1",
+            "version": "6.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "81c8a77c0793d450fee40265cfe68891df11d505"
+                "reference": "189990791826d8aa2b72c106ea3b07656534dd61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/81c8a77c0793d450fee40265cfe68891df11d505",
-                "reference": "81c8a77c0793d450fee40265cfe68891df11d505",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/189990791826d8aa2b72c106ea3b07656534dd61",
+                "reference": "189990791826d8aa2b72c106ea3b07656534dd61",
                 "shasum": ""
             },
             "require": {
@@ -6821,7 +6822,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-03-17T09:40:52+00:00"
+            "time": "2025-03-20T10:59:02+00:00"
         }
     ],
     "aliases": [],
