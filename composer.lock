@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f17804f2a8094a24e3ab42cc12febd7f",
+    "content-hash": "ef99d4cbd0e6fb723dcfdf4844dbb0b8",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -6708,16 +6708,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.9.5",
+            "version": "6.9.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "b9989c566097cd8a1cdc0378977938c8deb90545"
+                "reference": "61488aa2849793acfb72411829d114b4aa670941"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/b9989c566097cd8a1cdc0378977938c8deb90545",
-                "reference": "b9989c566097cd8a1cdc0378977938c8deb90545",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/61488aa2849793acfb72411829d114b4aa670941",
+                "reference": "61488aa2849793acfb72411829d114b4aa670941",
                 "shasum": ""
             },
             "require": {
@@ -6822,7 +6822,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-03-26T09:54:25+00:00"
+            "time": "2025-03-27T19:06:48+00:00"
         }
     ],
     "aliases": [],
