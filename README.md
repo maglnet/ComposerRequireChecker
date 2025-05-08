@@ -48,7 +48,7 @@ phive install composer-require-checker
 This package can be easily globally installed by using [Composer]:
 
 ```sh
-composer global require maglnet/composer-require-checker
+composer global require maglnet/composer-require-checker --dev
 ```
 
 If you haven't already setup your composer installation to support global requirements, please refer to the [Composer CLI - global]
