@@ -41,7 +41,7 @@
         "phpstan/phpstan": "^2.1.17",
         "phpunit/phpunit": "^11.5.21",
         "psalm/plugin-phpunit": "^0.19.5",
-        "roave/infection-static-analysis-plugin": "^1.37.0",
+        "roave/infection-static-analysis-plugin": "^1.38.0",
         "spatie/temporary-directory": "^2.3.0",
         "vimeo/psalm": "^6.12.0"
     },
