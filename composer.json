@@ -38,7 +38,7 @@
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^13.0.1",
         "phing/phing": "^3.0.1",
-        "phpstan/phpstan": "^2.1.17",
+        "phpstan/phpstan": "^2.1.18",
         "phpunit/phpunit": "^11.5.27",
         "psalm/plugin-phpunit": "^0.19.5",
         "roave/infection-static-analysis-plugin": "^1.38.0",
