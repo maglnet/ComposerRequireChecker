@@ -22,7 +22,7 @@ use const PHP_BINARY;
 final class PharTest extends TestCase
 {
     private string $bin;
-    private ?string $oldWorkingDirectory = null;
+    private string|null $oldWorkingDirectory = null;
 
     #[Override]
     protected function setUp(): void
