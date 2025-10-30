@@ -22,7 +22,7 @@ use const PHP_BINARY;
 final class PharTest extends TestCase
 {
     private string $bin;
-    private string $oldWorkingDirectory;
+    private string|null $oldWorkingDirectory = null;
 
     #[Override]
     protected function setUp(): void
@@ -40,11 +40,12 @@ final class PharTest extends TestCase
     #[Override]
     protected function tearDown(): void
     {
-        if ($this->oldWorkingDirectory === getcwd()) {
+        if ($this->oldWorkingDirectory === null || $this->oldWorkingDirectory === getcwd()) {
             return;
         }
 
         chdir($this->oldWorkingDirectory);
+        $this->oldWorkingDirectory = null;
     }
 
     public function testVersion(): void
