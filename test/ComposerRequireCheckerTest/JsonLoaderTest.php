@@ -20,7 +20,7 @@ final class JsonLoaderTest extends TestCase
     {
         $path = __DIR__ . '/wrong/path/non-existing-file.json';
         $this->expectException(NotReadable::class);
-        $this->expectExceptionMessage('unable to read file: The file "' . $path . '" does not exist.');
+        $this->expectExceptionMessageMatches('#unable to read file: The (file|path) "' . preg_quote($path) . '" (does not exist|is not a file)#');
         $this->expectExceptionCode(0);
         JsonLoader::getData($path);
     }
