@@ -83,23 +83,6 @@ class CheckCommand extends Command
     }
 
     #[Override]
-    protected function initialize(InputInterface $input, OutputInterface $output): void
-    {
-        try {
-            Type\union(
-                Type\null(),
-                Type\literal_scalar('text'),
-                Type\literal_scalar('json'),
-            )->coerce($input->getOption('output'));
-        } catch (Type\Exception\CoercionException $failedCoercion) {
-            throw new InvalidArgumentException(
-                'Option "output" must be either of value "json", "text" or omitted altogether',
-                previous: $failedCoercion,
-            );
-        }
-    }
-
-    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
