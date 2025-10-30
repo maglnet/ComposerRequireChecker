@@ -12,6 +12,7 @@ use PhpParser\ErrorHandler\Collecting;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser\Php7;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -19,7 +20,7 @@ use Spatie\TemporaryDirectory\TemporaryDirectory;
 use function file_put_contents;
 use function iterator_to_array;
 
-/** @covers \ComposerRequireChecker\ASTLocator\LocateASTFromFiles */
+#[CoversClass(LocateASTFromFiles::class)]
 final class LocateASTFromFilesTest extends TestCase
 {
     private LocateASTFromFiles $locator;
@@ -96,7 +97,7 @@ final class LocateASTFromFilesTest extends TestCase
         $this->locate($files);
     }
 
-    private function createFile(string $path, string|null $content = null): string
+    private function createFile(string $path, string $content): string
     {
         $fullPath = $this->root->path($path);
         file_put_contents($fullPath, $content);

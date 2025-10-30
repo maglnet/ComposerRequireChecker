@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
+use ComposerRequireChecker\JsonLoader;
 use Generator;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-
-use function json_decode;
+use Psl\Json;
 
 class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
 {
@@ -24,19 +25,23 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
     }
 
     /** @dataProvider provideComposerJsonWithUnsuitableComposerRuntimeApi */
+    #[DataProvider('provideComposerJsonWithUnsuitableComposerRuntimeApi')]
     public function testNoSymbols(string $composerJson): void
     {
-        $symbols = $this->locate(json_decode($composerJson, true));
-
-        self::assertEmpty($symbols);
+        self::assertEmpty(($this->locator)(Json\typed(
+            $composerJson,
+            JsonLoader::composerDataType(),
+        )));
     }
 
     /** @dataProvider provideComposerJsonWithSuitableComposerRuntimeApi */
+    #[DataProvider('provideComposerJsonWithSuitableComposerRuntimeApi')]
     public function testInstalledVersionsSymbol(string $composerJson): void
     {
-        $symbols = $this->locate(json_decode($composerJson, true));
-
-        self::assertContains('Composer\InstalledVersions', $symbols);
+        self::assertContains(
+            'Composer\InstalledVersions',
+            ($this->locator)(Json\typed($composerJson, JsonLoader::composerDataType())),
+        );
     }
 
     /** @return Generator<array-key, array<array-key, string>> */
@@ -57,15 +62,5 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
         yield 'Greater equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": ">=2" } }'];
         yield 'Equal major' => ['composerJson' => '{ "require": { "composer-runtime-api": "=2" } }'];
         yield 'Greater major' => ['composerJson' => '{ "require": { "composer-runtime-api": ">2" } }'];
-    }
-
-    /**
-     * @param array<string, mixed> $composerData
-     *
-     * @return string[]
-     */
-    private function locate(array $composerData): array
-    {
-        return ($this->locator)($composerData);
     }
 }

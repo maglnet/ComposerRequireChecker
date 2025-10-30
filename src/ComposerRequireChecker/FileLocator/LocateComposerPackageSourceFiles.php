@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace ComposerRequireChecker\FileLocator;
 
 use ArrayIterator;
+use ComposerRequireChecker\JsonLoader;
 use Generator;
 
 use function array_map;
 use function array_merge;
-use function array_reduce;
 use function array_values;
 use function is_dir;
 use function is_file;
@@ -17,35 +17,17 @@ use function ltrim;
 use function str_replace;
 
 /**
- * @psalm-type ComposerConfig = array{vendor-dir?: string}
- * @psalm-type ComposerRequire = array<string, string>
- * @psalm-type ComposerAutoload = array{
- *                 exclude-from-classmap?: list<string>,
- *                 classmap?: list<string>,
- *                 files?: list<string>,
- *                 psr-0?: list<string>,
- *                 psr-4?: list<string>
- *             }
- * @psalm-type ComposerPackageData = array{
- *                 name: string,
- *                 require?: ComposerConfig,
- *                 autoload?: ComposerAutoload,
- *                 config?: ComposerConfig
- *             }
- * @psalm-type ComposerData = array{
- *                 name: string,
- *                 require?: ComposerConfig,
- *                 autoload?: ComposerAutoload,
- *                 config?: ComposerConfig,
- *                 packages?: list<ComposerPackageData>
- *             }
+ * @psalm-import-type ComposerAutoload from JsonLoader
+ * @psalm-import-type ComposerData from JsonLoader
  */
 final class LocateComposerPackageSourceFiles
 {
     /**
-     * @param mixed[] $composerData The contents of composer.json for a package
-     * @param string  $packageDir   The path to package
+     * @param array{autoload?: ComposerAutoload} $composerData The contents of composer.json for a package
+     * @param string                             $packageDir   The path to package
      * @psalm-param ComposerData $composerData The contents of composer.json for a package
+     *
+     * @return Generator<string>
      */
     public function __invoke(array $composerData, string $packageDir): Generator
     {
@@ -62,12 +44,12 @@ final class LocateComposerPackageSourceFiles
         );
 
         yield from $this->locateFilesInPsr0Definitions(
-            $this->getFilePaths($composerData['autoload']['psr-0'] ?? [], $packageDir),
+            $this->getFilePaths(self::flattenPsrPaths($composerData['autoload']['psr-0'] ?? []), $packageDir),
             $blacklist,
         );
 
         yield from $this->locateFilesInPsr4Definitions(
-            $this->getFilePaths($composerData['autoload']['psr-4'] ?? [], $packageDir),
+            $this->getFilePaths(self::flattenPsrPaths($composerData['autoload']['psr-4'] ?? []), $packageDir),
             $blacklist,
         );
     }
@@ -79,21 +61,12 @@ final class LocateComposerPackageSourceFiles
      */
     private function getFilePaths(array $sourceDirs, string $packageDir): array
     {
-        $flattened = array_reduce(
-            $sourceDirs,
-            /** @param array|string $sourceDir */
-            static function (array $sourceDirs, $sourceDir): array {
-                return array_merge($sourceDirs, (array) $sourceDir);
-            },
-            [],
-        );
-
         return array_values(
             array_map(
-                function (string $sourceDir) use ($packageDir) {
+                function (string $sourceDir) use ($packageDir): string {
                     return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
                 },
-                $flattened,
+                self::flattenPsrPaths($sourceDirs),
             ),
         );
     }
@@ -107,6 +80,8 @@ final class LocateComposerPackageSourceFiles
     /**
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
+     *
+     * @return Generator<string>
      */
     private function locateFilesInPsr0Definitions(array $locations, array|null $blacklist): Generator
     {
@@ -116,6 +91,8 @@ final class LocateComposerPackageSourceFiles
     /**
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
+     *
+     * @return Generator<string>
      */
     private function locateFilesInPsr4Definitions(array $locations, array|null $blacklist): Generator
     {
@@ -123,8 +100,24 @@ final class LocateComposerPackageSourceFiles
     }
 
     /**
+     * @param array<string|list<string>> $paths
+     *
+     * @return array<string>
+     */
+    private static function flattenPsrPaths(array $paths): array
+    {
+        return array_merge(...array_values(array_map(
+            /** @param string|list<string> $item */
+            static fn (string|array $item): array => (array) $item,
+            $paths,
+        )));
+    }
+
+    /**
      * @param array<string>      $locations
      * @param array<string>|null $blacklist
+     *
+     * @return Generator<string>
      */
     private function locateFilesInClassmapDefinitions(array $locations, array|null $blacklist): Generator
     {
@@ -132,10 +125,12 @@ final class LocateComposerPackageSourceFiles
     }
 
     /**
-     * @param array<string>      $locations
+     * @param iterable<string>   $locations
      * @param array<string>|null $blacklist
+     *
+     * @return Generator<string>
      */
-    private function locateFilesInFilesInFilesDefinitions(array $locations, array|null $blacklist): Generator
+    private function locateFilesInFilesInFilesDefinitions(iterable $locations, array|null $blacklist): Generator
     {
         foreach ($locations as $location) {
             if (is_file($location)) {
@@ -146,7 +141,11 @@ final class LocateComposerPackageSourceFiles
         }
     }
 
-    /** @param array<string>|null $blacklist */
+    /**
+     * @param array<string>|null $blacklist
+     *
+     * @return Generator<string>
+     */
     private function extractFilesFromDirectory(string $directory, array|null $blacklist): Generator
     {
         yield from (new LocateAllFilesByExtension())->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);

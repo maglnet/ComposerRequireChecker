@@ -7,7 +7,11 @@ namespace ComposerRequireCheckerTest\FileLocator;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\JsonLoader;
 use Override;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psl\Str;
+use Psl\Type;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 use function count;
@@ -20,7 +24,7 @@ use function str_replace;
 use const DIRECTORY_SEPARATOR;
 use const JSON_THROW_ON_ERROR;
 
-/** @covers \ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles */
+#[CoversClass(LocateComposerPackageSourceFiles::class)]
 final class LocateComposerPackageSourceFilesTest extends TestCase
 {
     private LocateComposerPackageSourceFiles $locator;
@@ -150,6 +154,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
      *
      * @dataProvider provideExcludePattern
      */
+    #[DataProvider('provideExcludePattern')]
     public function testFromPsr4WithExcludeFromClassmap(array $excludedPattern, array $expectedFiles): void
     {
         $excludedPatternJson = json_encode($excludedPattern, JSON_THROW_ON_ERROR);
@@ -210,23 +215,35 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         ];
     }
 
-    /** @return string[] */
+    /**
+     * @param non-empty-string $composerJson
+     *
+     * @return list<string>
+     */
     private function files(string $composerJson): array
     {
-        $composerData   = JsonLoader::getData($composerJson);
+        $composerData   = JsonLoader::getData($composerJson, JsonLoader::composerDataType());
         $files          = [];
-        $filesGenerator = ($this->locator)($composerData, dirname($composerJson));
+        $filesGenerator = $this->locator->__invoke($composerData, dirname($composerJson));
         foreach ($filesGenerator as $file) {
-            $files[] = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $file);
+            $files[] = Str\replace_every(
+                $file,
+                [
+                    '\\' => DIRECTORY_SEPARATOR,
+                    '/' => DIRECTORY_SEPARATOR,
+                ],
+            );
         }
 
         return $files;
     }
 
+    /** @return non-empty-string */
     private function path(string $path): string
     {
         $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
 
-        return $this->root->path($path);
+        return Type\non_empty_string()
+            ->coerce($this->root->path($path));
     }
 }

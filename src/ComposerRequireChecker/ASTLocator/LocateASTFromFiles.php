@@ -9,13 +9,12 @@ use PhpParser\Error;
 use PhpParser\ErrorHandler;
 use PhpParser\Node\Stmt;
 use PhpParser\Parser;
+use Psl\File;
+use Psl\Filesystem;
+use Psl\Type;
 use RuntimeException;
 use Traversable;
 
-use function assert;
-use function file_get_contents;
-use function is_file;
-use function is_string;
 use function sprintf;
 
 final class LocateASTFromFiles
@@ -32,13 +31,14 @@ final class LocateASTFromFiles
     public function __invoke(Traversable $files): Traversable
     {
         foreach ($files as $file) {
-            if (! is_file($file)) {
+            $path = Type\non_empty_string()->coerce($file);
+
+            if (! Filesystem\is_file($path)) {
                 continue;
             }
 
             try {
-                $fileContent = file_get_contents($file);
-                assert(is_string($fileContent));
+                $fileContent = File\read($path);
 
                 $stmts = $this->parser->parse($fileContent, $this->errorHandler);
             } catch (Error $e) {

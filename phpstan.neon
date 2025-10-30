@@ -1,4 +1,7 @@
 parameters:
-    level: 5
+    level: max
     paths:
         - src
+
+includes:
+    - vendor/php-standard-library/phpstan-extension/extension.neon

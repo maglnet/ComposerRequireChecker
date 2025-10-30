@@ -6,6 +6,7 @@ namespace ComposerRequireCheckerTest;
 
 use Override;
 use PHPUnit\Framework\TestCase;
+use Psl\Env;
 
 use function chdir;
 use function dirname;
@@ -33,7 +34,7 @@ final class PharTest extends TestCase
             $this->markTestSkipped('Compiled PHAR not found');
         }
 
-        $this->oldWorkingDirectory = getcwd();
+        $this->oldWorkingDirectory = Env\current_dir();
         $this->bin                 = PHP_BINARY . ' ' . escapeshellarg($phar);
     }
 
@@ -44,7 +45,7 @@ final class PharTest extends TestCase
             return;
         }
 
-        chdir($this->oldWorkingDirectory);
+        Env\set_current_dir($this->oldWorkingDirectory);
         $this->oldWorkingDirectory = null;
     }
 
@@ -72,7 +73,7 @@ final class PharTest extends TestCase
 
     public function testInvalidConfiguration(): void
     {
-        $path = __DIR__ . '/../fixtures/validJson.json';
+        $path = __DIR__ . '/../fixtures/invalidJson.json';
         exec(sprintf('%s check %s 2>&1', $this->bin, $path), $output, $return);
         $this->assertStringContainsString('dependencies have not been installed', implode("\n", $output));
         $this->assertNotEquals(0, $return);

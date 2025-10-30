@@ -22,6 +22,7 @@ jobs:
                   coverage: "none"
                   php-version: "8.2"
                   ini-values: memory_limit=-1, phar.readonly=0
+                  extensions: mbstring, bcmath, intl, sodium
 
             - name: "Import GPG Key"
               run: echo "$PRIVATE_KEY" | gpg --import
