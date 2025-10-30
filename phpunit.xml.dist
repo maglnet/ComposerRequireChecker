@@ -4,7 +4,14 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     colors="true"
     cacheResult="false"
-    failOnAllIssues="true"
+    failOnPhpunitDeprecation="true"
+    failOnPhpunitWarning="true"
+    failOnWarning="true"
+    failOnNotice="true"
+    failOnDeprecation="true"
+    failOnEmptyTestSuite="true"
+    failOnRisky="true"
+    failOnIncomplete="true"
     displayDetailsOnAllIssues="true"
 >
   <testsuite name="ComposerRequireChecker tests">
