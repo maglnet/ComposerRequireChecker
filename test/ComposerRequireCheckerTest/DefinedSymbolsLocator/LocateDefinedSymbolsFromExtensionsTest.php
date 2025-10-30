@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
-use Override;
 use ComposerRequireChecker\Exception\UnknownExtension;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 use function array_merge;

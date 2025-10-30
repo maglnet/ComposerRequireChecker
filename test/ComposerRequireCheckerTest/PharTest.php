@@ -12,6 +12,7 @@ use function chdir;
 use function dirname;
 use function escapeshellarg;
 use function exec;
+use function getcwd;
 use function implode;
 use function realpath;
 use function sprintf;
