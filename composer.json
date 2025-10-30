@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "ext-zend-opcache": "*",
-        "doctrine/coding-standard": "^13.0.1",
+        "doctrine/coding-standard": "^14.0.0",
         "phing/phing": "^3.0.1",
         "php-standard-library/phpstan-extension": "^2.0",
         "php-standard-library/psalm-plugin": "^2.3",
