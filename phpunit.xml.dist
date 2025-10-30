@@ -11,7 +11,7 @@
     <directory>./test/ComposerRequireCheckerTest</directory>
   </testsuite>
   <coverage includeUncoveredFiles="true"/>
-  <source>
+  <source ignoreIndirectDeprecations="true">
     <include>
       <directory>./src</directory>
     </include>
