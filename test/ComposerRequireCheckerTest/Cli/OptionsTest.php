@@ -7,8 +7,9 @@ namespace ComposerRequireCheckerTest\Cli;
 use ComposerRequireChecker\Cli\Options;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-
-use function file_get_contents;
+use Psl\File;
+use Psl\Json;
+use Psl\Type;
 
 final class OptionsTest extends TestCase
 {
@@ -57,29 +58,13 @@ final class OptionsTest extends TestCase
 
     public function testOptionsFileRepresentsDefaults(): void
     {
-        $options = new Options();
-
-        $fileContent = file_get_contents(__DIR__ . '/../../../data/config.dist.json');
-        $this->assertNotFalse($fileContent);
-
-        $optionsFromFile = new Options([
-            'symbol-whitelist'    => [],
-            'php-core-extensions' => [
-                'Core',
-                'date',
-                'json',
-                'hash',
-                'pcre',
-                'Phar',
-                'Reflection',
-                'SPL',
-                'random',
-                'standard',
-            ],
-            'scan-files'          => [],
-        ]);
-
-        $this->assertEquals($options, $optionsFromFile);
+        $this->assertEquals(
+            new Options(),
+            new Options(Json\typed(
+                File\read(__DIR__ . '/../../../data/config.dist.json'),
+                Type\dict(Type\string(), Type\mixed()),
+            )),
+        );
     }
 
     public function testThrowsExceptionForUnknownOptions(): void
