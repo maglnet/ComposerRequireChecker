@@ -36,7 +36,7 @@ jobs:
               run: "vendor/bin/phing phar-build-release"
 
             - name: "Upload phar file artifact"
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v5
               with:
                   name: composer-require-checker.phar
                   path: |
