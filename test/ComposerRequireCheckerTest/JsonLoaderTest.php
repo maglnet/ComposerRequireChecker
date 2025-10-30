@@ -10,6 +10,7 @@ use ComposerRequireChecker\JsonLoader;
 use PHPUnit\Framework\TestCase;
 
 use function is_readable;
+use function preg_quote;
 
 use const PHP_OS_FAMILY;
 
