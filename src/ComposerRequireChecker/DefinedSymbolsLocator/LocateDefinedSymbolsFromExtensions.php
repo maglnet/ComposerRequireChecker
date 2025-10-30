@@ -21,7 +21,7 @@ class LocateDefinedSymbolsFromExtensions
      *        which is 'ext-Zend Opcache'. So the ALTERNATIVES allows us to look up the correct name, case sensitive
      *        without the '-'.
      */
-    private const ALTERNATIVES = ['zend-opcache' => 'Zend Opcache'];
+    private const array ALTERNATIVES = ['zend-opcache' => 'Zend Opcache'];
 
     /**
      * @param  string[] $extensionNames

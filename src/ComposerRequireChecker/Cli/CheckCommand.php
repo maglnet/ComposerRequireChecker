@@ -46,8 +46,8 @@ use function sprintf;
 /** @psalm-import-type ComposerData from JsonLoader */
 class CheckCommand extends Command
 {
-    public const NAME                 = 'check';
-    private const DEFAULT_CONFIG_PATH = 'composer-require-checker.json';
+    public const string NAME                 = 'check';
+    private const string DEFAULT_CONFIG_PATH = 'composer-require-checker.json';
 
     #[Override]
     protected function configure(): void

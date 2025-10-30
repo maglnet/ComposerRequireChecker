@@ -21,7 +21,7 @@ use function ucwords;
 /** @psalm-import-type ComposerData from JsonLoader */
 class Options
 {
-    private const PHP_LANGUAGE_TYPES = [
+    private const array PHP_LANGUAGE_TYPES = [
         'null',
         'true',
         'false', // consts
@@ -41,7 +41,7 @@ class Options
         'never',
     ];
 
-    private const PHP_ATTRIBUTES = [
+    private const array PHP_ATTRIBUTES = [
         AllowDynamicProperties::class,
         Attribute::class,
         Override::class,
