@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\Output;
 
 #[CoversClass(ApplicationHeaderWriter::class)]
 final class ApplicationHeaderWriterTest extends TestCase
@@ -31,5 +32,18 @@ final class ApplicationHeaderWriterTest extends TestCase
         (new ApplicationHeaderWriter($application))->__invoke($output);
 
         self::assertStringContainsString('APPNAME APPVERSION', $output->fetch());
+    }
+
+    public function testQuiet(): void
+    {
+        $output = new BufferedOutput();
+
+        $output->setVerbosity(Output::VERBOSITY_QUIET);
+
+        $application = new Application('APPNAME', 'APPVERSION');
+
+        (new ApplicationHeaderWriter($application))->__invoke($output);
+
+        self::assertEmpty($output->fetch());
     }
 }
