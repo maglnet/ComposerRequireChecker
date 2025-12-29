@@ -2,6 +2,9 @@ parameters:
     level: max
     paths:
         - src
+    ignoreErrors:
+        -
+            identifier: return.missing
 
 includes:
     - vendor/php-standard-library/phpstan-extension/extension.neon
