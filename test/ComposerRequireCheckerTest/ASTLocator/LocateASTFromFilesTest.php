@@ -83,7 +83,7 @@ final class LocateASTFromFilesTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $parserMock = $this->createMock(Php7::class);
+        $parserMock = $this->createStub(Php7::class);
         $parserMock->method('parse')->willReturn(null);
 
         $this->locator = new LocateASTFromFiles($parserMock, null);
