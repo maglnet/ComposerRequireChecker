@@ -15,10 +15,6 @@ final class ApplicationHeaderWriter
 
     public function __invoke(OutputInterface $output): void
     {
-        if ($output->isQuiet()) {
-            return;
-        }
-
         if ($this->application === null) {
             $output->writeln('Unknown version');
 

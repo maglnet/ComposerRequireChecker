@@ -23,7 +23,7 @@ class Application extends AbstractApplication
         );
 
         $check = new CheckCommand();
-        $this->add($check);
+        $this->addCommand($check);
         $this->setDefaultCommand(CheckCommand::NAME);
     }
 }
