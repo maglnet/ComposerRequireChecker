@@ -31,8 +31,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->collectedSymbols = [];
-
-        return parent::beforeTraverse($nodes);
     }
 
     /** @inheritDoc */
@@ -50,8 +48,6 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
         $this->recordTraitUsage($node);
         $this->recordPropertyTypeUsage($node);
         $this->recordAttributeUsage($node);
-
-        return parent::enterNode($node);
     }
 
     private function recordExtendsUsage(Node $node): void

@@ -27,8 +27,6 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->definedSymbols = [];
-
-        return parent::beforeTraverse($nodes);
     }
 
     /** @return list<string> */
