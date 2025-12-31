@@ -31,7 +31,7 @@
         "composer-runtime-api": "^2.0.0",
         "azjezz/psl": "^4.2.0",
         "nikic/php-parser": "^5.7.0",
-        "symfony/console": "^7.4.1",
+        "symfony/console": "^7.4.3",
         "webmozart/glob": "^4.7.0"
     },
     "require-dev": {
