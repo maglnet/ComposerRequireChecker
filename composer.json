@@ -41,7 +41,7 @@
         "php-standard-library/phpstan-extension": "^2.0.2",
         "php-standard-library/psalm-plugin": "^2.3",
         "phpstan/phpstan": "^2.1.33",
-        "phpunit/phpunit": "^12.5.4",
+        "phpunit/phpunit": "^12.5.5",
         "psalm/plugin-phpunit": "^0.19.5",
         "roave/infection-static-analysis-plugin": "^1.43.0",
         "spatie/temporary-directory": "^2.3.1",
