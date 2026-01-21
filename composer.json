@@ -40,7 +40,7 @@
         "phing/phing": "^3.1.1",
         "php-standard-library/phpstan-extension": "^2.0.2",
         "php-standard-library/psalm-plugin": "^2.3",
-        "phpstan/phpstan": "^2.1.35",
+        "phpstan/phpstan": "^2.1.36",
         "phpunit/phpunit": "^12.5.6",
         "psalm/plugin-phpunit": "^0.19.5",
         "roave/infection-static-analysis-plugin": "^1.43.0",
