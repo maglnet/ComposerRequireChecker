@@ -41,11 +41,11 @@
         "php-standard-library/phpstan-extension": "^2.0.2",
         "php-standard-library/psalm-plugin": "^2.3",
         "phpstan/phpstan": "^2.1.38",
-        "phpunit/phpunit": "^12.5.9",
+        "phpunit/phpunit": "^12.5.10",
         "psalm/plugin-phpunit": "^0.19.5",
         "roave/infection-static-analysis-plugin": "^1.43.0",
         "spatie/temporary-directory": "^2.3.1",
-        "vimeo/psalm": "^6.15.0"
+        "vimeo/psalm": "^6.15.1"
     },
     "conflict": {
         "revolt/event-loop": "< 1.0.8"
