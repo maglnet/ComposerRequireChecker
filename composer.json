@@ -31,14 +31,14 @@
         "composer-runtime-api": "^2.0.0",
         "azjezz/psl": "^4.3.0",
         "nikic/php-parser": "^5.7.0",
-        "symfony/console": "^8.0.6",
+        "symfony/console": "^8.0.7",
         "webmozart/glob": "^4.7.0"
     },
     "require-dev": {
         "ext-zend-opcache": "*",
         "doctrine/coding-standard": "^14.0.0",
         "phing/phing": "^3.1.2",
-        "php-standard-library/phpstan-extension": "^2.0.2",
+        "php-standard-library/phpstan-extension": "^2.0.3",
         "php-standard-library/psalm-plugin": "^2.3",
         "phpstan/phpstan": "^2.1.40",
         "phpunit/phpunit": "^12.5.14",
