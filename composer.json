@@ -29,7 +29,7 @@
         "php": "~8.4.0 || ~8.5.0",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
-        "azjezz/psl": "^4.3.0",
+        "azjezz/psl": "^5.4.0",
         "nikic/php-parser": "^5.7.0",
         "symfony/console": "^8.0.7",
         "webmozart/glob": "^4.7.0"

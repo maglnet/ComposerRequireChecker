@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e5215cc45b2e2faa933c6c05b1228ad",
+    "content-hash": "4cae788b956b30712a2206224d86ccdc",
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "4.3.0",
+            "version": "5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "74c95be0214eb7ea39146ed00ac4eb71b45d787b"
+                "reference": "6ac0675ada0e11f1b113a923448ccfe68ed385fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/74c95be0214eb7ea39146ed00ac4eb71b45d787b",
-                "reference": "74c95be0214eb7ea39146ed00ac4eb71b45d787b",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/6ac0675ada0e11f1b113a923448ccfe68ed385fa",
+                "reference": "6ac0675ada0e11f1b113a923448ccfe68ed385fa",
                 "shasum": ""
             },
             "require": {
@@ -25,16 +25,17 @@
                 "ext-intl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
+                "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
-                "revolt/event-loop": "^1.0.7"
+                "php": "~8.4.0 || ~8.5.0",
+                "revolt/event-loop": "^1.0.8"
             },
             "require-dev": {
-                "carthage-software/mago": "^1.6.0",
-                "infection/infection": "^0.31.2",
-                "php-coveralls/php-coveralls": "^2.7.0",
-                "phpbench/phpbench": "^1.4.0",
-                "phpunit/phpunit": "^9.6.22"
+                "carthage-software/mago": "^1.14.0",
+                "infection/infection": "^0.32.6",
+                "php-coveralls/php-coveralls": "^2.9.1",
+                "phpbench/phpbench": "^1.5.1",
+                "phpunit/phpunit": "^13.0.5"
             },
             "suggest": {
                 "php-standard-library/phpstan-extension": "PHPStan integration",
@@ -68,7 +69,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/4.3.0"
+                "source": "https://github.com/azjezz/psl/tree/5.4.0"
             },
             "funding": [
                 {
@@ -80,7 +81,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-24T01:58:53+00:00"
+            "time": "2026-03-10T20:51:43+00:00"
         },
         {
             "name": "nikic/php-parser",
