@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cae788b956b30712a2206224d86ccdc",
+    "content-hash": "d98dd5150ba97e66b5083c7b0d138fdf",
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "5.4.0",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "6ac0675ada0e11f1b113a923448ccfe68ed385fa"
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/6ac0675ada0e11f1b113a923448ccfe68ed385fa",
-                "reference": "6ac0675ada0e11f1b113a923448ccfe68ed385fa",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/8534d06d442b602970ee66ebc1d79c92361a4ba7",
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7",
                 "shasum": ""
             },
             "require": {
@@ -69,7 +69,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/5.4.0"
+                "source": "https://github.com/azjezz/psl/tree/5.5.0"
             },
             "funding": [
                 {
@@ -81,7 +81,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-10T20:51:43+00:00"
+            "time": "2026-03-12T20:19:39+00:00"
         },
         {
             "name": "nikic/php-parser",
