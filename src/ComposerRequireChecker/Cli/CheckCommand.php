@@ -9,11 +9,11 @@ use ComposerRequireChecker\Cli\ResultsWriter\CliJson;
 use ComposerRequireChecker\Cli\ResultsWriter\CliText;
 use ComposerRequireChecker\DefinedExtensionsResolver\DefinedExtensionsResolver;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromASTRoots;
+use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerAutoload;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromExtensions;
 use ComposerRequireChecker\DependencyGuesser\DependencyGuesser;
 use ComposerRequireChecker\Exception\InvalidJson;
-use ComposerRequireChecker\FileLocator\LocateComposerPackageDirectDependenciesSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateComposerPackageSourceFiles;
 use ComposerRequireChecker\FileLocator\LocateFilesByGlobPattern;
 use ComposerRequireChecker\GeneratorUtil\ComposeGenerators;
@@ -135,10 +135,10 @@ class CheckCommand extends Command
                     (new ComposeGenerators())->__invoke(
                         $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
                         $getPackageSourceFiles($composerData, dirname($composerJson)),
-                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson),
                     ),
                 ),
             ),
+            (new LocateDefinedSymbolsFromComposerAutoload())->__invoke($composerJson, $sourcesASTs),
             (new LocateDefinedSymbolsFromComposerRuntimeApi())->__invoke($composerData),
         );
 
