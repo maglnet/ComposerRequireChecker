@@ -29,8 +29,8 @@
         "php": "~8.4.0 || ~8.5.0",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0",
-        "azjezz/psl": "^5.5.0",
         "nikic/php-parser": "^5.7.0",
+        "php-standard-library/php-standard-library": "^5.5.0",
         "symfony/console": "^8.0.7",
         "webmozart/glob": "^4.7.0"
     },
@@ -45,7 +45,7 @@
         "psalm/plugin-phpunit": "^0.19.5",
         "roave/infection-static-analysis-plugin": "^1.43.0",
         "spatie/temporary-directory": "^2.3.1",
-        "vimeo/psalm": "^6.15.1"
+        "vimeo/psalm": "^6.16.1"
     },
     "conflict": {
         "revolt/event-loop": "< 1.0.8"
