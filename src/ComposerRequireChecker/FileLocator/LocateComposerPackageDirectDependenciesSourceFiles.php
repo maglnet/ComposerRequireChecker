@@ -13,6 +13,8 @@ use Psl\Type;
 
 use function array_key_exists;
 use function array_keys;
+use function ltrim;
+use function str_replace;
 
 /**
  * @psalm-import-type ComposerAutoload from JsonLoader
@@ -20,6 +22,10 @@ use function array_keys;
  */
 final class LocateComposerPackageDirectDependenciesSourceFiles
 {
+    public function __construct(private readonly bool $scanFilesFromAutoloadRequires = false)
+    {
+    }
+
     /** @return Generator<string> */
     public function __invoke(string $composerJsonPath): Generator
     {
@@ -35,12 +41,25 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
 
         $installedPackages = $this->getInstalledPackages($packageDir . '/' . $configVendorDir);
 
+        $locateViaRequires = $this->scanFilesFromAutoloadRequires
+            ? new LocateFilesViaRequireStatements()
+            : null;
+
         foreach ($vendorDirs as $vendorName => $vendorDir) {
             if (! array_key_exists($vendorName, $installedPackages)) {
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke(['autoload' => $installedPackages[$vendorName]], $vendorDir);
+            $autoload = $installedPackages[$vendorName];
+
+            yield from (new LocateComposerPackageSourceFiles())->__invoke(['autoload' => $autoload], $vendorDir);
+
+            if ($locateViaRequires !== null) {
+                foreach ($autoload['files'] ?? [] as $file) {
+                    $filePath = str_replace('\\', '/', $vendorDir . '/' . ltrim($file, '/'));
+                    yield from $locateViaRequires($filePath);
+                }
+            }
         }
     }
 
