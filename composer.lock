@@ -66,16 +66,16 @@
         },
         {
             "name": "php-standard-library/php-standard-library",
-            "version": "6.1.1",
+            "version": "6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-standard-library/php-standard-library.git",
-                "reference": "b7d151cb1c21589cdde17a6adff50d3375de0919"
+                "reference": "331f3ab363508825e62c42725f96c091bcceb970"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-standard-library/php-standard-library/zipball/b7d151cb1c21589cdde17a6adff50d3375de0919",
-                "reference": "b7d151cb1c21589cdde17a6adff50d3375de0919",
+                "url": "https://api.github.com/repos/php-standard-library/php-standard-library/zipball/331f3ab363508825e62c42725f96c091bcceb970",
+                "reference": "331f3ab363508825e62c42725f96c091bcceb970",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,10 @@
                 "php-standard-library/date-time": "self.version",
                 "php-standard-library/default": "self.version",
                 "php-standard-library/dict": "self.version",
+                "php-standard-library/dns": "self.version",
+                "php-standard-library/dnssec": "self.version",
                 "php-standard-library/either": "self.version",
+                "php-standard-library/either-or-both": "self.version",
                 "php-standard-library/encoding": "self.version",
                 "php-standard-library/env": "self.version",
                 "php-standard-library/file": "self.version",
@@ -119,6 +122,8 @@
                 "php-standard-library/hash": "self.version",
                 "php-standard-library/hpack": "self.version",
                 "php-standard-library/html": "self.version",
+                "php-standard-library/http-client": "self.version",
+                "php-standard-library/http-message": "self.version",
                 "php-standard-library/interface": "self.version",
                 "php-standard-library/interoperability": "self.version",
                 "php-standard-library/io": "self.version",
@@ -128,6 +133,8 @@
                 "php-standard-library/json": "self.version",
                 "php-standard-library/locale": "self.version",
                 "php-standard-library/math": "self.version",
+                "php-standard-library/message": "self.version",
+                "php-standard-library/mime": "self.version",
                 "php-standard-library/network": "self.version",
                 "php-standard-library/observer": "self.version",
                 "php-standard-library/option": "self.version",
@@ -144,6 +151,7 @@
                 "php-standard-library/runtime": "self.version",
                 "php-standard-library/secure-random": "self.version",
                 "php-standard-library/shell": "self.version",
+                "php-standard-library/smtp": "self.version",
                 "php-standard-library/socks": "self.version",
                 "php-standard-library/str": "self.version",
                 "php-standard-library/tcp": "self.version",
@@ -159,21 +167,24 @@
                 "php-standard-library/vec": "self.version"
             },
             "require-dev": {
-                "carthage-software/mago": "^1.15.2",
+                "carthage-software/mago": "^1.29.0",
                 "ext-brotli": "*",
                 "infection/infection": "^0.32.6",
                 "php-coveralls/php-coveralls": "^2.9.1",
-                "phpbench/phpbench": "^1.5.1",
+                "phpbench/phpbench": "^1.6.0",
                 "phpunit/phpunit": "^13.0.5"
             },
             "suggest": {
                 "php-standard-library/phpstan-extension": "PHPStan integration",
                 "php-standard-library/psalm-plugin": "Psalm integration"
             },
+            "bin": [
+                "bin/psl"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-next": "6.1.x-dev"
+                    "dev-next": "6.2.x-dev"
                 }
             },
             "autoload": {
@@ -192,6 +203,9 @@
                     "packages/dict/src/Psl/bootstrap.php",
                     "packages/encoding/src/Psl/bootstrap.php",
                     "packages/env/src/Psl/bootstrap.php",
+                    "packages/dns/src/Psl/bootstrap.php",
+                    "packages/dnssec/src/Psl/bootstrap.php",
+                    "packages/either-or-both/src/Psl/bootstrap.php",
                     "packages/file/src/Psl/bootstrap.php",
                     "packages/filesystem/src/Psl/bootstrap.php",
                     "packages/fun/src/Psl/bootstrap.php",
@@ -200,10 +214,14 @@
                     "packages/hash/src/Psl/bootstrap.php",
                     "packages/hpack/src/Psl/bootstrap.php",
                     "packages/html/src/Psl/bootstrap.php",
+                    "packages/http-client/src/Psl/bootstrap.php",
+                    "packages/http-message/src/Psl/bootstrap.php",
                     "packages/interface/src/Psl/bootstrap.php",
                     "packages/io/src/Psl/bootstrap.php",
                     "packages/iter/src/Psl/bootstrap.php",
                     "packages/json/src/Psl/bootstrap.php",
+                    "packages/mime/src/Psl/bootstrap.php",
+                    "packages/message/src/Psl/bootstrap.php",
                     "packages/math/src/Psl/bootstrap.php",
                     "packages/network/src/Psl/bootstrap.php",
                     "packages/option/src/Psl/bootstrap.php",
@@ -216,6 +234,7 @@
                     "packages/result/src/Psl/bootstrap.php",
                     "packages/runtime/src/Psl/bootstrap.php",
                     "packages/secure-random/src/Psl/bootstrap.php",
+                    "packages/smtp/src/Psl/bootstrap.php",
                     "packages/shell/src/Psl/bootstrap.php",
                     "packages/socks/src/Psl/bootstrap.php",
                     "packages/str/src/Psl/bootstrap.php",
@@ -238,6 +257,7 @@
                     "Psl\\IO\\": "packages/io/src/Psl/IO/",
                     "Psl\\IP\\": "packages/ip/src/Psl/IP/",
                     "Psl\\OS\\": "packages/os/src/Psl/OS/",
+                    "Psl\\DNS\\": "packages/dns/src/Psl/DNS/",
                     "Psl\\Env\\": "packages/env/src/Psl/Env/",
                     "Psl\\Fun\\": "packages/fun/src/Psl/Fun/",
                     "Psl\\IRI\\": "packages/iri/src/Psl/IRI/",
@@ -256,7 +276,9 @@
                     "Psl\\Html\\": "packages/html/src/Psl/Html/",
                     "Psl\\Iter\\": "packages/iter/src/Psl/Iter/",
                     "Psl\\Json\\": "packages/json/src/Psl/Json/",
+                    "Psl\\MIME\\": "packages/mime/src/Psl/MIME/",
                     "Psl\\Math\\": "packages/math/src/Psl/Math/",
+                    "Psl\\SMTP\\": "packages/smtp/src/Psl/SMTP/",
                     "Psl\\Tree\\": "packages/tree/src/Psl/Tree/",
                     "Psl\\Type\\": "packages/type/src/Psl/Type/",
                     "Psl\\Unix\\": "packages/unix/src/Psl/Unix/",
@@ -272,12 +294,14 @@
                     "Psl\\Trait\\": "packages/trait/src/Psl/Trait/",
                     "Psl\\Binary\\": "packages/binary/src/Psl/Binary/",
                     "Psl\\Crypto\\": "packages/crypto/src/Psl/Crypto/",
+                    "Psl\\DNSSEC\\": "packages/dnssec/src/Psl/DNSSEC/",
                     "Psl\\Either\\": "packages/either/src/Psl/Either/",
                     "Psl\\Locale\\": "packages/locale/src/Psl/Locale/",
                     "Psl\\Option\\": "packages/option/src/Psl/Option/",
                     "Psl\\Result\\": "packages/result/src/Psl/Result/",
                     "Psl\\Channel\\": "packages/channel/src/Psl/Channel/",
                     "Psl\\Default\\": "packages/default/src/Psl/Default/",
+                    "Psl\\Message\\": "packages/message/src/Psl/Message/",
                     "Psl\\Network\\": "packages/network/src/Psl/Network/",
                     "Psl\\Process\\": "packages/process/src/Psl/Process/",
                     "Psl\\Promise\\": "packages/promise/src/Psl/Promise/",
@@ -293,6 +317,9 @@
                     "Psl\\Comparison\\": "packages/comparison/src/Psl/Comparison/",
                     "Psl\\Filesystem\\": "packages/filesystem/src/Psl/Filesystem/",
                     "Psl\\Compression\\": "packages/compression/src/Psl/Compression/",
+                    "Psl\\HTTP\\Client\\": "packages/http-client/src/Psl/HTTP/Client/",
+                    "Psl\\EitherOrBoth\\": "packages/either-or-both/src/Psl/EitherOrBoth/",
+                    "Psl\\HTTP\\Message\\": "packages/http-message/src/Psl/HTTP/Message/",
                     "Psl\\PseudoRandom\\": "packages/pseudo-random/src/Psl/PseudoRandom/",
                     "Psl\\SecureRandom\\": "packages/secure-random/src/Psl/SecureRandom/",
                     "Psl\\DataStructure\\": "packages/data-structure/src/Psl/DataStructure/",
@@ -313,7 +340,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/php-standard-library/php-standard-library/issues",
-                "source": "https://github.com/php-standard-library/php-standard-library/tree/6.1.1"
+                "source": "https://github.com/php-standard-library/php-standard-library/tree/6.2.1"
             },
             "funding": [
                 {
@@ -325,7 +352,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-20T08:09:20+00:00"
+            "time": "2026-05-23T22:30:15+00:00"
         },
         {
             "name": "psr/container",
