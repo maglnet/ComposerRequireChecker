@@ -26,7 +26,7 @@ final class LocateFilesByGlobPatternTest extends TestCase
     protected function setUp(): void
     {
         $this->locator = new LocateFilesByGlobPattern();
-        $this->root    = (new TemporaryDirectory())
+        $this->root    = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }
@@ -48,7 +48,7 @@ final class LocateFilesByGlobPatternTest extends TestCase
         touch($this->path('bin/not-console.php'));
 
         $files = $this->files(['bin/console*.php'], $this->root->path() . '/');
-        $files = array_map('realpath', $files);
+        $files = array_map(realpath(...), $files);
 
         self::assertCount(2, $files);
         self::assertContains(realpath($this->path('bin/console.php')), $files);

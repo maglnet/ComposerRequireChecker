@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest\DefinedSymbolsLocator;
 
+use Composer\InstalledVersions;
 use ComposerRequireChecker\DefinedSymbolsLocator\LocateDefinedSymbolsFromComposerRuntimeApi;
 use ComposerRequireChecker\JsonLoader;
 use Generator;
@@ -39,7 +40,7 @@ class LocateDefinedSymbolsFromComposerRuntimeApiTest extends TestCase
     public function testInstalledVersionsSymbol(string $composerJson): void
     {
         self::assertContains(
-            'Composer\InstalledVersions',
+            InstalledVersions::class,
             ($this->locator)(Json\typed($composerJson, JsonLoader::composerDataType())),
         );
     }

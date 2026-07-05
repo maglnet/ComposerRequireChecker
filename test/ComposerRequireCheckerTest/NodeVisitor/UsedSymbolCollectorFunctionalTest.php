@@ -33,7 +33,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
     protected function setUp(): void
     {
         $this->collector = new UsedSymbolCollector();
-        $this->parser    = (new ParserFactory())->createForNewestSupportedVersion();
+        $this->parser    = new ParserFactory()->createForNewestSupportedVersion();
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());
@@ -47,18 +47,18 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
         self::assertSameCollectedSymbols(
             [
                 'Override',
-                'PHPUnit\Framework\Attributes\CoversNothing',
-                'PHPUnit\Framework\Attributes\Group',
-                'ComposerRequireChecker\NodeVisitor\UsedSymbolCollector',
-                'PHPUnit\Framework\TestCase',
-                'PhpParser\NodeTraverser',
-                'PhpParser\NodeTraverserInterface',
-                'PhpParser\Parser',
-                'PhpParser\ParserFactory',
+                CoversNothing::class,
+                Group::class,
+                UsedSymbolCollector::class,
+                TestCase::class,
+                NodeTraverser::class,
+                NodeTraverserInterface::class,
+                Parser::class,
+                ParserFactory::class,
                 'ReflectionClass',
                 'array_diff',
                 'self',
-                'PhpParser\NodeVisitor\NameResolver',
+                NameResolver::class,
                 'string',
                 'array',
                 'void',
@@ -184,7 +184,7 @@ final class UsedSymbolCollectorFunctionalTest extends TestCase
     /** @param class-string $className */
     private function traverseClassAST(string $className): void
     {
-        $fileContent = File\read((new ReflectionClass($className))->getFileName());
+        $fileContent = File\read(new ReflectionClass($className)->getFileName());
 
         $this->traverseStringAST($fileContent);
     }

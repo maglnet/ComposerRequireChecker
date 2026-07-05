@@ -15,7 +15,7 @@ use function in_array;
 class GuessFromLoadedExtensions implements Guesser
 {
     /** @var array<string> */
-    private array $loadedExtensions;
+    private readonly array $loadedExtensions;
 
     /** @var string[] */
     private array $coreExtensions = [];

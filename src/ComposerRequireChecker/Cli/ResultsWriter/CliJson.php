@@ -22,7 +22,7 @@ final class CliJson implements ResultsWriter
      * @param callable(string): void        $write
      * @param callable(): DateTimeImmutable $now
      */
-    public function __construct(callable $write, private string $applicationVersion, callable $now)
+    public function __construct(callable $write, private readonly string $applicationVersion, callable $now)
     {
         $this->writeCallable = $write;
         $this->nowCallable   = $now;

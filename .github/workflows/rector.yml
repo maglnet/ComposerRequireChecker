@@ -1,0 +1,64 @@
+# https://help.github.com/en/categories/automating-your-workflow-with-github-actions
+
+name: "Static Analysis by Rector"
+
+on:
+    pull_request:
+    push:
+
+jobs:
+    rector:
+        name: "Static Analysis by Rector"
+
+        runs-on: ${{ matrix.operating-system }}
+
+        strategy:
+            matrix:
+                dependencies:
+                    - "locked"
+                php-version:
+                    - "8.4"
+                operating-system:
+                    - "ubuntu-latest"
+
+        steps:
+            - name: "Checkout"
+              uses: "actions/checkout@v6"
+
+            - name: "Install PHP"
+              uses: "shivammathur/setup-php@2.37.1"
+              with:
+                  coverage: "pcov"
+                  php-version: "${{ matrix.php-version }}"
+                  ini-values: memory_limit=-1
+                  extensions: mbstring, bcmath, intl, sodium
+
+            - name: Get Composer cache directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-dir)"
+
+            - name: Cache dependencies
+              uses: actions/cache@v5
+              with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-${{ matrix.dependencies }}
+                restore-keys: |
+                  composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-
+                  composer-${{ runner.os }}-${{ matrix.php-version }}-
+                  composer-${{ runner.os }}-
+                  composer-
+
+            - name: "Install lowest dependencies"
+              if: ${{ matrix.dependencies == 'lowest' }}
+              run: "composer update --prefer-lowest --no-interaction --no-progress --no-suggest"
+
+            - name: "Install highest dependencies"
+              if: ${{ matrix.dependencies == 'highest' }}
+              run: "composer update --no-interaction --no-progress --no-suggest"
+
+            - name: "Install locked dependencies"
+              if: ${{ matrix.dependencies == 'locked' }}
+              run: "composer install --no-interaction --no-progress --no-suggest"
+
+            - name: "rector"
+              run: "vendor/bin/rector --dry-run"

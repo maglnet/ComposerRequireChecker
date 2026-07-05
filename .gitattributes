@@ -12,4 +12,5 @@ phpcs.xml.dist export-ignore
 phpstan.neon export-ignore
 phpunit.xml.dist export-ignore
 psalm.xml export-ignore
+rector.php export-ignore
 renovate.json export-ignore

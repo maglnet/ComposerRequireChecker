@@ -25,7 +25,7 @@ final class DefinedExtensionsResolverTest extends TestCase
 
         $this->resolver = new DefinedExtensionsResolver();
 
-        $this->root = (new TemporaryDirectory())
+        $this->root = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }

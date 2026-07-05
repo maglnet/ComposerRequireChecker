@@ -36,7 +36,7 @@ final class LocateComposerPackageSourceFilesTest extends TestCase
         parent::setUp();
 
         $this->locator = new LocateComposerPackageSourceFiles();
-        $this->root    = (new TemporaryDirectory())
+        $this->root    = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }

@@ -32,7 +32,7 @@ final class LocateAllFilesByExtensionTest extends TestCase
         parent::setUp();
 
         $this->locator = new LocateAllFilesByExtension();
-        $this->root    = (new TemporaryDirectory())
+        $this->root    = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }

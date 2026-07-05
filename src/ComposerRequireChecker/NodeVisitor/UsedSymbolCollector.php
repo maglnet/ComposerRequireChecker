@@ -60,7 +60,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
             return;
         }
 
-        array_map([$this, 'recordUsageOf'], $node->extends);
+        array_map($this->recordUsageOf(...), $node->extends);
     }
 
     private function recordImplementsUsage(Node $node): void
@@ -69,7 +69,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
             return;
         }
 
-        array_map([$this, 'recordUsageOf'], $node->implements);
+        array_map($this->recordUsageOf(...), $node->implements);
     }
 
     private function recordClassExpressionUsage(Node $node): void
@@ -175,7 +175,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
             return;
         }
 
-        array_map([$this, 'recordUsageOf'], $node->traits);
+        array_map($this->recordUsageOf(...), $node->traits);
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation->trait !== null) {
@@ -186,7 +186,7 @@ final class UsedSymbolCollector extends NodeVisitorAbstract
                 continue;
             }
 
-            array_map([$this, 'recordUsageOf'], $adaptation->insteadof);
+            array_map($this->recordUsageOf(...), $adaptation->insteadof);
         }
     }
 

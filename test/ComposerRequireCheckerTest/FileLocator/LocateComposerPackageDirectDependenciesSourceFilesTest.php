@@ -31,7 +31,7 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         parent::setUp();
 
         $this->locator = new LocateComposerPackageDirectDependenciesSourceFiles();
-        $this->root    = (new TemporaryDirectory())
+        $this->root    = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }

@@ -32,7 +32,7 @@ final class LocateASTFromFilesTest extends TestCase
         parent::setUp();
 
         $this->locator = new LocateASTFromFiles(new Php7(new Lexer()), null);
-        $this->root    = (new TemporaryDirectory())
+        $this->root    = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
     }

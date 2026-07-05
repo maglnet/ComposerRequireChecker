@@ -7,7 +7,7 @@ namespace ComposerRequireChecker\Cli;
 use Symfony\Component\Console\Application as AbstractApplication;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ApplicationHeaderWriter
+final readonly class ApplicationHeaderWriter
 {
     public function __construct(private AbstractApplication|null $application = null)
     {

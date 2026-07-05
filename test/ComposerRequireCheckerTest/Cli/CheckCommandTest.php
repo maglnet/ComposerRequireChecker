@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireCheckerTest\Cli;
 
+use Composer\InstalledVersions;
 use ComposerRequireChecker\Cli\Application;
 use InvalidArgumentException;
 use LogicException;
@@ -174,7 +175,7 @@ final class CheckCommandTest extends TestCase
 
     public function testWithAdditionalSourceFiles(): void
     {
-        $root = (new TemporaryDirectory())
+        $root = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
 
@@ -203,7 +204,7 @@ JSON
 
     public function testSourceFileThatUsesDevDependency(): void
     {
-        $root = (new TemporaryDirectory())
+        $root = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
 
@@ -246,7 +247,7 @@ JSON
         $display = $this->commandTester->getDisplay();
 
         $this->assertStringContainsString('The following 1 unknown symbols were found:', $display);
-        $this->assertStringContainsString('Composer\InstalledVersions', $display);
+        $this->assertStringContainsString(InstalledVersions::class, $display);
     }
 
     public function testNoUnknownComposerSymbolFound(): void
@@ -316,7 +317,7 @@ JSON
     public function testOverrideDefaultConfigPath(): void
     {
         $baseDirectory = dirname(__DIR__, 2) . '/fixtures/defaultConfigPath/';
-        $root          = (new TemporaryDirectory())
+        $root          = new TemporaryDirectory()
             ->deleteWhenDestroyed()
             ->create();
 
