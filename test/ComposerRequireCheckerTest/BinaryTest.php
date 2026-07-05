@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use function exec;
 use function implode;
 use function sprintf;
-use function strpos;
+use function str_starts_with;
 
 use const PHP_OS;
 
@@ -21,7 +21,7 @@ final class BinaryTest extends TestCase
     #[Override]
     protected function setUp(): void
     {
-        if (strpos(PHP_OS, 'WIN') === 0) {
+        if (str_starts_with(PHP_OS, 'WIN')) {
             $this->bin = __DIR__ . "\\..\\..\\bin\\composer-require-checker.bat";
         } else {
             $this->bin = __DIR__ . '/../../bin/composer-require-checker';

@@ -33,7 +33,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     protected function setUp(): void
     {
         $this->collector = new DefinedSymbolCollector();
-        $this->parser    = (new ParserFactory())->createForNewestSupportedVersion();
+        $this->parser    = new ParserFactory()->createForNewestSupportedVersion();
         $this->traverser = new NodeTraverser();
 
         $this->traverser->addVisitor(new NameResolver());
@@ -45,7 +45,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
         $this->traverseClassAST(self::class);
 
         self::assertSameCollectedSymbols(
-            ['ComposerRequireCheckerTest\NodeVisitor\DefinedSymbolCollectorFunctionalTest'],
+            [self::class],
             $this->collector->getDefinedSymbols(),
         );
     }
@@ -160,7 +160,7 @@ final class DefinedSymbolCollectorFunctionalTest extends TestCase
     /** @param class-string $className */
     private function traverseClassAST(string $className): void
     {
-        $parsed = $this->parser->parse(File\read((new ReflectionClass($className))->getFileName()));
+        $parsed = $this->parser->parse(File\read(new ReflectionClass($className)->getFileName()));
 
         self::assertNotNull($parsed);
 

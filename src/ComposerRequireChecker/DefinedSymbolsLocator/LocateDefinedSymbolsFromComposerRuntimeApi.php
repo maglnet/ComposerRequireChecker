@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ComposerRequireChecker\DefinedSymbolsLocator;
 
+use Composer\InstalledVersions;
 use ComposerRequireChecker\JsonLoader;
 use Psl\Regex;
 
@@ -21,6 +22,6 @@ final class LocateDefinedSymbolsFromComposerRuntimeApi
             return [];
         }
 
-        return ['Composer\InstalledVersions'];
+        return [InstalledVersions::class];
     }
 }

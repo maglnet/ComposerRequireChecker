@@ -18,7 +18,7 @@ final class CliText implements ResultsWriter
     /** @var callable */
     private $writeCallable;
 
-    public function __construct(private OutputInterface $output, callable|null $write = null)
+    public function __construct(private readonly OutputInterface $output, callable|null $write = null)
     {
         if ($write === null) {
             $write = static function (string $string) use ($output): void {

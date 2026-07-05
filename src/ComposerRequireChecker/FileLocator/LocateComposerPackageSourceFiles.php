@@ -63,9 +63,7 @@ final class LocateComposerPackageSourceFiles
     {
         return array_values(
             array_map(
-                function (string $sourceDir) use ($packageDir): string {
-                    return $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/'));
-                },
+                fn (string $sourceDir): string => $this->normalizePath($packageDir . '/' . ltrim($sourceDir, '/')),
                 self::flattenPsrPaths($sourceDirs),
             ),
         );
@@ -148,6 +146,6 @@ final class LocateComposerPackageSourceFiles
      */
     private function extractFilesFromDirectory(string $directory, array|null $blacklist): Generator
     {
-        yield from (new LocateAllFilesByExtension())->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);
+        yield from new LocateAllFilesByExtension()->__invoke(new ArrayIterator([$directory]), '.php', $blacklist);
     }
 }

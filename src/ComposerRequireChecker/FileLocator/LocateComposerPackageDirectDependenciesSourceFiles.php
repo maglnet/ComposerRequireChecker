@@ -40,7 +40,7 @@ final class LocateComposerPackageDirectDependenciesSourceFiles
                 continue;
             }
 
-            yield from (new LocateComposerPackageSourceFiles())->__invoke(['autoload' => $installedPackages[$vendorName]], $vendorDir);
+            yield from new LocateComposerPackageSourceFiles()->__invoke(['autoload' => $installedPackages[$vendorName]], $vendorDir);
         }
     }
 

@@ -102,7 +102,7 @@ class CheckCommand extends Command
             $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
-        (new ApplicationHeaderWriter($this->getApplication()))->__invoke($output);
+        new ApplicationHeaderWriter($this->getApplication())->__invoke($output);
 
         $composerJsonArgument = $input->getArgument('composer-json');
 
@@ -130,30 +130,30 @@ class CheckCommand extends Command
 
         $this->verbose('Collecting defined vendor symbols... ', $output);
         $definedVendorSymbols = array_merge(
-            (new LocateDefinedSymbolsFromASTRoots())->__invoke(
+            new LocateDefinedSymbolsFromASTRoots()->__invoke(
                 $sourcesASTs(
-                    (new ComposeGenerators())->__invoke(
+                    new ComposeGenerators()->__invoke(
                         $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
                         $getPackageSourceFiles($composerData, dirname($composerJson)),
-                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson),
+                        new LocateComposerPackageDirectDependenciesSourceFiles()->__invoke($composerJson),
                     ),
                 ),
             ),
-            (new LocateDefinedSymbolsFromComposerRuntimeApi())->__invoke($composerData),
+            new LocateDefinedSymbolsFromComposerRuntimeApi()->__invoke($composerData),
         );
 
         $this->verbose(sprintf('found %d symbols.', count($definedVendorSymbols)), $output, true);
 
         $this->verbose('Collecting defined extension symbols... ', $output);
-        $definedExtensionSymbols = (new LocateDefinedSymbolsFromExtensions())->__invoke(
-            (new DefinedExtensionsResolver())->__invoke($composerJson, $options->getPhpCoreExtensions()),
+        $definedExtensionSymbols = new LocateDefinedSymbolsFromExtensions()->__invoke(
+            new DefinedExtensionsResolver()->__invoke($composerJson, $options->getPhpCoreExtensions()),
         );
         $this->verbose(sprintf('found %d symbols.', count($definedExtensionSymbols)), $output, true);
 
         $this->verbose('Collecting used symbols... ', $output);
-        $usedSymbols = (new LocateUsedSymbolsFromASTRoots())->__invoke(
+        $usedSymbols = new LocateUsedSymbolsFromASTRoots()->__invoke(
             $sourcesASTs(
-                (new ComposeGenerators())->__invoke(
+                new ComposeGenerators()->__invoke(
                     $getPackageSourceFiles($composerData, dirname($composerJson)),
                     $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
                 ),
@@ -175,7 +175,7 @@ class CheckCommand extends Command
 
         // pcov which is used for coverage does not detect executed code in anonymous functions used as callable
         // therefore we require to have closure class.
-        $outputWrapper = new class ($output) {
+        $outputWrapper = new readonly class ($output) {
             public function __construct(private OutputInterface $output)
             {
             }
@@ -255,7 +255,7 @@ class CheckCommand extends Command
     private function getASTFromFilesLocator(InputInterface $input): LocateASTFromFiles
     {
         $errorHandler = $input->getOption('ignore-parse-errors') ? new CollectingErrorHandler() : null;
-        $parser       = (new ParserFactory())->createForNewestSupportedVersion();
+        $parser       = new ParserFactory()->createForNewestSupportedVersion();
 
         return new LocateASTFromFiles($parser, $errorHandler);
     }

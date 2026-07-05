@@ -18,7 +18,7 @@ final class ApplicationHeaderWriterTest extends TestCase
     {
         $output = new BufferedOutput();
 
-        (new ApplicationHeaderWriter())->__invoke($output);
+        new ApplicationHeaderWriter()->__invoke($output);
 
         self::assertStringContainsString('Unknown version', $output->fetch());
     }
@@ -29,7 +29,7 @@ final class ApplicationHeaderWriterTest extends TestCase
 
         $application = new Application('APPNAME', 'APPVERSION');
 
-        (new ApplicationHeaderWriter($application))->__invoke($output);
+        new ApplicationHeaderWriter($application)->__invoke($output);
 
         self::assertStringContainsString('APPNAME APPVERSION', $output->fetch());
     }
@@ -42,7 +42,7 @@ final class ApplicationHeaderWriterTest extends TestCase
 
         $application = new Application('APPNAME', 'APPVERSION');
 
-        (new ApplicationHeaderWriter($application))->__invoke($output);
+        new ApplicationHeaderWriter($application)->__invoke($output);
 
         self::assertEmpty($output->fetch());
     }

@@ -141,7 +141,7 @@ final class DefinedSymbolCollector extends NodeVisitorAbstract
     /** @psalm-param Node\Stmt\Function_|Node\Stmt\ClassLike|Node\Const_ $node */
     private function recordDefinitionOf(Node $node): void
     {
-        $isNamespacedNameInitialized = (new ReflectionProperty($node, 'namespacedName'))->isInitialized($node);
+        $isNamespacedNameInitialized = new ReflectionProperty($node, 'namespacedName')->isInitialized($node);
         $namespacedName              = $isNamespacedNameInitialized ? $node->namespacedName : null;
 
         if ($namespacedName === null) {

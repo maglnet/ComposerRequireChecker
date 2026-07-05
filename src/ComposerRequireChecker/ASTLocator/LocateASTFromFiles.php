@@ -17,7 +17,7 @@ use Traversable;
 
 use function sprintf;
 
-final class LocateASTFromFiles
+final readonly class LocateASTFromFiles
 {
     public function __construct(private Parser $parser, private ErrorHandler|null $errorHandler)
     {
