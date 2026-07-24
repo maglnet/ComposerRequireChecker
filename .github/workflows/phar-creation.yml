@@ -14,10 +14,10 @@ jobs:
 
         steps:
             - name: "Checkout"
-              uses: "actions/checkout@v7"
+              uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7
 
             - name: "Install PHP"
-              uses: "shivammathur/setup-php@2.37.1"
+              uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # 2.37.1
               with:
                   coverage: "none"
                   php-version: "8.4"
@@ -36,7 +36,7 @@ jobs:
               run: "vendor/bin/phing phar-build-release"
 
             - name: "Upload phar file artifact"
-              uses: actions/upload-artifact@v7
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
               with:
                   name: composer-require-checker.phar
                   path: |
@@ -44,7 +44,7 @@ jobs:
                     build/composer-require-checker.phar.asc
 
             - name: Upload PHAR to release
-              uses: svenstaro/upload-release-action@v2
+              uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # v2
               with:
                 repo_token: ${{ secrets.GITHUB_TOKEN }}
                 file: build/composer-require-checker.phar*
