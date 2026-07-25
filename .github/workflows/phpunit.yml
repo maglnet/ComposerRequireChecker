@@ -30,10 +30,10 @@ jobs:
 
         steps:
             - name: "Checkout"
-              uses: "actions/checkout@v7"
+              uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # v7
 
             - name: "Install PHP"
-              uses: "shivammathur/setup-php@2.37.1"
+              uses: "shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc" # 2.37.1
               with:
                   coverage: "pcov"
                   php-version: "${{ matrix.php-version }}"
@@ -45,7 +45,7 @@ jobs:
               run: echo "::set-output name=dir::$(composer config cache-dir)"
 
             - name: Cache dependencies
-              uses: actions/cache@v6
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
               with:
                 path: ${{ steps.composer-cache.outputs.dir }}
                 key: composer-${{ runner.os }}-${{ matrix.php-version }}-${{ hashFiles('composer.*') }}-${{ matrix.dependencies }}
