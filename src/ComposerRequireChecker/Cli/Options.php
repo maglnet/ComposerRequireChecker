@@ -73,6 +73,8 @@ class Options
      */
     private array $scanFiles = [];
 
+    private bool $scanFilesFromAutoloadRequires = false;
+
     /** @param array<string, mixed> $options */
     public function __construct(array $options = [])
     {
@@ -133,6 +135,16 @@ class Options
     public function setScanFiles(array $scanFiles): void
     {
         $this->scanFiles = $scanFiles;
+    }
+
+    public function getScanFilesFromAutoloadRequires(): bool
+    {
+        return $this->scanFilesFromAutoloadRequires;
+    }
+
+    public function setScanFilesFromAutoloadRequires(bool $scanFilesFromAutoloadRequires): void
+    {
+        $this->scanFilesFromAutoloadRequires = $scanFilesFromAutoloadRequires;
     }
 
     private function getCamelCase(string $string): string
