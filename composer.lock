@@ -4540,11 +4540,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.13",
+            "version": "2.2.14",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
-                "reference": "9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
+                "reference": "9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
                 "shasum": ""
             },
             "require": {
@@ -4600,7 +4600,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-03T20:38:19+00:00"
+            "time": "2026-09-12T21:39:33+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -7438,16 +7438,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.17.0",
+            "version": "6.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "056992a902704e2b691d33f9bfe4a063e43c79f2"
+                "reference": "ecdb39e1d470a661f423d08ec8d2db8bdc043ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/056992a902704e2b691d33f9bfe4a063e43c79f2",
-                "reference": "056992a902704e2b691d33f9bfe4a063e43c79f2",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/ecdb39e1d470a661f423d08ec8d2db8bdc043ba7",
+                "reference": "ecdb39e1d470a661f423d08ec8d2db8bdc043ba7",
                 "shasum": ""
             },
             "require": {
@@ -7552,7 +7552,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2026-09-10T11:14:46+00:00"
+            "time": "2026-09-12T13:51:46+00:00"
         },
         {
             "name": "webmozart/assert",
