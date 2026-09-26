@@ -79,6 +79,12 @@ class CheckCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'generate output either as "text" or as "json", if specified, "quiet mode" is implied',
+            )
+            ->addOption(
+                'scan-autoload-requires',
+                null,
+                InputOption::VALUE_NONE,
+                'scan PHP files required by autoload.files entries to discover transitively defined symbols',
             );
     }
 
@@ -123,6 +129,10 @@ class CheckCommand extends Command
 
         $options = $this->getCheckOptions($input);
 
+        if ($input->getOption('scan-autoload-requires')) {
+            $options->setScanFilesFromAutoloadRequires(true);
+        }
+
         $getPackageSourceFiles    = new LocateComposerPackageSourceFiles();
         $getAdditionalSourceFiles = new LocateFilesByGlobPattern();
 
@@ -135,7 +145,7 @@ class CheckCommand extends Command
                     (new ComposeGenerators())->__invoke(
                         $getAdditionalSourceFiles($options->getScanFiles(), dirname($composerJson)),
                         $getPackageSourceFiles($composerData, dirname($composerJson)),
-                        (new LocateComposerPackageDirectDependenciesSourceFiles())->__invoke($composerJson),
+                        (new LocateComposerPackageDirectDependenciesSourceFiles($options->getScanFilesFromAutoloadRequires()))->__invoke($composerJson),
                     ),
                 ),
             ),

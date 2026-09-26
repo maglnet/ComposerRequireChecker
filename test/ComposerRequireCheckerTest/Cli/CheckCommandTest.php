@@ -236,6 +236,276 @@ JSON
         );
     }
 
+    public function testNoUnknownSymbolsFoundForDirectDependencyFunction(): void
+    {
+        $root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        file_put_contents(
+            $root->path('composer.json'),
+            <<<'JSON'
+{
+    "require": {
+        "php": "^8.4",
+        "foo/bar": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\Library\\": "src/"
+        }
+    }
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/composer/installed.json'),
+            <<<'JSON'
+{
+    "packages": [
+        {
+            "name": "foo/bar",
+            "autoload": {
+                "files": ["functions.php"]
+            }
+        }
+    ]
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/foo/bar/functions.php'),
+            <<<'PHP'
+<?php
+
+namespace Foo\Bar;
+
+function helper(): string
+{
+    return 'value';
+}
+PHP
+        );
+        file_put_contents(
+            $root->path('src/SomeClass.php'),
+            <<<'PHP'
+<?php
+
+namespace Example\Library;
+
+use function Foo\Bar\helper;
+
+final class SomeClass
+{
+    public function someMethod(): string
+    {
+        return helper();
+    }
+}
+PHP
+        );
+
+        $this->commandTester->execute([
+            'composer-json' => $root->path('composer.json'),
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay(),
+        );
+    }
+
+    public function testNoUnknownSymbolsFoundForTransitiveAutoloadFilesFunction(): void
+    {
+        $root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        file_put_contents(
+            $root->path('composer.json'),
+            <<<'JSON'
+{
+    "require": {
+        "php": "^8.4",
+        "foo/bar": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\Library\\": "src/"
+        }
+    }
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/composer/installed.json'),
+            <<<'JSON'
+{
+    "packages": [
+        {
+            "name": "foo/bar",
+            "autoload": {
+                "files": ["bootstrap.php"]
+            }
+        }
+    ]
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/foo/bar/bootstrap.php'),
+            <<<'PHP'
+<?php
+require __DIR__ . '/functions.php';
+PHP
+        );
+        file_put_contents(
+            $root->path('vendor/foo/bar/functions.php'),
+            <<<'PHP'
+<?php
+
+namespace Foo\Bar;
+
+function helper(): string
+{
+    return 'value';
+}
+PHP
+        );
+        file_put_contents(
+            $root->path('src/SomeClass.php'),
+            <<<'PHP'
+<?php
+
+namespace Example\Library;
+
+use function Foo\Bar\helper;
+
+final class SomeClass
+{
+    public function someMethod(): string
+    {
+        return helper();
+    }
+}
+PHP
+        );
+
+        $this->commandTester->execute([
+            'composer-json'          => $root->path('composer.json'),
+            '--scan-autoload-requires' => true,
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay(),
+        );
+    }
+
+    public function testNoUnknownSymbolsFoundForConditionalRequireInAutoloadFiles(): void
+    {
+        $root = (new TemporaryDirectory())
+            ->deleteWhenDestroyed()
+            ->create();
+
+        file_put_contents(
+            $root->path('composer.json'),
+            <<<'JSON'
+{
+    "require": {
+        "php": "^8.4",
+        "foo/bar": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Example\\Library\\": "src/"
+        }
+    }
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/composer/installed.json'),
+            <<<'JSON'
+{
+    "packages": [
+        {
+            "name": "foo/bar",
+            "autoload": {
+                "files": ["generated/url.php"]
+            }
+        }
+    ]
+}
+JSON
+        );
+        file_put_contents(
+            $root->path('vendor/foo/bar/generated/url.php'),
+            <<<'PHP'
+<?php
+if (str_starts_with(PHP_VERSION, "8.1.")) {
+    require_once __DIR__ . '/8.1/url.php';
+}
+if (str_starts_with(PHP_VERSION, "8.2.")) {
+    require_once __DIR__ . '/8.1/url.php';
+}
+if (str_starts_with(PHP_VERSION, "8.3.")) {
+    require_once __DIR__ . '/8.1/url.php';
+}
+if (str_starts_with(PHP_VERSION, "8.4.")) {
+    require_once __DIR__ . '/8.1/url.php';
+}
+if (str_starts_with(PHP_VERSION, "8.5.")) {
+    require_once __DIR__ . '/8.1/url.php';
+}
+PHP
+        );
+        file_put_contents(
+            $root->path('vendor/foo/bar/generated/8.1/url.php'),
+            <<<'PHP'
+<?php
+
+namespace Foo\Bar;
+
+function base64_decode(string $string): string
+{
+    return \base64_decode($string, true) ?: throw new \RuntimeException('Invalid base64');
+}
+PHP
+        );
+        file_put_contents(
+            $root->path('src/SomeClass.php'),
+            <<<'PHP'
+<?php
+
+namespace Example\Library;
+
+use function Foo\Bar\base64_decode;
+
+final class SomeClass
+{
+    public function decode(string $input): string
+    {
+        return base64_decode($input);
+    }
+}
+PHP
+        );
+
+        $this->commandTester->execute([
+            'composer-json'            => $root->path('composer.json'),
+            '--scan-autoload-requires' => true,
+        ]);
+
+        self::assertSame(Command::SUCCESS, $this->commandTester->getStatusCode());
+        self::assertStringContainsString(
+            'There were no unknown symbols found.',
+            $this->commandTester->getDisplay(),
+        );
+    }
+
     public function testUnknownComposerSymbolFound(): void
     {
         $this->commandTester->execute([
