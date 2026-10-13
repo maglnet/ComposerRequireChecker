@@ -126,10 +126,64 @@ final class LocateComposerPackageDirectDependenciesSourceFilesTest extends TestC
         $this->assertFalse(file_exists($this->path('vendor/foo/bar/composer.json')));
     }
 
+    public function testAutoloadFilesRequiresAreNotFollowedByDefault(): void
+    {
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
+        file_put_contents(
+            $this->path('vendor/composer/installed.json'),
+            '{"packages":[{"name": "foo/bar", "autoload":{"files":["bootstrap.php"]}}]}',
+        );
+        file_put_contents(
+            $this->path('vendor/foo/bar/bootstrap.php'),
+            '<?php require __DIR__ . \'/functions.php\';',
+        );
+        file_put_contents($this->path('vendor/foo/bar/functions.php'), '<?php function foo() {}');
+
+        $files = $this->locate($this->path('composer.json'));
+
+        $this->assertNotContains(
+            str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $this->path('vendor/foo/bar/functions.php')),
+            array_map(
+                static fn (string $f): string => str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $f),
+                $files,
+            ),
+        );
+    }
+
+    public function testAutoloadFilesRequiresAreFollowedWhenEnabled(): void
+    {
+        file_put_contents($this->path('composer.json'), '{"require":{"foo/bar": "^1.0"}}');
+        file_put_contents(
+            $this->path('vendor/composer/installed.json'),
+            '{"packages":[{"name": "foo/bar", "autoload":{"files":["bootstrap.php"]}}]}',
+        );
+        file_put_contents(
+            $this->path('vendor/foo/bar/bootstrap.php'),
+            '<?php require __DIR__ . \'/functions.php\';',
+        );
+        file_put_contents($this->path('vendor/foo/bar/functions.php'), '<?php function foo() {}');
+
+        $files = $this->locateWithRequireScanning($this->path('composer.json'));
+
+        $this->assertContains(
+            str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $this->path('vendor/foo/bar/functions.php')),
+            array_map(
+                static fn (string $f): string => str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $f),
+                $files,
+            ),
+        );
+    }
+
     /** @return string[] */
     private function locate(string $composerJson): array
     {
         return iterator_to_array(($this->locator)($composerJson));
+    }
+
+    /** @return string[] */
+    private function locateWithRequireScanning(string $composerJson): array
+    {
+        return iterator_to_array((new LocateComposerPackageDirectDependenciesSourceFiles(true))($composerJson));
     }
 
     private function path(string $path): string
