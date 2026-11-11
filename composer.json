@@ -42,7 +42,7 @@
         "php-standard-library/psalm-plugin": "^2.3",
         "phpstan/phpstan": "^2.1.40",
         "phpunit/phpunit": "^12.5.14",
-        "psalm/plugin-phpunit": "^0.19.5",
+        "psalm/plugin-phpunit": "^1.1.0",
         "roave/infection-static-analysis-plugin": "^1.43.0",
         "spatie/temporary-directory": "^2.3.1",
         "vimeo/psalm": "^6.16.1"
