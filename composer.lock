@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb28a933318d27e8241ee6a1d5a6f9ef",
+    "content-hash": "dfe1e0492d9a2fe3f4947ebc1cf2d7d5",
     "packages": [
         {
             "name": "nikic/php-parser",
@@ -65,16 +65,16 @@
         },
         {
             "name": "php-standard-library/php-standard-library",
-            "version": "6.2.1",
+            "version": "6.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-standard-library/php-standard-library.git",
-                "reference": "331f3ab363508825e62c42725f96c091bcceb970"
+                "reference": "f537759b58ba36c8093505004e1bff7578238736"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-standard-library/php-standard-library/zipball/331f3ab363508825e62c42725f96c091bcceb970",
-                "reference": "331f3ab363508825e62c42725f96c091bcceb970",
+                "url": "https://api.github.com/repos/php-standard-library/php-standard-library/zipball/f537759b58ba36c8093505004e1bff7578238736",
+                "reference": "f537759b58ba36c8093505004e1bff7578238736",
                 "shasum": ""
             },
             "require": {
@@ -84,8 +84,8 @@
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.4.0 || ~8.5.0",
-                "revolt/event-loop": "^1.0.8"
+                "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
+                "revolt/event-loop": "^1.0.9"
             },
             "conflict": {
                 "azjezz/psl": "*"
@@ -166,14 +166,15 @@
                 "php-standard-library/vec": "self.version"
             },
             "require-dev": {
-                "carthage-software/mago": "^1.29.0",
+                "carthage-software/mago": "^1.50.0",
                 "ext-brotli": "*",
-                "infection/infection": "^0.32.6",
+                "infection/infection": "^0.32.7",
                 "php-coveralls/php-coveralls": "^2.9.1",
-                "phpbench/phpbench": "^1.6.0",
-                "phpunit/phpunit": "^13.0.5"
+                "phpbench/phpbench": "^1.7.0",
+                "phpunit/phpunit": "^13.1.14"
             },
             "suggest": {
+                "ext-sockets": "Gives every TCP connection accepted by Psl\\TCP a private stream context, so TLS options and peer certificates cannot leak between connections of one listener, reports the errno of a failed TCP connect and of a failed receive on a connected UDP socket, connects a UDP socket in place, and binds a Unix socket before it connects",
                 "php-standard-library/phpstan-extension": "PHPStan integration",
                 "php-standard-library/psalm-plugin": "Psalm integration"
             },
@@ -183,7 +184,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-next": "6.2.x-dev"
+                    "dev-next": "6.4.x-dev"
                 }
             },
             "autoload": {
@@ -339,7 +340,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/php-standard-library/php-standard-library/issues",
-                "source": "https://github.com/php-standard-library/php-standard-library/tree/6.2.1"
+                "source": "https://github.com/php-standard-library/php-standard-library/tree/6.4.2"
             },
             "funding": [
                 {
@@ -351,7 +352,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-23T22:30:15+00:00"
+            "time": "2026-10-28T08:36:50+00:00"
         },
         {
             "name": "psr/container",
@@ -7627,7 +7628,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.4.0 || ~8.5.0 || ~8.6.0",
         "ext-phar": "*",
         "composer-runtime-api": "^2.0.0"
     },
